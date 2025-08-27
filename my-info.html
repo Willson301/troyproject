@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나의 정보 - Troy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f5f5;
+            color: #000007;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            min-height: 100vh;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 24px;
+            color: #255ffe;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            color: #1d4ed8;
+            transform: translateX(-4px);
+        }
+
+        /* 광고주기본정보 섹션 */
+        .basic-info-section {
+            background: linear-gradient(135deg, #f9f9f9 0%, #ffffff 100%);
+            padding: 40px 32px;
+            border-bottom: 8px solid #f9f9f9;
+        }
+
+        .section-title {
+            font-size: 20.7px;
+            font-weight: 500;
+            color: #1740bc;
+            margin-bottom: 16px;
+        }
+
+        .section-description {
+            font-size: 14.5px;
+            color: #b8b7ba;
+            margin-bottom: 32px;
+        }
+
+        .info-grid {
+            display: grid;
+            gap: 24px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .info-label {
+            font-size: 17.5px;
+            font-weight: 400;
+            color: #000007;
+            min-width: 120px;
+        }
+
+        .info-value {
+            font-size: 17.5px;
+            color: #9a9a9d;
+            flex: 1;
+        }
+
+        .info-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 13.75px;
+            font-size: 13.5px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-secondary {
+            background-color: #f0f0f0;
+            color: #000007;
+            border: 1px solid #f8f8f8;
+        }
+
+        .btn-secondary:hover {
+            background-color: #e0e0e0;
+        }
+
+        .btn-primary {
+            background-color: #f0f1f1;
+            color: #403851;
+        }
+
+        .btn-primary:hover {
+            background-color: #e0e1e1;
+        }
+
+        .code-section {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .code-label {
+            font-size: 17.1px;
+            color: #1740bc;
+        }
+
+        .code-value {
+            font-size: 18px;
+            color: #8b8a8d;
+        }
+
+        .code-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        /* 담당자 정보 섹션 */
+        .contact-section {
+            padding: 40px 32px;
+            background: #ffffff;
+        }
+
+        .contact-title {
+            font-size: 19.7px;
+            font-weight: 500;
+            color: #000007;
+            margin-bottom: 16px;
+        }
+
+        .contact-description {
+            font-size: 14.1px;
+            color: #8484aa;
+            margin-bottom: 32px;
+        }
+
+        .contact-form {
+            display: grid;
+            gap: 24px;
+        }
+
+        .form-group {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .form-label {
+            font-size: 18px;
+            color: #000007;
+            min-width: 120px;
+        }
+
+        .form-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid #ebebeb;
+            border-radius: 10px;
+            font-size: 16px;
+            background-color: #fefefe;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #255ffe;
+        }
+
+        /* 방해금지 스타일 개선 */
+        .notification-section {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-top: 24px;
+            background: #f8f9fa;
+            border: 1px solid #e1e5e9;
+            border-radius: 12px;
+            padding: 16px 20px;
+        }
+
+        .notification-toggle {
+            position: relative;
+            width: 44px;
+            height: 24px;
+        }
+
+        .checkbox-input {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .checkbox-label {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #e1e5e9;
+            border-radius: 24px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .checkbox-label::after {
+            content: "";
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background-color: white;
+            top: 3px;
+            left: 3px;
+            transition: transform 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .checkbox-input:checked + .checkbox-label {
+            background-color: #255ffe;
+        }
+
+        .checkbox-input:checked + .checkbox-label::after {
+            transform: translateX(20px);
+        }
+
+        .notification-text {
+            font-size: 16px;
+            color: #666;
+            flex: 1;
+        }
+
+        .notification-title {
+            font-size: 16px;
+            color: #000007;
+            font-weight: 500;
+        }
+
+        .save-btn {
+            background-color: #255ffe;
+            color: #fffbfa;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 13px;
+            font-size: 15.2px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 24px;
+            transition: background-color 0.2s;
+        }
+
+        .save-btn:hover {
+            background-color: #1e4fd8;
+        }
+
+        /* 세금계산서 발급정보 섹션 */
+        .tax-section {
+            padding: 40px 32px;
+            background: #ffffff;
+        }
+
+        .tax-title {
+            font-size: 19.8px;
+            font-weight: 500;
+            color: #202024;
+            margin-bottom: 16px;
+        }
+
+        .tax-description {
+            font-size: 14.1px;
+            color: #0b0b21;
+            margin-bottom: 32px;
+        }
+
+        .tax-form {
+            display: grid;
+            gap: 16px;
+        }
+
+        .tax-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .tax-label {
+            font-size: 16px;
+            color: #0b0b21;
+            font-weight: 400;
+            margin-bottom: 2px;
+        }
+
+        .tax-input {
+            font-size: 16px;
+            color: #0b0b21;
+            padding: 8px 12px;
+            background-color: #ffffff;
+            border: 1px solid #e7e7e7;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .tax-input:focus {
+            outline: none;
+            border-color: #255ffe;
+        }
+
+        .tax-actions {
+            display: flex;
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .edit-btn {
+            background-color: #f0f0f0;
+            color: #000007;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 13px;
+            font-size: 15.2px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .edit-btn:hover {
+            background-color: #e0e0e0;
+        }
+
+        .tax-input:disabled {
+            background-color: #f8f9fa;
+            color: #6c757d;
+            cursor: not-allowed;
+        }
+
+        .tax-description {
+            margin-top: 16px;
+            padding: 16px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #255ffe;
+        }
+
+        .tax-description p {
+            margin: 0;
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .tax-description p:first-child {
+            margin-bottom: 8px;
+        }
+
+        /* 예치금 섹션 - 노란색으로 변경 */
+        .deposit-section {
+            padding: 40px 32px;
+            background: #ffffff;
+        }
+
+        .deposit-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .deposit-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .deposit-icon {
+            width: 36px;
+            height: 37px;
+            background-color: #FFD700;
+            border-radius: 50%;
+        }
+
+        .deposit-details h3 {
+            font-size: 16px;
+            color: #64748b;
+            font-weight: 600;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .deposit-amount {
+            font-size: 28px;
+            font-weight: 800;
+            color: #FFD700; /* 노란색으로 변경 */
+        }
+
+        .deposit-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .deposit-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 16px;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-charge {
+            background-color: #255ffe;
+            color: #ffffff;
+            border: 1px solid #feea8c;
+        }
+
+        .btn-charge:hover {
+            background-color: #1e4fd8;
+        }
+
+        .btn-refund {
+            background-color: #fefefe;
+            color: #9b9a9d;
+            border: 1px solid #ebebeb;
+        }
+
+        .btn-refund:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* 모달 스타일 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 24px 16px;
+            border-bottom: 1px solid #e7e7e7;
+        }
+
+        .modal-header h2 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin: 0;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .amount-section h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 16px;
+        }
+
+        .amount-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .amount-option {
+            padding: 16px;
+            border: 2px solid #e7e7e7;
+            border-radius: 12px;
+            background: #fff;
+            color: #333;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .amount-option:hover {
+            border-color: #255ffe;
+            background-color: #f8f9ff;
+        }
+
+        .amount-option.active {
+            border-color: #255ffe;
+            background-color: #255ffe;
+            color: #fff;
+        }
+
+        .custom-amount {
+            margin-bottom: 24px;
+        }
+
+        .custom-amount label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .custom-amount input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e7e7e7;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.2s;
+        }
+
+        .custom-amount input:focus {
+            outline: none;
+            border-color: #255ffe;
+        }
+
+        .tax-invoice-section {
+            margin-bottom: 24px;
+            padding: 16px;
+            background-color: #f8f9ff;
+            border-radius: 8px;
+            border: 1px solid #e1e5ff;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            margin-right: 12px;
+            width: 18px;
+            height: 18px;
+            accent-color: #255ffe;
+        }
+
+        .payment-summary {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .summary-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .summary-row.total {
+            font-weight: 600;
+            font-size: 16px;
+            color: #255ffe;
+            border-top: 1px solid #e7e7e7;
+            padding-top: 8px;
+            margin-top: 8px;
+        }
+
+        .account-info {
+            margin-bottom: 24px;
+        }
+
+        .account-info h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 12px;
+        }
+
+        .account-details {
+            background-color: #f8f9fa;
+            border: 1px solid #e7e7e7;
+            border-radius: 8px;
+            padding: 16px;
+            min-height: 80px;
+        }
+
+        .account-details p {
+            margin: 0;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .payment-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .copy-btn {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid #255ffe;
+            border-radius: 8px;
+            background: #fff;
+            color: #255ffe;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            background-color: #255ffe;
+            color: #fff;
+        }
+
+        .confirm-btn {
+            flex: 2;
+            padding: 12px 16px;
+            border: none;
+            border-radius: 8px;
+            background: #255ffe;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .confirm-btn:hover {
+            background-color: #1e4fd8;
+        }
+
+        /* 두 번째 모달 스타일 */
+        .modal-content.account-modal {
+            max-width: 600px;
+        }
+
+        .account-input-section h3,
+        .payment-details h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1740bc;
+            margin-bottom: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e7e7e7;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: 'Inter', sans-serif;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #255ffe;
+        }
+
+        .payment-details {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 24px 0;
+            border: 1px solid #e7e7e7;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .detail-row.total {
+            font-weight: 600;
+            font-size: 16px;
+            color: #255ffe;
+            border-top: 1px solid #e7e7e7;
+            padding-top: 12px;
+            margin-top: 12px;
+        }
+
+        .copy-section {
+            text-align: center;
+            margin: 24px 0;
+        }
+
+        .copy-all-btn {
+            background-color: #255ffe;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 16px 32px;
+            font-size: 16px;
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 12px;
+        }
+
+        .copy-all-btn:hover {
+            background-color: #1e4fd8;
+        }
+
+        .copy-note {
+            font-size: 13px;
+            color: #666;
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .final-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .back-btn-step {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid #255ffe;
+            border-radius: 8px;
+            background: #fff;
+            color: #255ffe;
+            font-size: 14px;
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .back-btn-step:hover {
+            background-color: #255ffe;
+            color: #fff;
+        }
+
+        .complete-btn {
+            flex: 2;
+            padding: 12px 16px;
+            border: none;
+            border-radius: 8px;
+            background: #255ffe;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .complete-btn:hover {
+            background-color: #1e4fd8;
+        }
+
+        .deposit-history {
+            background-color: #ffffff;
+            border: 1px solid #eaeaea;
+            border-radius: 8px;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .history-text {
+            font-size: 15.4px;
+            color: #a0a0a4;
+        }
+
+        /* 반응형 디자인 */
+        @media (max-width: 768px) {
+            .container {
+                margin: 0;
+            }
+            
+            .basic-info-section,
+            .contact-section,
+            .tax-section,
+            .deposit-section {
+                padding: 24px 16px;
+            }
+            
+            .tax-row {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            .deposit-header {
+                flex-direction: column;
+                gap: 16px;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="admin-dashboard.html" class="back-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            대시보드로 돌아가기
+        </a>
+
+        <!-- 광고주기본정보 섹션 -->
+        <div class="basic-info-section">
+            <h1 class="section-title">광고주기본정보</h1>
+            <p class="section-description">가입 당시 입력하신광고주님의 사업체정보입니다.</p>
+            
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">법인/상호명</span>
+                    <span class="info-value">에드핏플</span>
+                    <div class="info-actions">
+                        <button class="btn btn-primary">사업자등록사본</button>
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <span class="info-label">사업자번호</span>
+                    <span class="info-value">2773501431</span>
+                    <div class="info-actions">
+                        <button class="btn btn-secondary">변경하기</button>
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <span class="info-label">홈페이지</span>
+                    <span class="info-value"></span>
+                    <div class="info-actions">
+                        <button class="btn btn-secondary">변경하기</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-section">
+                <span class="code-label">나의 코드</span>
+                <div class="code-icon"></div>
+                <span class="code-value">2025-08-05 11:38:52</span>
+                <div class="code-actions">
+                    <span class="code-label">가입일</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 담당자 정보 섹션 -->
+        <div class="contact-section">
+            <h2 class="contact-title">담당자 정보</h2>
+            <p class="contact-description">트로이에서 연락을 드릴 수 있는 담당자분의 정보입니다.</p>
+            
+            <div class="contact-form">
+                <div class="form-group">
+                    <label class="form-label">성함</label>
+                    <input type="text" class="form-input" placeholder="담당자 성함을 입력해주세요">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">이메일</label>
+                    <input type="email" class="form-input" placeholder="담당자 이메일을 입력해주세요">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">연락처</label>
+                    <input type="tel" class="form-input" placeholder="담당자 연락처를 입력해주세요">
+                </div>
+            </div>
+
+            <div class="notification-section">
+                <div class="notification-toggle">
+                    <input type="checkbox" id="doNotDisturb" class="checkbox-input">
+                    <label for="doNotDisturb" class="checkbox-label"></label>
+                </div>
+                <span class="notification-text">밤 10시부터 아침 8시까지 알림을 안받을래요</span>
+                <span class="notification-title">방해금지모드</span>
+            </div>
+
+            <button class="save-btn">위 내용으로 정보를 수정합니다.</button>
+        </div>
+
+        <!-- 세금계산서 발급정보 섹션 -->
+        <div class="tax-section">
+            <h2 class="tax-title">세금계산서 발급정보</h2>
+            <p class="tax-description">예치금 충전 등 서비스 사용에 발생한 비용에 따른 세금계산서 발급정보입니다.</p>
+            
+            <div class="tax-form" id="taxForm">
+                <div class="tax-row">
+                    <span class="tax-label">상호/법인명</span>
+                    <input type="text" class="tax-input" id="companyName" placeholder="상호/법인명을 입력하세요">
+                </div>
+                
+                <div class="tax-row">
+                    <span class="tax-label">사업자등록번호</span>
+                    <input type="text" class="tax-input" id="businessNumber" placeholder="사업자등록번호를 입력하세요">
+                </div>
+                
+                <div class="tax-row">
+                    <span class="tax-label">대표자 (성명)</span>
+                    <input type="text" class="tax-input" id="ceoName" placeholder="대표자 성명을 입력하세요">
+                </div>
+                
+                <div class="tax-row">
+                    <span class="tax-label">사업장 소재지</span>
+                    <input type="text" class="tax-input" id="businessAddress" placeholder="사업장 소재지를 입력하세요">
+                </div>
+                
+                <div class="tax-row">
+                    <span class="tax-label">업태</span>
+                    <input type="text" class="tax-input" id="businessType" placeholder="업태를 입력하세요">
+                </div>
+                
+                <div class="tax-row">
+                    <span class="tax-label">종목</span>
+                    <input type="text" class="tax-input" id="businessCategory" placeholder="종목을 입력하세요">
+                </div>
+                
+                <div class="tax-row">
+                    <span class="tax-label">전자우편주소</span>
+                    <input type="email" class="tax-input" id="taxEmail" placeholder="이메일 주소를 입력하세요">
+                </div>
+            </div>
+
+            <div class="tax-actions">
+                <button class="save-btn" id="taxSaveBtn" onclick="saveTaxInfo()">저장하기</button>
+                <button class="edit-btn" id="taxEditBtn" onclick="editTaxInfo()" style="display: none;">수정하기</button>
+            </div>
+            
+            <div class="tax-description">
+                <p>예치금충전 등 서비스에 사용에 발생한 비용에 따른 세금계산서 발급정보입니다.</p>
+                <p>계산서발행은 부가세 10%를 합산한 금액에 대해서 발행이 가능합니다.</p>
+            </div>
+        </div>
+
+        <!-- 예치금 섹션 -->
+        <div class="deposit-section">
+            <div class="deposit-header">
+                <div class="deposit-info">
+                    <div class="deposit-icon"></div>
+                    <div class="deposit-details">
+                        <h3>예치금잔액</h3>
+                        <div class="deposit-amount">10</div>
+                    </div>
+                </div>
+                
+                <div class="deposit-actions">
+                    <button class="deposit-btn btn-charge">예치금 충전하기</button>
+                    <button class="deposit-btn btn-refund">잔액 환불요청</button>
+                </div>
+            </div>
+            
+            <div class="deposit-history">
+                <p class="history-text">내역이 존재하지 않습니다.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 예치금 충전 모달 -->
+    <div id="depositModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>예치금 충전</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="amount-section">
+                    <h3>충전 금액 선택</h3>
+                    <div class="amount-options">
+                        <button class="amount-option" data-amount="1000000">100만원</button>
+                        <button class="amount-option" data-amount="3000000">300만원</button>
+                        <button class="amount-option" data-amount="5000000">500만원</button>
+                        <button class="amount-option" data-amount="8000000">800만원</button>
+                    </div>
+                    
+                    <div class="custom-amount">
+                        <label for="customAmount">직접 입력</label>
+                        <input type="number" id="customAmount" placeholder="금액을 입력하세요" min="10000" step="10000">
+                    </div>
+                </div>
+
+
+
+                <div class="payment-summary">
+                    <div class="summary-row">
+                        <span>충전 금액:</span>
+                        <span id="baseAmount">0원</span>
+                    </div>
+                    <div class="summary-row" id="taxRow" style="display: none;">
+                        <span>부가세 (10%):</span>
+                        <span id="taxAmount">0원</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>총 결제금액:</span>
+                        <span id="totalAmount">0원</span>
+                    </div>
+                </div>
+
+                <div class="tax-checkbox-section">
+                    <label class="tax-checkbox-label">
+                        <input type="checkbox" id="taxInvoiceCheck">
+                        <span class="checkmark"></span>
+                        세금계산서 발행이 필요하신가요?
+                    </label>
+                </div>
+
+                <div class="account-info">
+                    <h3>계좌 안내</h3>
+                    <div class="account-details">
+                        <p>입금 계좌 정보를 여기에 입력하세요</p>
+                    </div>
+                </div>
+
+                <div class="payment-actions">
+                    <button id="confirmBtn" class="confirm-btn">충전 신청</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 계좌 정보 입력 모달 (2단계) -->
+    <div id="accountModal" class="modal">
+        <div class="modal-content account-modal">
+            <div class="modal-header">
+                <h2>계좌 정보 입력</h2>
+                <button class="modal-close-account">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="account-input-section">
+                    <h3>입금 계좌 정보</h3>
+                    
+                    <div class="form-group">
+                        <label for="bankName">입금은행</label>
+                        <input type="text" id="bankName" placeholder="예: 신한은행" value="신한은행">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="accountNumber">계좌번호</label>
+                        <input type="text" id="accountNumber" placeholder="예: 110-123456-789" value="110-123456-789">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="accountHolder">예금주</label>
+                        <input type="text" id="accountHolder" placeholder="예: (주)트로이" value="(주)트로이">
+                    </div>
+                </div>
+
+                <div class="payment-details">
+                    <h3>입금 정보</h3>
+                    <div class="detail-row">
+                        <span>충전 금액:</span>
+                        <span id="finalAmount">0원</span>
+                    </div>
+                    <div class="detail-row total">
+                        <span>입금 금액:</span>
+                        <span id="depositAmount">0원</span>
+                    </div>
+                </div>
+
+                <div class="copy-section">
+                    <button id="copyAllInfo" class="copy-all-btn">전체 정보 복사</button>
+                    <p class="copy-note">입금 시 입금자명에 본인 이름을 기재해주세요</p>
+                </div>
+
+                <div class="final-actions">
+                    <button class="back-btn-step">이전 단계</button>
+                    <button class="complete-btn">입금 완료 확인</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM이 완전히 로드된 후 실행
+        document.addEventListener('DOMContentLoaded', function() {
+            // 예치금 충전 모달
+            document.querySelector('.btn-charge').addEventListener('click', function() {
+                document.getElementById('depositModal').style.display = 'flex';
+            });
+
+            // 첫 번째 모달 닫기
+            document.querySelector('.modal-close').addEventListener('click', function() {
+                document.getElementById('depositModal').style.display = 'none';
+            });
+
+            // 첫 번째 모달 외부 클릭시 닫기
+            document.getElementById('depositModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.style.display = 'none';
+                }
+            });
+
+            // 두 번째 모달 닫기
+            document.querySelector('.modal-close-account').addEventListener('click', function() {
+                document.getElementById('accountModal').style.display = 'none';
+            });
+
+            // 두 번째 모달 외부 클릭시 닫기
+            document.getElementById('accountModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.style.display = 'none';
+                }
+            });
+
+            // 금액 선택 버튼들
+            document.querySelectorAll('.amount-option').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // 모든 버튼에서 active 클래스 제거
+                    document.querySelectorAll('.amount-option').forEach(b => b.classList.remove('active'));
+                    // 클릭된 버튼에 active 클래스 추가
+                    this.classList.add('active');
+                    // 직접입력 필드에 값 설정
+                    document.getElementById('customAmount').value = this.dataset.amount;
+                    updateTotalAmount();
+                });
+            });
+
+            // 직접입력 필드 이벤트
+            document.getElementById('customAmount').addEventListener('input', function() {
+                // 모든 금액 옵션 버튼에서 active 클래스 제거
+                document.querySelectorAll('.amount-option').forEach(btn => btn.classList.remove('active'));
+                updateTotalAmount();
+            });
+
+            // 세금계산서 발행 체크박스 이벤트
+            document.getElementById('taxInvoiceCheck').addEventListener('change', function() {
+                updateTotalAmount();
+            });
+
+
+
+                                        // 총 금액 업데이트 함수
+            function updateTotalAmount() {
+                const amount = parseFloat(document.getElementById('customAmount').value) || 0;
+                const taxInvoice = document.getElementById('taxInvoiceCheck').checked;
+                const totalAmount = taxInvoice ? amount * 1.1 : amount;
+                
+                // 기본 금액 표시
+                document.getElementById('baseAmount').textContent = amount.toLocaleString() + '원';
+                
+                // 부가세 행 표시/숨김 및 금액 업데이트
+                const taxRow = document.getElementById('taxRow');
+                if (taxInvoice) {
+                    taxRow.style.display = 'flex';
+                    document.getElementById('taxAmount').textContent = (amount * 0.1).toLocaleString() + '원';
+                } else {
+                    taxRow.style.display = 'none';
+                    document.getElementById('taxAmount').textContent = '0원';
+                }
+                
+                // 총 금액 업데이트
+                document.getElementById('totalAmount').textContent = totalAmount.toLocaleString() + '원';
+            }
+
+                
+
+                            // 페이지 로드 시 초기화
+            updateTotalAmount();
+
+            // 충전 신청 버튼 클릭 시 두 번째 모달로 이동
+            document.getElementById('confirmBtn').addEventListener('click', function() {
+                const amount = document.getElementById('customAmount').value || '0';
+                const taxInvoice = document.getElementById('taxInvoiceCheck').checked;
+                const totalAmount = taxInvoice ? parseFloat(amount) * 1.1 : parseFloat(amount);
+                
+                // 두 번째 모달에 금액 정보 전달
+                document.getElementById('finalAmount').textContent = parseFloat(amount).toLocaleString() + '원';
+                document.getElementById('depositAmount').textContent = totalAmount.toLocaleString() + '원';
+                
+                // 첫 번째 모달 숨기고 두 번째 모달 표시
+                document.getElementById('depositModal').style.display = 'none';
+                document.getElementById('accountModal').style.display = 'flex';
+            });
+
+            // 이전 단계 버튼 클릭 시 첫 번째 모달로 돌아가기
+            document.querySelector('.back-btn-step').addEventListener('click', function() {
+                document.getElementById('accountModal').style.display = 'none';
+                document.getElementById('depositModal').style.display = 'flex';
+            });
+
+            // 전체 정보 복사 기능
+            document.getElementById('copyAllInfo').addEventListener('click', function() {
+                const bankName = document.getElementById('bankName').value;
+                const accountNumber = document.getElementById('accountNumber').value;
+                const accountHolder = document.getElementById('accountHolder').value;
+                const amount = document.getElementById('depositAmount').textContent;
+                
+                const allInfo = `입금 계좌 정보\n은행: ${bankName}\n계좌번호: ${accountNumber}\n예금주: ${accountHolder}\n입금금액: ${amount}\n\n입금 시 입금자명에 본인 이름을 기재해주세요`;
+                
+                navigator.clipboard.writeText(allInfo).then(() => {
+                    this.textContent = '복사완료!';
+                    setTimeout(() => {
+                        this.textContent = '전체 정보 복사';
+                    }, 2000);
+                }).catch(() => {
+                    alert('복사에 실패했습니다. 수동으로 복사해주세요.');
+                });
+            });
+
+            // 잔액 환불요청
+            document.querySelector('.btn-refund').addEventListener('click', function() {
+                alert('잔액 환불요청 기능이 준비 중입니다.');
+            });
+
+            // 정보 수정 버튼
+            document.querySelectorAll('.save-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    alert('정보가 저장되었습니다.');
+                });
+            });
+
+            // 변경하기 버튼들
+            document.querySelectorAll('.btn-secondary').forEach(btn => {
+                if (btn.textContent === '변경하기') {
+                    btn.addEventListener('click', function() {
+                        alert('변경 기능이 준비 중입니다.');
+                    });
+                }
+            });
+
+            // 사업자등록사본 버튼
+            document.querySelector('.btn-primary').addEventListener('click', function() {
+                alert('사업자등록사본이 다운로드되었습니다.');
+            });
+
+            // 방해금지 체크박스 기능
+            document.getElementById('doNotDisturb').addEventListener('change', function() {
+                if (this.checked) {
+                    alert('방해금지 모드가 활성화되었습니다. 밤 10시부터 아침 8시까지 알림을 받지 않습니다.');
+                } else {
+                    alert('방해금지 모드가 비활성화되었습니다.');
+                }
+            });
+
+            // 세금계산서 정보 저장 기능
+            function saveTaxInfo() {
+                const companyName = document.getElementById('companyName').value;
+                const ceoName = document.getElementById('ceoName').value;
+                const businessType = document.getElementById('businessType').value;
+                const taxEmail = document.getElementById('taxEmail').value;
+
+                if (!companyName || !ceoName || !businessType || !taxEmail) {
+                    alert('모든 필드를 입력해주세요.');
+                    return;
+                }
+
+                // 입력 필드들을 비활성화
+                document.getElementById('companyName').disabled = true;
+                document.getElementById('ceoName').disabled = true;
+                document.getElementById('businessType').disabled = true;
+                document.getElementById('taxEmail').disabled = true;
+
+                // 저장하기 버튼 숨기고 수정하기 버튼 표시
+                document.getElementById('taxSaveBtn').style.display = 'none';
+                document.getElementById('taxEditBtn').style.display = 'inline-block';
+
+                alert('세금계산서 발급정보가 저장되었습니다.');
+            }
+
+            // 세금계산서 정보 수정 기능
+            function editTaxInfo() {
+                // 입력 필드들을 활성화
+                document.getElementById('companyName').disabled = false;
+                document.getElementById('ceoName').disabled = false;
+                document.getElementById('businessType').disabled = false;
+                document.getElementById('taxEmail').disabled = false;
+
+                // 수정하기 버튼 숨기고 저장하기 버튼 표시
+                document.getElementById('taxEditBtn').style.display = 'none';
+                document.getElementById('taxSaveBtn').style.display = 'inline-block';
+
+                alert('수정 모드가 활성화되었습니다. 정보를 수정한 후 저장하기를 클릭하세요.');
+            }
+        }); // DOMContentLoaded 닫기
+    </script>
+</body>
+</html>

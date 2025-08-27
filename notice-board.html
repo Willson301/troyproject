@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공지사항 - Troy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 2px solid #255ffe;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #255ffe 0%, #1d4ed8 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid white;
+            border-radius: 12px;
+            padding: 10px 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: white;
+            color: #255ffe;
+            transform: translateY(-2px);
+        }
+
+        .board-container {
+            padding: 40px;
+        }
+
+        .board-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .board-stats {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .notice-list {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .notice-header {
+            background: #f8fafc;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 80px 1fr 120px 120px;
+            gap: 20px;
+            font-weight: 700;
+            color: #475569;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .notice-item {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 80px 1fr 120px 120px;
+            gap: 20px;
+            align-items: center;
+            border-bottom: 1px solid #f1f5f9;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .notice-item:hover {
+            background: #f8fafc;
+            border-left: 4px solid #255ffe;
+            transform: translateX(2px);
+        }
+
+        .notice-item:last-child {
+            border-bottom: none;
+        }
+
+        .notice-number {
+            font-weight: 600;
+            color: #64748b;
+        }
+
+        .notice-title {
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .notice-title.important {
+            color: #dc2626;
+        }
+
+        .notice-title.important::before {
+            content: "[중요]";
+            color: #dc2626;
+            font-weight: 700;
+            margin-right: 8px;
+        }
+
+        .notice-date {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .notice-views {
+            color: #64748b;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 40px;
+        }
+
+        .page-btn {
+            padding: 10px 15px;
+            border: 1px solid #e2e8f0;
+            background: white;
+            color: #64748b;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .page-btn:hover,
+        .page-btn.active {
+            background: #255ffe;
+            color: white;
+            border-color: #255ffe;
+        }
+
+        .page-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <button class="back-btn" onclick="history.back()">← 돌아가기</button>
+            <h1>공지사항</h1>
+            <p>Troy 플랫폼의 최신 소식과 중요 공지사항을 확인하세요</p>
+        </div>
+
+        <div class="board-container">
+            <div class="board-header">
+                <h2>공지사항 목록</h2>
+                <div class="board-stats">총 8개의 공지사항</div>
+            </div>
+
+            <div class="notice-list">
+                <div class="notice-header">
+                    <div>번호</div>
+                    <div>제목</div>
+                    <div>작성일</div>
+                    <div>조회수</div>
+                </div>
+
+                <div class="notice-item" onclick="openNotice(1)">
+                    <div class="notice-number">8</div>
+                    <div class="notice-title important">시스템 정기 점검 안내 (2025.08.30)</div>
+                    <div class="notice-date">2025.08.27</div>
+                    <div class="notice-views">1,245</div>
+                </div>
+
+                <div class="notice-item" onclick="openNotice(2)">
+                    <div class="notice-number">7</div>
+                    <div class="notice-title">캠페인 등록 기능 개선 안내</div>
+                    <div class="notice-date">2025.08.25</div>
+                    <div class="notice-views">892</div>
+                </div>
+
+                <div class="notice-item" onclick="openNotice(3)">
+                    <div class="notice-number">6</div>
+                    <div class="notice-title">Troy 플랫폼 2.0 업데이트 완료</div>
+                    <div class="notice-date">2025.08.20</div>
+                    <div class="notice-views">2,156</div>
+                </div>
+
+                <div class="notice-item" onclick="openNotice(4)">
+                    <div class="notice-number">5</div>
+                    <div class="notice-title important">개인정보처리방침 개정 안내</div>
+                    <div class="notice-date">2025.08.15</div>
+                    <div class="notice-views">1,678</div>
+                </div>
+
+                <div class="notice-item" onclick="openNotice(5)">
+                    <div class="notice-number">4</div>
+                    <div class="notice-title">새로운 파트너사 등록 오픈</div>
+                    <div class="notice-date">2025.08.10</div>
+                    <div class="notice-views">934</div>
+                </div>
+
+                <div class="notice-item" onclick="openNotice(6)">
+                    <div class="notice-number">3</div>
+                    <div class="notice-title">여름 휴가철 고객센터 운영 안내</div>
+                    <div class="notice-date">2025.08.01</div>
+                    <div class="notice-views">567</div>
+                </div>
+
+                <div class="notice-item" onclick="openNotice(7)">
+                    <div class="notice-number">2</div>
+                    <div class="notice-title">Troy 모바일 앱 출시 안내</div>
+                    <div class="notice-date">2025.07.25</div>
+                    <div class="notice-views">3,421</div>
+                </div>
+
+                <div class="notice-item" onclick="openNotice(8)">
+                    <div class="notice-number">1</div>
+                    <div class="notice-title">Troy 플랫폼 오픈 기념 이벤트</div>
+                    <div class="notice-date">2025.07.01</div>
+                    <div class="notice-views">5,234</div>
+                </div>
+            </div>
+
+            <div class="pagination">
+                <button class="page-btn" disabled>‹</button>
+                <button class="page-btn active">1</button>
+                <button class="page-btn">2</button>
+                <button class="page-btn">3</button>
+                <button class="page-btn">›</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openNotice(id) {
+            alert(`공지사항 ${id}번을 확인합니다. (상세 페이지는 준비 중입니다.)`);
+        }
+
+        // 페이지네이션
+        document.querySelectorAll('.page-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                if (!this.disabled && !this.classList.contains('active')) {
+                    document.querySelector('.page-btn.active').classList.remove('active');
+                    this.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

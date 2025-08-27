@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>광고주센터 로그인 - Troy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="troy-login.css">
+</head>
+<body>
+  <div class="page">
+    <section class="hero">
+      <div class="hero-inner">
+        <img src="assets/horse.png" alt="Troy emblem" class="emblem">
+        <h2 class="hero-subtitle">리뷰와 유입, 매출 상승의 공식</h2>
+        <p class="hero-desc">믿을 수 있는 실용적 마케팅</p>
+        <h3 class="hero-title">
+          <img src="assets/left.png" alt="left wreath" class="hero-wreath">
+          <span>Troy</span>
+          <img src="assets/right.png" alt="right wreath" class="hero-wreath">
+        </h3>
+        <p class="hero-brand-desc">Influencer Platform &amp; Brands</p>
+        <div class="legal">
+          <p class="links"><a href="agency-register.html" class="link">대행사 모집</a> <span class="sep">|</span> <a href="register-select.html" class="link">광고주센터</a> <span class="sep">|</span> <a href="admin-dashboard.html" class="link">관리자</a> <span class="sep">|</span> <a href="agency-dashboard.html" class="link">대행사</a> <span class="sep">|</span> <a href="customer-dashboard.html" class="link">고객사</a> <span class="sep">|</span> <a href="partner-dashboard.html" class="link">파트너사</a> <span class="sep">|</span> 로그인</p>
+          <p class="corp">트로이 인터내셔널 대표자: 이원섭 사업자등록번호: 117-81-79518 ...</p>
+        </div>
+      </div>
+    </section>
+    <section class="login">
+      <div class="login-card">
+        <div class="login-header">
+                  <div class="wreaths-container">
+          <div class="center-content">
+            <div class="troy-with-wreaths">
+              <img class="wreath left" src="assets/left.png" alt="left wreath">
+              <span class="brand">Troy</span>
+              <img class="wreath right" src="assets/right.png" alt="right wreath">
+            </div>
+                         <div class="center">광고주센터</div>
+          </div>
+        </div>
+        </div>
+        <form class="form">
+          <label class="label" for="bizId">아이디</label>
+          <input class="input" id="bizId" placeholder="아이디">
+
+          <label class="label" for="password">비밀번호</label>
+          <input class="input" id="password" type="password" placeholder="6자이상의 비밀번호">
+
+          <button class="btn" type="button">로그인하기</button>
+
+          <div class="meta-links">
+            <a href="register-select.html" class="primary">광고주센터가입</a>
+            <span class="divider">|</span>
+            <a href="#">비밀번호찾기</a>
+            <span class="divider">|</span>
+            <a href="#">문의하기</a>
+          </div>
+        </form>
+      </div>
+    </section>
+  </div>
+  <script>
+    // 로그인 버튼 클릭 시
+    document.querySelector('.btn').addEventListener('click', function() {
+      const userId = document.getElementById('bizId').value;
+      const password = document.getElementById('password').value;
+      
+      if (!userId || !password) {
+        alert('아이디와 비밀번호를 입력해주세요.');
+        return;
+      }
+      
+      // 각 유형별 로그인 처리
+      if (userId === 'admin' && password === '1234') {
+        alert('관리자 로그인 성공!');
+        setTimeout(() => window.location.replace('admin-dashboard.html'), 500);
+      } else if (userId === 'agency' && password === '1234') {
+        alert('대행사 로그인 성공!');
+        setTimeout(() => window.location.replace('agency-dashboard.html'), 500);
+      } else if (userId === 'customer' && password === '1234') {
+        alert('고객 로그인 성공!');
+        setTimeout(() => window.location.replace('customer-dashboard.html'), 500);
+      } else if (userId === 'partner' && password === '1234') {
+        alert('파트너 로그인 성공!');
+        setTimeout(() => window.location.replace('partner-dashboard.html'), 500);
+      } else {
+        alert('아이디 또는 비밀번호가 올바르지 않습니다.');
+      }
+    });
+  </script>
+</body>
+</html>
+
+
