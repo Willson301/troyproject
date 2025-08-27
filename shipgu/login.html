@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>로그인 | SHIPGU - 글로벌 소싱 플랫폼</title>
+    <meta name="description" content="SHIPGU 로그인 - 세상에 없던 1688 직접 구매 솔루션"/>
+    <link rel="stylesheet" href="style.css"/>
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet"/>
+</head>
+<body>
+    <header class="black my-lto8ev">
+        <div class="my-yghcnd">
+            <div class="my-p71deq">
+                <a href="index.html"><img src="수바.PNG" alt="SHIPGU" class="logo-image"></a>
+            </div>
+            <div class="my-155dtqa">
+                <a href="/1688"><div class="fs_16 fw_600 my-1nm2b7m">1688솔루션</div></a>
+                <a href="/superagency"><div class="fs_16 fw_600 my-1nm2b7m">슈퍼에이전시</div></a>
+            </div>
+            <div class="white my-32upwi">
+                <a href="login.html"><div class="fs_16 fw_600 my-1nm2b7m">로그인</div></a>
+                <a href="login.html"><button class="fs_16 fw_600 my-16duwqb">지금 시작하기 <strong>↗</strong></button></a>
+                <div id="menu">≡</div>
+            </div>
+        </div>
+    </header>
+
+    <main class="login-main">
+        <div class="login-container">
+            <div class="login-box">
+                <div class="login-header">
+                    <h1 class="login-title">SHIPGU 로그인</h1>
+                    <p class="login-subtitle">글로벌 소싱 플랫폼에 오신 것을 환영합니다</p>
+                </div>
+                
+                <form class="login-form" id="loginForm">
+                    <div class="input-group">
+                        <label for="email">이메일</label>
+                        <input type="email" id="email" name="email" placeholder="이메일을 입력하세요" required>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="password">비밀번호</label>
+                        <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요" required>
+                    </div>
+                    
+                    <div class="login-options">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="remember">
+                            <span class="checkmark"></span>
+                            로그인 상태 유지
+                        </label>
+                        <a href="/forgot-password" class="forgot-link">비밀번호 찾기</a>
+                    </div>
+                    
+                    <button type="submit" class="login-btn" id="loginButton">로그인</button>
+                    
+                    <div class="test-accounts">
+                        <h4>🧪 테스트 계정</h4>
+                        <div class="test-account individual">👤 개인회원: user@shipgu.com / 12345678</div>
+                        <div class="test-account business">🏢 사업자회원: business@shipgu.com / 12345678</div>
+                    </div>
+                    
+                    <div class="divider">
+                        <span>또는</span>
+                    </div>
+                    
+                    <div class="social-login">
+                        <button type="button" class="social-btn kakao" onclick="loginWithKakao()">
+                            <span>카카오로 시작하기</span>
+                        </button>
+                        <button type="button" class="social-btn google" onclick="loginWithGoogle()">
+                            <span>Google로 시작하기</span>
+                        </button>
+                    </div>
+                </form>
+                
+                <div class="signup-link">
+                    <p>아직 계정이 없으신가요? <a href="register.html">지금 시작하기</a></p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer id="footer" class="my-1gl34xe">
+        <div class="my-1h7r2m1">
+            <div class="my-1hm2lll">
+                <div class="footer-logo">🚢 SHIPGU</div>
+            </div>
+            <div class="my-1l2hii8">
+                <div class="my-8lyjdm">
+                    <ul class="my-2uhc2f">
+                        <li class="my-q0ixca">주식회사 SHIPGU</li>
+                        <li class="my-q0ixca">개인정보보호책임자 : SHIPGU 관리자</li>
+                        <li class="my-q0ixca">사업자등록증 : 123-45-67890</li>
+                        <li class="my-q0ixca">통신판매업 신고번호 : 제2024-서울강남-00000호</li>
+                        <li class="my-q0ixca">주소 : 서울특별시 강남구</li>
+                    </ul>
+                    <div class="my-14jnlbs">
+                        <div class="my-17pdlp9"><a href="/terms">이용약관</a></div>
+                        <div class="my-17pdlp9"><a href="/privacy">개인정보취급방침</a></div>
+                    </div>
+                </div>
+                <li class="my-q0ixca">Copyright 2024 ⓒ SHIPGU</li>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 테스트용 사용자 데이터
+        const testUsers = {
+            'user@shipgu.com': { 
+                password: '12345678', 
+                name: '홍길동', 
+                memberType: 'individual',
+                isVerified: false 
+            },
+            'business@shipgu.com': { 
+                password: '12345678', 
+                name: '김사업', 
+                memberType: 'business',
+                isVerified: false 
+            }
+        };
+
+        // 테스트 계정 클릭 시 자동 입력
+        document.querySelectorAll('.test-account').forEach(account => {
+            account.addEventListener('click', function() {
+                const emailInput = document.getElementById('email');
+                const passwordInput = document.getElementById('password');
+                
+                if (this.classList.contains('individual')) {
+                    emailInput.value = 'user@shipgu.com';
+                    passwordInput.value = '12345678';
+                } else if (this.classList.contains('business')) {
+                    emailInput.value = 'business@shipgu.com';
+                    passwordInput.value = '12345678';
+                }
+                
+                // 입력 효과
+                emailInput.focus();
+                setTimeout(() => passwordInput.focus(), 100);
+            });
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const loginButton = document.getElementById('loginButton');
+            
+            if (!email || !password) {
+                alert('이메일과 비밀번호를 입력해주세요');
+                return;
+            }
+
+            // 로딩 상태
+            loginButton.disabled = true;
+            loginButton.innerHTML = '<div class="loading-spinner"></div>로그인 중...';
+
+            setTimeout(() => {
+                const user = testUsers[email];
+                
+                if (user && user.password === password) {
+                    // 사용자 정보 저장
+                    const userData = {
+                        email: email,
+                        name: user.name,
+                        memberType: user.memberType,
+                        isVerified: user.isVerified,
+                        loginTime: new Date().toISOString()
+                    };
+                    
+                    localStorage.setItem('currentUser', JSON.stringify(userData));
+                    
+                    alert(`${user.name}님 로그인 성공!`);
+                    window.location.href = 'dashboard.html';
+                } else {
+                    alert('이메일 또는 비밀번호가 잘못되었습니다.');
+                }
+                
+                // 버튼 상태 복원
+                loginButton.disabled = false;
+                loginButton.innerHTML = '로그인';
+            }, 1000);
+        });
+
+        function loginWithKakao() {
+            alert('카카오 로그인을 진행합니다...');
+            
+            setTimeout(() => {
+                // 카카오 로그인 성공 시뮬레이션
+                const userData = {
+                    email: 'kakao@shipgu.com',
+                    name: '카카오사용자',
+                    memberType: 'individual',
+                    isVerified: false,
+                    loginMethod: 'kakao',
+                    loginTime: new Date().toISOString()
+                };
+                
+                localStorage.setItem('currentUser', JSON.stringify(userData));
+                
+                alert('카카오 로그인 성공!');
+                window.location.href = 'dashboard.html';
+            }, 1500);
+        }
+
+        function loginWithGoogle() {
+            alert('Google 로그인을 진행합니다...');
+            
+            setTimeout(() => {
+                // 구글 로그인 성공 시뮬레이션
+                const userData = {
+                    email: 'google@shipgu.com',
+                    name: '구글사용자',
+                    memberType: 'individual',
+                    isVerified: false,
+                    loginMethod: 'google',
+                    loginTime: new Date().toISOString()
+                };
+                
+                localStorage.setItem('currentUser', JSON.stringify(userData));
+                
+                alert('Google 로그인 성공!');
+                window.location.href = 'dashboard.html';
+            }, 1500);
+        }
+    </script>
+</body>
+</html>

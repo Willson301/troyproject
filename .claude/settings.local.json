@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(/C:\\Users\\user\\OneDrive\\문서\\카카오톡 받은 파일/**)",
+      "Read(/C:\\Users\\user\\OneDrive\\문서\\카카오톡 받은 파일/**)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

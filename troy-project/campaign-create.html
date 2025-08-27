@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Troy - 새 캠페인 등록</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f9fafb;
+            color: #111827;
+        }
+        
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* 사이드바 스타일 (간소화) */
+        .sidebar {
+            width: 264px;
+            background: #f9fafb;
+            border-right: 1px solid #e5e7eb;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+        
+        .logo-section {
+            padding: 24px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .logo-link {
+            display: block;
+            text-decoration: none;
+        }
+        
+        .logo-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo-icon {
+            width: 48px;
+            height: 24px;
+            background: #2563eb;
+            border-radius: 4px;
+        }
+        
+        .brand-name {
+            font-size: 20px;
+            font-weight: 700;
+            color: #111827;
+        }
+        
+        .brand-subtitle {
+            margin-top: 8px;
+            font-size: 14px;
+            color: #6b7280;
+        }
+        
+        .back-section {
+            padding: 24px;
+        }
+        
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px;
+            background: #f3f4f6;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #374151;
+            transition: all 0.2s;
+            width: 100%;
+        }
+        
+        .back-btn:hover {
+            background: #e5e7eb;
+        }
+        
+        /* 메인 콘텐츠 */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 16px 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .header-title {
+            font-size: 24px;
+            font-weight: 500;
+            color: #111827;
+        }
+        
+        .breadcrumb {
+            font-size: 14px;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+        
+        .breadcrumb a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+        
+        /* 캠페인 생성 폼 */
+        .campaign-form {
+            flex: 1;
+            padding: 24px;
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        .form-section {
+            background: white;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .form-label.required::after {
+            content: ' *';
+            color: #ef4444;
+        }
+        
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+        
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+        }
+        
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .checkbox-item input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+        }
+        
+        .checkbox-item label {
+            font-size: 14px;
+            color: #374151;
+        }
+        
+        .file-upload {
+            border: 2px dashed #d1d5db;
+            border-radius: 8px;
+            padding: 32px;
+            text-align: center;
+            transition: border-color 0.2s;
+            cursor: pointer;
+        }
+        
+        .file-upload:hover {
+            border-color: #2563eb;
+        }
+        
+        .file-upload.drag-over {
+            border-color: #2563eb;
+            background: #eff6ff;
+        }
+        
+        .file-upload-text {
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        .file-upload-button {
+            margin-top: 12px;
+            padding: 8px 16px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .uploaded-files {
+            margin-top: 16px;
+        }
+        
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            background: #f3f4f6;
+            border-radius: 6px;
+            margin-bottom: 8px;
+        }
+        
+        .file-name {
+            font-size: 14px;
+            color: #374151;
+        }
+        
+        .remove-file {
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        /* 예산 설정 */
+        .budget-input {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .budget-input input {
+            flex: 1;
+        }
+        
+        .currency {
+            font-size: 14px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+        
+        /* 액션 버튼 */
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            padding: 24px;
+            background: white;
+            border-top: 1px solid #e5e7eb;
+            position: sticky;
+            bottom: 0;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+        }
+        
+        .btn-secondary:hover {
+            background: #e5e7eb;
+        }
+        
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #1d4ed8;
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        /* 프리뷰 */
+        .campaign-preview {
+            background: #f9fafb;
+            border-radius: 8px;
+            padding: 20px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .preview-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 12px;
+        }
+        
+        .preview-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .preview-label {
+            color: #6b7280;
+        }
+        
+        .preview-value {
+            color: #111827;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- 사이드바 -->
+        <div class="sidebar">
+            <div class="logo-section">
+                <a href="dashboard.html" class="logo-link">
+                    <div class="logo-content">
+                        <div class="logo-icon"></div>
+                        <span class="brand-name">TROY</span>
+                    </div>
+                    <div class="brand-subtitle">광고주센터</div>
+                </a>
+            </div>
+
+            <div class="back-section">
+                <button class="back-btn" onclick="goBack()">
+                    ← 대시보드로 돌아가기
+                </button>
+            </div>
+        </div>
+
+        <!-- 메인 콘텐츠 -->
+        <div class="main-content">
+            <header class="header">
+                <div class="header-content">
+                    <div>
+                        <h1 class="header-title">새 캠페인 등록</h1>
+                        <div class="breadcrumb">
+                            <a href="dashboard.html">대시보드</a> > 새 캠페인 등록
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <form class="campaign-form" id="campaignForm">
+                <!-- 기본 정보 -->
+                <div class="form-section">
+                    <h2 class="section-title">기본 정보</h2>
+                    
+                    <div class="form-group">
+                        <label class="form-label required">캠페인 제목</label>
+                        <input type="text" class="form-input" id="campaignTitle" placeholder="예: [쿠팡 구매평] 뷰티 제품 체험단 모집" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label required">캠페인 유형</label>
+                            <select class="form-select" id="campaignType" required>
+                                <option value="">선택해주세요</option>
+                                <option value="구매평">구매평</option>
+                                <option value="제공형">제공형</option>
+                                <option value="페이백">페이백</option>
+                                <option value="페이백+구매평">페이백+구매평</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label required">모집 플랫폼</label>
+                            <select class="form-select" id="platform" required>
+                                <option value="">선택해주세요</option>
+                                <option value="coupang">쿠팡</option>
+                                <option value="instagram">인스타그램</option>
+                                <option value="naver">네이버 블로그</option>
+                                <option value="youtube">유튜브</option>
+                                <option value="tiktok">틱톡</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label required">캠페인 설명</label>
+                        <textarea class="form-textarea" id="description" placeholder="캠페인에 대한 상세한 설명을 입력해주세요." required></textarea>
+                    </div>
+                </div>
+
+                <!-- 모집 조건 -->
+                <div class="form-section">
+                    <h2 class="section-title">모집 조건</h2>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label required">모집 인원</label>
+                            <input type="number" class="form-input" id="recruitCount" min="1" placeholder="예: 30" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">예비 선발</label>
+                            <input type="number" class="form-input" id="backupCount" min="0" placeholder="예: 5">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">활동 조건</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="condition1" value="follower_1000">
+                                <label for="condition1">팔로워 1000명 이상</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="condition2" value="recent_post">
+                                <label for="condition2">최근 활동 이력</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="condition3" value="quality_content">
+                                <label for="condition3">고품질 콘텐츠</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="condition4" value="brand_fit">
+                                <label for="condition4">브랜드 적합성</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 일정 및 예산 -->
+                <div class="form-section">
+                    <h2 class="section-title">일정 및 예산</h2>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label required">신청 시작일</label>
+                            <input type="date" class="form-input" id="startDate" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label required">신청 마감일</label>
+                            <input type="date" class="form-input" id="endDate" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">캠페인 시작일</label>
+                            <input type="date" class="form-input" id="campaignStart">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">캠페인 종료일</label>
+                            <input type="date" class="form-input" id="campaignEnd">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">예산 (크레딧)</label>
+                            <div class="budget-input">
+                                <input type="number" class="form-input" id="budget" min="0" placeholder="0">
+                                <span class="currency">C</span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">인플루언서당 보상</label>
+                            <div class="budget-input">
+                                <input type="number" class="form-input" id="reward" min="0" placeholder="0">
+                                <span class="currency">C</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 제품/서비스 정보 -->
+                <div class="form-section">
+                    <h2 class="section-title">제품/서비스 정보</h2>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label required">제품명</label>
+                            <input type="text" class="form-input" id="productName" placeholder="예: 6-195PROBLEM 발란스핏 종아리 마사지기" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">카테고리</label>
+                            <select class="form-select" id="category">
+                                <option value="">선택해주세요</option>
+                                <option value="beauty">뷰티/화장품</option>
+                                <option value="fashion">패션/의류</option>
+                                <option value="food">식품</option>
+                                <option value="health">건강/의료기기</option>
+                                <option value="tech">전자제품</option>
+                                <option value="home">홈/리빙</option>
+                                <option value="etc">기타</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">제품 설명</label>
+                        <textarea class="form-textarea" id="productDescription" placeholder="제품의 특징, 효과, 사용법 등을 입력해주세요."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">해시태그</label>
+                        <input type="text" class="form-input" id="hashtags" placeholder="예: #종아리붓기싹 #초강력맞춤압박 #해은PICK (공백으로 구분)">
+                    </div>
+                </div>
+
+                <!-- 이미지 업로드 -->
+                <div class="form-section">
+                    <h2 class="section-title">캠페인 이미지</h2>
+                    
+                    <div class="form-group">
+                        <label class="form-label">제품 이미지</label>
+                        <div class="file-upload" id="fileUpload">
+                            <div class="file-upload-text">
+                                이미지를 드래그하여 올리거나 클릭하여 선택하세요<br>
+                                <small>(JPG, PNG, 최대 5MB, 최대 5장)</small>
+                            </div>
+                            <button type="button" class="file-upload-button" onclick="selectFiles()">파일 선택</button>
+                            <input type="file" id="imageFiles" multiple accept="image/*" style="display: none;" onchange="handleFiles(this.files)">
+                        </div>
+                        <div class="uploaded-files" id="uploadedFiles"></div>
+                    </div>
+                </div>
+
+                <!-- 미리보기 -->
+                <div class="form-section">
+                    <h2 class="section-title">캠페인 미리보기</h2>
+                    
+                    <div class="campaign-preview" id="campaignPreview">
+                        <div class="preview-title">캠페인 정보</div>
+                        <div class="preview-item">
+                            <span class="preview-label">제목:</span>
+                            <span class="preview-value" id="previewTitle">-</span>
+                        </div>
+                        <div class="preview-item">
+                            <span class="preview-label">유형:</span>
+                            <span class="preview-value" id="previewType">-</span>
+                        </div>
+                        <div class="preview-item">
+                            <span class="preview-label">플랫폼:</span>
+                            <span class="preview-value" id="previewPlatform">-</span>
+                        </div>
+                        <div class="preview-item">
+                            <span class="preview-label">모집인원:</span>
+                            <span class="preview-value" id="previewCount">-</span>
+                        </div>
+                        <div class="preview-item">
+                            <span class="preview-label">예산:</span>
+                            <span class="preview-value" id="previewBudget">-</span>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <!-- 액션 버튼 -->
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" onclick="saveDraft()">임시저장</button>
+                <button type="button" class="btn btn-secondary" onclick="goBack()">취소</button>
+                <button type="submit" class="btn btn-primary" form="campaignForm">캠페인 등록</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let uploadedFiles = [];
+
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            
+            if (!currentUser) {
+                alert('로그인이 필요합니다.');
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // 오늘 날짜를 기본값으로 설정
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('startDate').value = today;
+
+            // 실시간 미리보기 업데이트
+            setupPreviewUpdates();
+
+            // 파일 드래그&드롭 설정
+            setupFileUpload();
+        });
+
+        // 실시간 미리보기 업데이트 설정
+        function setupPreviewUpdates() {
+            const fields = [
+                { id: 'campaignTitle', preview: 'previewTitle' },
+                { id: 'campaignType', preview: 'previewType' },
+                { id: 'platform', preview: 'previewPlatform' },
+                { id: 'recruitCount', preview: 'previewCount', suffix: '명' },
+                { id: 'budget', preview: 'previewBudget', suffix: ' C' }
+            ];
+
+            fields.forEach(field => {
+                const element = document.getElementById(field.id);
+                element.addEventListener('input', function() {
+                    const value = this.value || '-';
+                    const displayValue = field.suffix ? (value !== '-' ? value + field.suffix : '-') : value;
+                    document.getElementById(field.preview).textContent = displayValue;
+                });
+            });
+        }
+
+        // 파일 업로드 설정
+        function setupFileUpload() {
+            const fileUpload = document.getElementById('fileUpload');
+            
+            fileUpload.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.classList.add('drag-over');
+            });
+            
+            fileUpload.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                this.classList.remove('drag-over');
+            });
+            
+            fileUpload.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.classList.remove('drag-over');
+                handleFiles(e.dataTransfer.files);
+            });
+            
+            fileUpload.addEventListener('click', selectFiles);
+        }
+
+        function selectFiles() {
+            document.getElementById('imageFiles').click();
+        }
+
+        function handleFiles(files) {
+            Array.from(files).forEach(file => {
+                if (file.type.startsWith('image/') && file.size <= 5 * 1024 * 1024) {
+                    if (uploadedFiles.length < 5) {
+                        uploadedFiles.push(file);
+                        displayUploadedFile(file);
+                    } else {
+                        alert('최대 5장까지만 업로드할 수 있습니다.');
+                    }
+                } else {
+                    alert(`${file.name}: 이미지 파일(5MB 이하)만 업로드할 수 있습니다.`);
+                }
+            });
+        }
+
+        function displayUploadedFile(file) {
+            const container = document.getElementById('uploadedFiles');
+            const fileItem = document.createElement('div');
+            fileItem.className = 'file-item';
+            fileItem.innerHTML = `
+                <span class="file-name">${file.name} (${(file.size / 1024).toFixed(1)}KB)</span>
+                <button type="button" class="remove-file" onclick="removeFile('${file.name}')">삭제</button>
+            `;
+            container.appendChild(fileItem);
+        }
+
+        function removeFile(fileName) {
+            uploadedFiles = uploadedFiles.filter(file => file.name !== fileName);
+            
+            const fileItems = document.querySelectorAll('.file-item');
+            fileItems.forEach(item => {
+                if (item.querySelector('.file-name').textContent.includes(fileName)) {
+                    item.remove();
+                }
+            });
+        }
+
+        // 폼 제출
+        document.getElementById('campaignForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                title: document.getElementById('campaignTitle').value,
+                type: document.getElementById('campaignType').value,
+                platform: document.getElementById('platform').value,
+                description: document.getElementById('description').value,
+                recruitCount: document.getElementById('recruitCount').value,
+                backupCount: document.getElementById('backupCount').value,
+                startDate: document.getElementById('startDate').value,
+                endDate: document.getElementById('endDate').value,
+                campaignStart: document.getElementById('campaignStart').value,
+                campaignEnd: document.getElementById('campaignEnd').value,
+                budget: document.getElementById('budget').value,
+                reward: document.getElementById('reward').value,
+                productName: document.getElementById('productName').value,
+                category: document.getElementById('category').value,
+                productDescription: document.getElementById('productDescription').value,
+                hashtags: document.getElementById('hashtags').value,
+                files: uploadedFiles.map(f => f.name)
+            };
+            
+            // 여기서 실제로는 서버로 데이터를 전송합니다
+            console.log('캠페인 데이터:', formData);
+            
+            alert('캠페인이 성공적으로 등록되었습니다!');
+            window.location.href = 'dashboard.html';
+        });
+
+        function saveDraft() {
+            alert('임시저장되었습니다.');
+        }
+
+        function goBack() {
+            if (confirm('작성 중인 내용이 사라집니다. 정말 나가시겠습니까?')) {
+                window.location.href = 'dashboard.html';
+            }
+        }
+    </script>
+</body>
+</html>

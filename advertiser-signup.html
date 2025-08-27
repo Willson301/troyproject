@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>광고주센터 신규가입 - Troy</title>
+    <link rel="stylesheet" href="advertiser-signup.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- 헤더 섹션 -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="main-title">
+                    <span class="highlight">광고주센터</span>
+                    <span class="subtitle">신규가입</span>
+                </h1>
+            </div>
+        </header>
+
+        <!-- 광고주 유형 선택 섹션 -->
+        <section class="advertiser-type">
+            <div class="type-cards">
+                <div class="type-card active" data-type="commerce">
+                    <div class="card-content">
+                        <h3 class="card-title">온라인 커머스 고객사</h3>
+                        <p class="card-description">브랜드(세품),쿠팡,네이버,오늘의집 광고주님인가요?</p>
+                    </div>
+                </div>
+                
+                <div class="type-card" data-type="agency">
+                    <div class="card-content">
+                        <h3 class="card-title">광고 대행사</h3>
+                        <p class="card-description">광고 대행사를 운영하고 계신가요?</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 회원가입 폼 섹션 -->
+        <section class="signup-form">
+            <form id="signupForm">
+                <!-- 아이디 (사업자번호) -->
+                <div class="form-group">
+                    <label for="business-number">아이디 (사업자번호)</label>
+                    <input type="text" id="business-number" name="businessNumber" 
+                           placeholder="사업자번호를입력해주세요" required>
+                    <p class="form-hint">사업자번호가 사용하실ID가 됩니다. (별도 설정 불가)</p>
+                </div>
+
+                <!-- 비밀번호 -->
+                <div class="form-group">
+                    <label for="password">비밀번호</label>
+                    <input type="password" id="password" name="password" 
+                           placeholder="비밀번호를 입력해주세요" required>
+                    <p class="form-hint">영문, 숫자, 특수문자(®$%*?&# 허용) 포함8~20자리</p>
+                </div>
+
+                <!-- 비밀번호 재확인 -->
+                <div class="form-group">
+                    <label for="password-confirm">비밀번호재확인</label>
+                    <input type="password" id="password-confirm" name="passwordConfirm" 
+                           placeholder="비밀번호를 다시 입력해주세요" required>
+                </div>
+
+                <!-- 상호명 -->
+                <div class="form-group">
+                    <label for="company-name">상호명</label>
+                    <input type="text" id="company-name" name="companyName" 
+                           placeholder="회사이름을 입력해주세요" required>
+                </div>
+
+                <!-- 담당자 성함 -->
+                <div class="form-group">
+                    <label for="manager-name">담당자 성함</label>
+                    <input type="text" id="manager-name" name="managerName" 
+                           placeholder="담당자 성함을입력해주세요" required>
+                </div>
+
+                <!-- 전화번호 -->
+                <div class="form-group">
+                    <label for="phone">전화번호</label>
+                    <input type="tel" id="phone" name="phone" 
+                           placeholder="전화번호를입력해주세요" required>
+                </div>
+
+                <!-- 이메일 -->
+                <div class="form-group">
+                    <label for="email">이메일</label>
+                    <input type="email" id="email" name="email" 
+                           placeholder="이메일을입력해주세요" required>
+                </div>
+
+                <!-- 홈페이지 -->
+                <div class="form-group">
+                    <label for="website">홈페이지 또는 관련URL</label>
+                    <input type="url" id="website" name="website" 
+                           placeholder="https://www.stylec.co.kr">
+                </div>
+
+                <!-- 사업자등록증 업로드 (광고대행사만) -->
+                <div class="form-group file-upload-group" id="business-license-group" style="display: none;">
+                    <label for="business-license">사업자등록증</label>
+                    <div class="file-upload-container">
+                        <div class="file-upload-area" id="fileUploadArea">
+                            <div class="upload-icon">📎</div>
+                            <p class="upload-text">사업자등록증을 첨부해주세요</p>
+                            <p class="upload-hint">파일 형식: PDF, JPG, PNG (최대 10MB)</p>
+                            <input type="file" id="business-license" name="businessLicense" 
+                                   accept=".pdf,.jpg,.jpeg,.png" style="display: none;">
+                        </div>
+                        <div class="uploaded-file" id="uploadedFile" style="display: none;">
+                            <div class="file-info">
+                                <span class="file-name" id="fileName"></span>
+                                <span class="file-size" id="fileSize"></span>
+                            </div>
+                            <button type="button" class="remove-file" id="removeFile">✕</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </section>
+
+        <!-- 약관 동의 섹션 -->
+        <section class="terms-agreement">
+            <div class="terms-group">
+                <div class="term-item">
+                    <input type="checkbox" id="service-terms" name="serviceTerms" required>
+                    <label for="service-terms">
+                        <span class="checkbox-custom"></span>
+                        <span class="term-text">서비스 이용약관 동의</span>
+                        <span class="term-required">(필수)</span>
+                    </label>
+                    <a href="#" class="terms-link">약관보기</a>
+                </div>
+
+                <div class="term-item">
+                    <input type="checkbox" id="privacy-terms" name="privacyTerms" required>
+                    <label for="privacy-terms">
+                        <span class="checkbox-custom"></span>
+                        <span class="term-text">개인정보 수집 및 이용 동의</span>
+                        <span class="term-required">(필수)</span>
+                    </label>
+                    <a href="#" class="terms-link">약관보기</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 가입 버튼 섹션 -->
+        <section class="signup-button">
+            <button type="submit" form="signupForm" class="signup-btn" id="signupBtn">
+                광고주 회원가입
+            </button>
+            <p class="signup-note">광고주센터 가입은 무료입니다.</p>
+        </section>
+
+        <!-- 푸터 -->
+        <footer class="footer">
+            <p class="copyright">Copyright 2025. (주)스타일씨 코퍼레이션 All rights reserved</p>
+        </footer>
+    </div>
+
+    <script src="advertiser-signup.js"></script>
+</body>
+</html>

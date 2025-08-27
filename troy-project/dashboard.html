@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Troy - 광고주센터 대시보드</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f9fafb;
+            color: #111827;
+        }
+        
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* 사이드바 */
+        .sidebar {
+            width: 264px;
+            background: #f9fafb;
+            border-right: 1px solid #e5e7eb;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+        
+        /* 로고 섹션 */
+        .logo-section {
+            padding: 24px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .logo-link {
+            display: block;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+        
+        .logo-link:hover {
+            opacity: 0.8;
+        }
+        
+        .logo-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo-icon {
+            width: 48px;
+            height: 24px;
+            background: #2563eb;
+            border-radius: 4px;
+        }
+        
+        .brand-name {
+            font-size: 20px;
+            font-weight: 700;
+            color: #111827;
+        }
+        
+        .brand-subtitle {
+            margin-top: 8px;
+            font-size: 14px;
+            color: #6b7280;
+        }
+        
+        /* 사용자 정보 섹션 */
+        .user-section {
+            padding: 24px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .user-label {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 4px;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        
+        .user-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .user-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .user-badge.admin {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+        
+        .user-badge.agency {
+            background: #f3e8ff;
+            color: #7c3aed;
+        }
+        
+        .user-badge.client {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+        
+        /* 예치금 정보 */
+        .balance-card {
+            background: #dbeafe;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+        
+        .balance-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        .balance-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .balance-link {
+            font-size: 12px;
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .balance-link:hover {
+            color: #1d4ed8;
+            text-decoration: underline;
+        }
+        
+        .balance-amount {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .balance-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #2563eb;
+        }
+        
+        .balance-history {
+            font-size: 12px;
+            color: #6b7280;
+            text-decoration: none;
+        }
+        
+        .balance-history:hover {
+            color: #374151;
+            text-decoration: underline;
+        }
+        
+        .balance-warning {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #ea580c;
+            background: #fed7aa;
+            padding: 8px;
+            border-radius: 4px;
+        }
+        
+        /* 새 캠페인 등록 버튼 */
+        .action-section {
+            padding: 24px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .primary-action {
+            display: block;
+            width: 100%;
+            padding: 12px 16px;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 500;
+            transition: background-color 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .primary-action:hover {
+            background: #1d4ed8;
+        }
+        
+        /* 네비게이션 메뉴 */
+        .nav-section {
+            flex: 1;
+            padding: 24px;
+        }
+        
+        .nav-group {
+            margin-bottom: 24px;
+        }
+        
+        .nav-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #111827;
+            margin-bottom: 12px;
+        }
+        
+        .nav-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .nav-item {
+            margin-bottom: 8px;
+        }
+        
+        .nav-link {
+            display: block;
+            padding: 8px 12px;
+            color: #374151;
+            text-decoration: none;
+            font-size: 14px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+        
+        .nav-link:hover {
+            background: #f3f4f6;
+            color: #111827;
+        }
+        
+        .nav-link.active {
+            color: #2563eb;
+            background: #eff6ff;
+        }
+        
+        /* 로그아웃 섹션 */
+        .logout-section {
+            padding: 24px;
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        .logout-btn {
+            width: 100%;
+            padding: 8px 12px;
+            background: none;
+            border: none;
+            color: #6b7280;
+            font-size: 14px;
+            text-align: left;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .logout-btn:hover {
+            background: #f3f4f6;
+            color: #111827;
+        }
+        
+        /* 메인 콘텐츠 */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* 헤더 */
+        .header {
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 16px 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .header-title {
+            font-size: 24px;
+            font-weight: 500;
+            color: #111827;
+            margin-bottom: 4px;
+        }
+        
+        .header-subtitle {
+            font-size: 14px;
+            color: #6b7280;
+        }
+        
+        .header-logout {
+            padding: 8px 16px;
+            background: #111827;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+        
+        .header-logout:hover {
+            background: #1f2937;
+        }
+        
+        /* 통계 카드 */
+        .stats-section {
+            padding: 24px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid;
+        }
+        
+        .stat-count {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #6b7280;
+        }
+        
+        /* 캠페인 섹션 */
+        .campaigns-section {
+            flex: 1;
+            padding: 0 24px 24px;
+        }
+        
+        .search-bar {
+            background: white;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+        }
+        
+        .campaign-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e7eb;
+        }
+        
+        .campaign-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+        
+        .campaign-image {
+            width: 80px;
+            height: 80px;
+            background: #f3f4f6;
+            border-radius: 6px;
+            flex-shrink: 0;
+        }
+        
+        .campaign-info {
+            flex: 1;
+        }
+        
+        .campaign-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 4px;
+        }
+        
+        .campaign-id {
+            font-size: 12px;
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+        
+        .campaign-status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .status-pending {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+        
+        .status-active {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .status-ended {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- 사이드바 -->
+        <div class="sidebar">
+            <!-- 로고 섹션 -->
+            <div class="logo-section">
+                <a href="#" class="logo-link" onclick="goToMain()">
+                    <div class="logo-content">
+                        <div class="logo-icon"></div>
+                        <span class="brand-name">TROY</span>
+                    </div>
+                    <div class="brand-subtitle">광고주센터</div>
+                </a>
+            </div>
+
+            <!-- 사용자 정보 섹션 -->
+            <div class="user-section">
+                <div class="user-label">TROY 광고주센터</div>
+                <div class="user-info">
+                    <div class="user-name" id="userName">애드피플님</div>
+                    <span class="user-badge client" id="userBadge">고객사님</span>
+                </div>
+                
+                <!-- 예치금 현황 -->
+                <div class="balance-card">
+                    <div class="balance-header">
+                        <span class="balance-label">예치금 잔액</span>
+                        <a href="#" class="balance-link">충전</a>
+                    </div>
+                    <div class="balance-amount">
+                        <span class="balance-value" id="balanceValue">10원</span>
+                        <a href="#" class="balance-history">내역</a>
+                    </div>
+                    <div class="balance-warning" id="balanceWarning" style="display: none;">
+                        잔액 부족 - 충전을 권장합니다
+                    </div>
+                </div>
+            </div>
+
+            <!-- 새 캠페인 등록 버튼 -->
+            <div class="action-section">
+                <button class="primary-action" onclick="createCampaign()">
+                    새로운 캠페인 등록
+                </button>
+            </div>
+
+            <!-- 네비게이션 메뉴 -->
+            <div class="nav-section">
+                <nav>
+                    <div class="nav-group">
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a href="#" class="nav-link active">광고 캠페인관리</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="schedule.html" class="nav-link">스케줄 관리</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="nav-group" id="adminMenu" style="display: none;">
+                        <h3 class="nav-title">시스템 관리</h3>
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">인플루언서 관리</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">대행사 관리</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">고객사 관리</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">시스템 설정</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="nav-group" id="agencyMenu" style="display: none;">
+                        <h3 class="nav-title">대행사 관리</h3>
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a href="agency-clients.html" class="nav-link">클라이언트 관리</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="agency-folders.html" class="nav-link">폴더 관리</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="nav-group">
+                        <h3 class="nav-title">리뷰 관리</h3>
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">리뷰 작성/관리</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="nav-group">
+                        <h3 class="nav-title">고객 지원</h3>
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">공지사항</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">1:1 문의</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">반려 및 신고</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="nav-group">
+                        <h3 class="nav-title">계정 관리</h3>
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">결제내역</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">정산</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="my-info.html" class="nav-link">나의 정보/카드</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+
+            <!-- 로그아웃 섹션 -->
+            <div class="logout-section">
+                <button onclick="logout()" class="logout-btn">
+                    로그아웃
+                </button>
+            </div>
+        </div>
+
+        <!-- 메인 콘텐츠 -->
+        <div class="main-content">
+            <!-- 헤더 -->
+            <header class="header">
+                <div class="header-content">
+                    <div>
+                        <h1 class="header-title">광고 캠페인 관리</h1>
+                        <p class="header-subtitle" id="headerSubtitle">
+                            사용자 - 캠페인 로딩중...
+                        </p>
+                    </div>
+                    <button class="header-logout" onclick="logout()">
+                        로그아웃
+                    </button>
+                </div>
+            </header>
+
+            <!-- 통계 카드 -->
+            <div class="stats-section">
+                <div class="stats-grid">
+                    <div class="stat-card" style="border-left-color: #929193;">
+                        <div class="stat-count" style="color: #929193;">31</div>
+                        <div class="stat-label">전체</div>
+                    </div>
+                    <div class="stat-card" style="border-left-color: #8d8c8e;">
+                        <div class="stat-count" style="color: #8d8c8e;">6</div>
+                        <div class="stat-label">예정</div>
+                    </div>
+                    <div class="stat-card" style="border-left-color: #255ffe;">
+                        <div class="stat-count" style="color: #255ffe;">9</div>
+                        <div class="stat-label">신청중</div>
+                    </div>
+                    <div class="stat-card" style="border-left-color: #2de0b0;">
+                        <div class="stat-count" style="color: #2de0b0;">12</div>
+                        <div class="stat-label">진행중</div>
+                    </div>
+                    <div class="stat-card" style="border-left-color: #b5b3b7;">
+                        <div class="stat-count" style="color: #b5b3b7;">4</div>
+                        <div class="stat-label">종료</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 캠페인 섹션 -->
+            <div class="campaigns-section">
+                <div class="search-bar">
+                    <input 
+                        type="text" 
+                        placeholder="캠페인 검색..." 
+                        class="search-input"
+                        id="searchInput"
+                        onkeyup="searchCampaigns()"
+                    >
+                </div>
+
+                <div id="campaignsList">
+                    <!-- 캠페인 목록이 여기에 동적으로 추가됩니다 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 페이지 로드 시 사용자 정보 확인
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            
+            if (!currentUser) {
+                alert('로그인이 필요합니다.');
+                window.location.href = 'troy.html';
+                return;
+            }
+            
+            // 사용자 정보 표시
+            document.getElementById('userName').textContent = currentUser.name;
+            document.getElementById('headerSubtitle').textContent = 
+                `${currentUser.name} (${currentUser.code}) - 캠페인 로딩중...`;
+            
+            // 역할별 뱃지 설정
+            const userBadge = document.getElementById('userBadge');
+            if (currentUser.role === 'admin') {
+                userBadge.textContent = '관리자님';
+                userBadge.className = 'user-badge admin';
+                document.getElementById('adminMenu').style.display = 'block';
+            } else if (currentUser.role === 'agency') {
+                userBadge.textContent = '대행사님';
+                userBadge.className = 'user-badge agency';
+                document.getElementById('agencyMenu').style.display = 'block';
+            } else {
+                userBadge.textContent = '고객사님';
+                userBadge.className = 'user-badge client';
+            }
+            
+            // 예치금 정보 설정
+            const savedBalance = localStorage.getItem('depositBalance');
+            const balance = savedBalance ? parseInt(savedBalance) : 10;
+            document.getElementById('balanceValue').textContent = balance.toLocaleString('ko-KR') + '원';
+            
+            if (balance < 50000) {
+                document.getElementById('balanceWarning').style.display = 'block';
+            }
+            
+            // 캠페인 목록 로드
+            loadCampaigns();
+        });
+
+        // 샘플 캠페인 데이터
+        const sampleCampaigns = [
+            {
+                id: '1',
+                title: '[쿠팡 구매평] 6-195PROBLEM 발란스핏 종아리 마사지기',
+                campaignId: '202406149371330A9310',
+                status: '신청중',
+                type: '구매평',
+                budget: '84,550 C',
+                progress: '200/15/15',
+                dates: '2025-8-03~ 2025-08-21 캠페인 마감',
+                tags: ['종아리붓기싹!', '초강력 맞춤압박', '해은PICK!']
+            },
+            {
+                id: '2',
+                title: '[인스타그램] 헤이로지manon - 브이골지가디건cd (색상랜덤)',
+                campaignId: '202402281155995A7017',
+                status: '신청중',
+                type: '제공형',
+                progress: '223/5/5',
+                dates: '-- 2025-08-17 신청마감'
+            },
+            {
+                id: '3',
+                title: '크롭후디스셔츠 - 베이지',
+                campaignId: '2024022811553446A7031',
+                status: '종료',
+                type: '제공형',
+                progress: '5/5',
+                dates: '2025-08-11'
+            },
+            {
+                id: '4',
+                title: '[네이버 블로그] 라온 탈모증상완화 기능성 탈모 샴푸',
+                campaignId: '2024022811552153A7024',
+                status: '진행중',
+                type: '제공형',
+                progress: '50/50',
+                dates: '2025-08-11'
+            },
+            {
+                id: '5',
+                title: '[쿠팡구매-배송비본인부담] 라비시레더바디워시+바디로션 사용하고 페이백받자!',
+                campaignId: '2024022811553291A7030',
+                status: '진행중',
+                type: '페이백+구매평',
+                budget: '59,000 C',
+                progress: '3/5',
+                dates: '2025-08-11'
+            }
+        ];
+
+        function loadCampaigns() {
+            const campaignsList = document.getElementById('campaignsList');
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            
+            campaignsList.innerHTML = '';
+            
+            sampleCampaigns.forEach(campaign => {
+                const campaignCard = createCampaignCard(campaign);
+                campaignsList.appendChild(campaignCard);
+            });
+            
+            // 헤더 서브타이틀 업데이트
+            document.getElementById('headerSubtitle').textContent = 
+                `${currentUser.name} (${currentUser.code}) - ${sampleCampaigns.length}개 캠페인`;
+        }
+
+        function createCampaignCard(campaign) {
+            const card = document.createElement('div');
+            card.className = 'campaign-card';
+            
+            const statusClass = 
+                campaign.status === '신청중' ? 'status-pending' :
+                campaign.status === '진행중' ? 'status-active' : 'status-ended';
+            
+            card.innerHTML = `
+                <div class="campaign-header">
+                    <div class="campaign-image"></div>
+                    <div class="campaign-info">
+                        <h3 class="campaign-title">${campaign.title}</h3>
+                        <p class="campaign-id">${campaign.campaignId}</p>
+                        <span class="campaign-status ${statusClass}">${campaign.status}</span>
+                        ${campaign.budget ? `<span style="margin-left: 8px; font-size: 12px; color: #6b7280;">${campaign.budget}</span>` : ''}
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #6b7280;">
+                    <span>${campaign.progress}</span>
+                    <span>${campaign.dates}</span>
+                </div>
+                ${campaign.tags && campaign.tags.length > 0 ? 
+                    `<div style="margin-top: 8px;">
+                        ${campaign.tags.map(tag => `<span style="display: inline-block; background: #f3f4f6; color: #6b7280; padding: 2px 6px; border-radius: 4px; font-size: 10px; margin-right: 4px;">${tag}</span>`).join('')}
+                    </div>` : ''}
+            `;
+            
+            return card;
+        }
+
+        function searchCampaigns() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const campaignCards = document.querySelectorAll('.campaign-card');
+            
+            campaignCards.forEach(card => {
+                const title = card.querySelector('.campaign-title').textContent.toLowerCase();
+                if (title.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function createCampaign() {
+            window.location.href = 'campaign-create.html';
+        }
+
+        function goToMain() {
+            window.location.href = 'troy.html';
+        }
+
+        function logout() {
+            if (confirm('로그아웃 하시겠습니까?')) {
+                localStorage.removeItem('currentUser');
+                localStorage.removeItem('depositBalance');
+                alert('로그아웃되었습니다.');
+                window.location.href = 'troy.html';
+            }
+        }
+    </script>
+</body>
+</html>

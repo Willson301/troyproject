@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>대시보드 | SHIPGU - 글로벌 소싱 플랫폼</title>
+    <meta name="description" content="SHIPGU 대시보드 - 세상에 없던 1688 직접 구매 솔루션"/>
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet"/>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Pretendard', sans-serif;
+            background: #f9fafb;
+            color: #111827;
+        }
+        
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* 사이드바 */
+        .sidebar {
+            width: 264px;
+            background: #f9fafb;
+            border-right: 1px solid #e5e7eb;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+        
+        /* 로고 섹션 */
+        .logo-section {
+            padding: 24px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .logo-link {
+            display: block;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+        
+        .logo-link:hover {
+            opacity: 0.8;
+        }
+        
+        .logo-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo-icon {
+            width: 48px;
+            height: 24px;
+            background: #2563eb;
+            border-radius: 4px;
+        }
+        
+        .brand-name {
+            font-size: 20px;
+            font-weight: 700;
+            color: #111827;
+        }
+        
+        .brand-subtitle {
+            margin-top: 8px;
+            font-size: 14px;
+            color: #6b7280;
+        }
+        
+        /* 사용자 정보 섹션 */
+        .user-section {
+            padding: 24px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .user-label {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 4px;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        
+        .user-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .user-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .user-badge.verified {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .user-badge.unverified {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        /* 환율 정보 */
+        .exchange-rate {
+            display: flex !important;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding: 8px 12px;
+            background: #f0f9ff !important;
+            border-radius: 6px;
+            border: 1px solid #0ea5e9 !important;
+            font-family: 'Pretendard', sans-serif;
+        }
+        
+        .exchange-label {
+            font-size: 12px !important;
+            font-weight: 500;
+            color: #0369a1 !important;
+        }
+        
+        .exchange-value {
+            font-size: 12px !important;
+            font-weight: 700 !important;
+            color: #0c4a6e !important;
+        }
+        
+        /* 잔액 정보 */
+        .balance-card {
+            background: #dbeafe;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+        
+        .balance-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        .balance-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .balance-link {
+            font-size: 12px;
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .balance-link:hover {
+            color: #1d4ed8;
+            text-decoration: underline;
+        }
+        
+        .balance-amount {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .balance-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #2563eb;
+        }
+        
+        .balance-history {
+            font-size: 12px;
+            color: #6b7280;
+            text-decoration: none;
+        }
+        
+        .balance-history:hover {
+            color: #374151;
+            text-decoration: underline;
+        }
+        
+        /* 주요 액션 버튼 */
+        .action-section {
+            padding: 24px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .primary-action {
+            display: block;
+            width: 100%;
+            padding: 12px 16px;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+        
+        .primary-action:hover {
+            background: #1d4ed8;
+        }
+        
+        /* 네비게이션 메뉴 */
+        .nav-section {
+            flex: 1;
+            padding: 24px;
+        }
+        
+        .nav-group {
+            margin-bottom: 24px;
+        }
+        
+        .nav-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #111827;
+            margin-bottom: 12px;
+        }
+        
+        .nav-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .nav-item {
+            margin-bottom: 8px;
+        }
+        
+        .nav-link {
+            display: block;
+            padding: 8px 12px;
+            color: #374151;
+            text-decoration: none;
+            font-size: 14px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+        
+        .nav-link:hover {
+            background: #f3f4f6;
+            color: #111827;
+        }
+        
+        .nav-link.active {
+            color: #2563eb;
+            background: #eff6ff;
+        }
+        
+        /* 로그아웃 섹션 */
+        .logout-section {
+            padding: 24px;
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        .logout-btn {
+            width: 100%;
+            padding: 8px 12px;
+            background: none;
+            border: none;
+            color: #6b7280;
+            font-size: 14px;
+            text-align: left;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .logout-btn:hover {
+            background: #f3f4f6;
+            color: #111827;
+        }
+        
+        /* 메인 콘텐츠 */
+        .main-content {
+            flex: 1;
+            padding: 24px;
+        }
+        
+        .welcome-section {
+            background: white;
+            border-radius: 8px;
+            padding: 32px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .welcome-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+        
+        .welcome-subtitle {
+            font-size: 16px;
+            color: #6b7280;
+            margin-bottom: 32px;
+        }
+        
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+        
+        .service-card {
+            background: #f9fafb;
+            padding: 24px;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            text-align: center;
+            transition: all 0.2s;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .service-card:hover {
+            border-color: #2563eb;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transform: translateY(-2px);
+        }
+        
+        .service-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+        
+        .service-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+        
+        .service-desc {
+            font-size: 14px;
+            color: #6b7280;
+            line-height: 1.4;
+        }
+        
+        /* 공지사항 배너 */
+        .notice-banner {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #fef3c7;
+            border: 1px solid #fbbf24;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .notice-icon {
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        
+        .notice-text {
+            font-size: 14px;
+            color: #92400e;
+            line-height: 1.5;
+        }
+        
+        .notice-text strong {
+            color: #78350f;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- 사이드바 -->
+        <div class="sidebar">
+            <!-- 로고 섹션 -->
+            <div class="logo-section">
+                <a href="index.html" class="logo-link">
+                    <div class="logo-content">
+                        <div class="logo-icon"></div>
+                        <span class="brand-name">SHIPGU</span>
+                    </div>
+                    <div class="brand-subtitle">글로벌 소싱 플랫폼</div>
+                </a>
+            </div>
+
+            <!-- 사용자 정보 섹션 -->
+            <div class="user-section">
+                <div class="user-label">SHIPGU 회원</div>
+                <div class="user-info">
+                    <div class="user-name" id="userName">홍길동</div>
+                    <span class="user-badge unverified" id="userBadge">미인증</span>
+                </div>
+                
+                <!-- 환율 정보 -->
+                <div class="exchange-rate">
+                    <span class="exchange-label">환율</span>
+                    <span class="exchange-value" id="exchangeRate">1CNY = 200KRW</span>
+                </div>
+                
+                <!-- 예치금/크레딧 정보 -->
+                <div class="balance-card">
+                    <div class="balance-header">
+                        <span class="balance-label">SHIPGU 크레딧</span>
+                        <a href="#" class="balance-link">충전</a>
+                    </div>
+                    <div class="balance-amount">
+                        <span class="balance-value">0원</span>
+                        <a href="#" class="balance-history">내역</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 주요 액션 버튼 -->
+            <div class="action-section">
+                <button onclick="showServiceSelection()" class="primary-action">
+                    결제요청
+                </button>
+            </div>
+
+            <!-- 네비게이션 메뉴 -->
+            <div class="nav-section">
+                <nav>
+                    <div class="nav-group">
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a href="/notices" class="nav-link">📢 공지사항</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="nav-group">
+                        <h3 class="nav-title">주문 관리</h3>
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a href="/orders" class="nav-link">주문내역</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/cart" class="nav-link">장바구니</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/favorites" class="nav-link">찜한 상품</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="nav-group">
+                        <h3 class="nav-title">배송 관리</h3>
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a href="/shipping" class="nav-link">배송조회</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/warehouse" class="nav-link">창고현황</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="nav-group">
+                        <h3 class="nav-title">고객 지원</h3>
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a href="/notices" class="nav-link">공지사항</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/support" class="nav-link">1:1 문의</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/faq" class="nav-link">자주묻는질문</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="nav-group">
+                        <h3 class="nav-title">계정 관리</h3>
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a href="/payment" class="nav-link">결제내역</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/profile" class="nav-link">나의 정보</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+
+            <!-- 로그아웃 섹션 -->
+            <div class="logout-section">
+                <button onclick="logout()" class="logout-btn">
+                    로그아웃
+                </button>
+            </div>
+        </div>
+
+        <!-- 메인 콘텐츠 -->
+        <div class="main-content">
+            <!-- 공지사항 섹션 -->
+            <div class="notice-banner">
+                <div class="notice-icon">📢</div>
+                <div class="notice-text">
+                    <strong>서비스 이용 안내:</strong><br>
+                    제품구매목적으로만 서비스이용이 가능합니다.
+                </div>
+            </div>
+            
+            <div class="welcome-section">
+                <h1 class="welcome-title">
+                    <span id="welcomeUserName">홍길동</span>님, 환영합니다!
+                </h1>
+                <p class="welcome-subtitle">
+                    SHIPGU와 함께 글로벌 소싱을 시작해보세요
+                </p>
+                
+                <div class="service-grid">
+                    <a href="/1688" class="service-card">
+                        <div class="service-icon">🛒</div>
+                        <div class="service-title">1688솔루션</div>
+                        <div class="service-desc">수수료 없는 1688 직접 구매</div>
+                    </a>
+                    
+                    <a href="/payment" class="service-card">
+                        <div class="service-icon">💳</div>
+                        <div class="service-title">1688 결제 솔루션</div>
+                        <div class="service-desc">QR코드결제(알리페이/위챗페이/웨이디엔)</div>
+                    </a>
+                    
+                    <a href="/superagency" class="service-card">
+                        <div class="service-icon">🏢</div>
+                        <div class="service-title">슈퍼에이전시</div>
+                        <div class="service-desc">전문 구매대행 서비스</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 페이지 로드 시 사용자 정보 확인
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            
+            if (!currentUser) {
+                alert('로그인이 필요합니다.');
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // 로그인 시 공지사항 팝업 표시
+            const hasSeenNotice = localStorage.getItem('hasSeenNotice_' + currentUser.email);
+            if (!hasSeenNotice) {
+                setTimeout(() => {
+                    alert('📢 서비스 이용 안내\n\n제품구매목적으로만 서비스이용이 가능합니다.\n\n이 공지사항은 대시보드 상단에서도 확인하실 수 있습니다.');
+                    localStorage.setItem('hasSeenNotice_' + currentUser.email, 'true');
+                }, 1000);
+            }
+            
+            // 사용자 이름 표시
+            document.getElementById('userName').textContent = currentUser.name;
+            document.getElementById('welcomeUserName').textContent = currentUser.name;
+            
+            // 회원 유형별 라벨 설정
+            const userLabel = document.querySelector('.user-label');
+            const memberType = currentUser.memberType;
+            
+            if (memberType === 'individual') {
+                userLabel.textContent = '개인회원';
+            } else if (memberType === 'business') {
+                userLabel.textContent = '사업자회원';
+            } else if (memberType === 'corporation') {
+                userLabel.textContent = '법인회원';
+            } else {
+                userLabel.textContent = 'SHIPGU 회원';
+            }
+            
+            // 인증 뱃지 업데이트
+            const userBadge = document.getElementById('userBadge');
+            const isVerified = currentUser.isVerified;
+            
+            if (isVerified) {
+                userBadge.textContent = '인증완료';
+                userBadge.className = 'user-badge verified';
+            } else {
+                userBadge.textContent = '미인증';
+                userBadge.className = 'user-badge unverified';
+                userBadge.style.cursor = 'pointer';
+                userBadge.title = '클릭하여 인증하기';
+                
+                // 미인증 뱃지 클릭 시 인증 페이지로 이동
+                userBadge.addEventListener('click', function() {
+                    if (confirm('인증을 진행하시겠습니까?')) {
+                        window.location.href = 'verify.html';
+                    }
+                });
+            }
+        });
+
+        function logout() {
+            if (confirm('로그아웃 하시겠습니까?')) {
+                localStorage.removeItem('currentUser');
+                alert('로그아웃되었습니다.');
+                window.location.href = 'index.html';
+            }
+        }
+
+        function showServiceSelection() {
+            const services = [
+                { name: '1688솔루션', desc: '수수료 없는 1688 직접 구매', url: '/1688' },
+                { name: '1688 결제 솔루션', desc: 'QR코드결제(알리페이/위쳇/웨이디엔/시엔위)', url: '/payment' },
+                { name: '슈퍼에이전시', desc: '전문 구매대행 서비스', url: '/superagency' }
+            ];
+            
+            let message = '📋 서비스를 선택해주세요:\n\n';
+            services.forEach((service, index) => {
+                message += `${index + 1}. ${service.name}\n   ${service.desc}\n\n`;
+            });
+            
+            const choice = prompt(message + '선택하실 번호를 입력해주세요 (1-3):');
+            
+            if (choice && choice >= 1 && choice <= 3) {
+                const selectedService = services[choice - 1];
+                alert(`${selectedService.name} 서비스를 선택하셨습니다.\n${selectedService.desc}`);
+                // window.location.href = selectedService.url; // 실제 페이지 연결시 활성화
+            }
+        }
+    </script>
+</body>
+</html>
