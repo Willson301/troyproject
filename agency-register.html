@@ -1,75 +1,121 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>광고대행사 신규가입 - Troy</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="troy-login.css">
-</head>
-<body>
-  <div class="page register-page">
-    <section class="login register-section">
-      <div class="login-card register-card">
-        <div class="login-header">
-          <div class="wreaths-container">
-            <div class="center-content">
-              <div class="troy-with-wreaths">
-                <img class="wreath left" src="assets/left.png" alt="left wreath">
-                <span class="brand">Troy</span>
-                <img class="wreath right" src="assets/right.png" alt="right wreath">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>광고대행사 신규가입 - Troy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="troy-login.css" />
+  </head>
+  <body>
+    <div class="page register-page">
+      <section class="login register-section">
+        <div class="login-card register-card">
+          <div class="login-header">
+            <div class="wreaths-container">
+              <div class="center-content">
+                <div class="troy-with-wreaths">
+                  <img
+                    class="wreath left"
+                    src="./left.png"
+                    alt="left wreath"
+                  />
+                  <span class="brand">Troy</span>
+                  <img
+                    class="wreath right"
+                    src="./right.png"
+                    alt="right wreath"
+                  />
+                </div>
+                <div class="center">광고대행사 가입</div>
               </div>
-              <div class="center">광고대행사 가입</div>
             </div>
           </div>
+          <form class="form" id="agency-register-form">
+            <label class="label" for="agencyId">아이디</label>
+            <input
+              class="input"
+              id="agencyId"
+              placeholder="광고대행사 아이디"
+              required
+            />
+
+            <label class="label" for="agencyPw">비밀번호</label>
+            <input
+              class="input"
+              id="agencyPw"
+              type="password"
+              placeholder="4자리이상 비밀번호"
+              required
+            />
+
+            <label class="label" for="agencyPw2">비밀번호 확인</label>
+            <input
+              class="input"
+              id="agencyPw2"
+              type="password"
+              placeholder="비밀번호 재입력"
+              required
+            />
+
+            <label class="label" for="agencyName">대행사명</label>
+            <input
+              class="input"
+              id="agencyName"
+              placeholder="ex) 트로이마케팅"
+              required
+            />
+
+            <label class="label" for="businessNumber">사업자등록번호</label>
+            <input
+              class="input"
+              id="businessNumber"
+              placeholder="123-45-67890"
+              required
+            />
+
+            <label class="label" for="agencyContact">담당자 성함</label>
+            <input
+              class="input"
+              id="agencyContact"
+              placeholder="홍길동"
+              required
+            />
+
+            <label class="label" for="agencyPhone">전화번호</label>
+            <input
+              class="input"
+              id="agencyPhone"
+              placeholder="010-1111-2222"
+              required
+            />
+
+            <label class="label" for="agencyEmail">이메일</label>
+            <input
+              class="input"
+              id="agencyEmail"
+              type="email"
+              placeholder="abc@agency.co.kr"
+              required
+            />
+
+            <label class="label" for="agencyWebsite">대행사 홈페이지</label>
+            <input
+              class="input"
+              id="agencyWebsite"
+              placeholder="https://www.agency.co.kr"
+            />
+
+            <button class="btn" type="submit">광고대행사 회원가입</button>
+          </form>
         </div>
-        <form class="form" id="agency-register-form">
-          <label class="label" for="agencyId">아이디</label>
-          <input class="input" id="agencyId" placeholder="광고대행사 아이디" required>
-          
-          <label class="label" for="agencyPw">비밀번호</label>
-          <input class="input" id="agencyPw" type="password" placeholder="4자리이상 비밀번호" required>
-          
-          <label class="label" for="agencyPw2">비밀번호 확인</label>
-          <input class="input" id="agencyPw2" type="password" placeholder="비밀번호 재입력" required>
-          
-          <label class="label" for="agencyName">대행사명</label>
-          <input class="input" id="agencyName" placeholder="ex) 트로이마케팅" required>
-          
-          <label class="label" for="businessNumber">사업자등록번호</label>
-          <input class="input" id="businessNumber" placeholder="123-45-67890" required>
-          
-          <label class="label" for="agencyContact">담당자 성함</label>
-          <input class="input" id="agencyContact" placeholder="홍길동" required>
-          
-          <label class="label" for="agencyPhone">전화번호</label>
-          <input class="input" id="agencyPhone" placeholder="010-1111-2222" required>
-          
-          <label class="label" for="agencyEmail">이메일</label>
-          <input class="input" id="agencyEmail" type="email" placeholder="abc@agency.co.kr" required>
-          
-          <label class="label" for="agencyWebsite">대행사 홈페이지</label>
-          <input class="input" id="agencyWebsite" placeholder="https://www.agency.co.kr">
-          
-          <button class="btn" type="submit">광고대행사 회원가입</button>
-        </form>
-      </div>
-    </section>
-  </div>
-  <script>
-    document.getElementById('agency-register-form').addEventListener('submit', function(e){
-      e.preventDefault();
-      const pw = document.getElementById('agencyPw').value;
-      const pw2 = document.getElementById('agencyPw2').value;
-      if(pw !== pw2){
-        alert('비밀번호가 일치하지 않습니다.');
-        return;
-      }
-      alert('광고대행사 가입이 완료되었습니다. 메인으로 이동합니다.');
-      window.location.href = 'index.html';
-    });
-  </script>
-</body>
+      </section>
+    </div>
+    <script src="./agency-register.js"></script>
+  </body>
 </html>

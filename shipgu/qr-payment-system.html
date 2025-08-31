@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>AI결제대행 어시스턴스 | SHIPGU</title>
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet"/>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Pretendard', sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .container {
+            display: flex;
+            height: 100vh;
+            gap: 16px;
+            padding: 16px;
+        }
+        
+        /* AI 어시스턴트 채팅창 - 가장 크게 */
+        .ai-chat-section {
+            flex: 2;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            border: 2px solid #e2e8f0;
+            position: relative;
+        }
+        
+        .ai-header {
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 20px 20px 0 0;
+            text-align: center;
+        }
+        
+        .ai-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        
+        .ai-subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 16px;
+            padding-bottom: 0;
+            overflow: hidden;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            background: #f8fafc;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 16px;
+            scroll-behavior: smooth;
+            padding-bottom: 20px;
+        }
+        
+        .message {
+            margin-bottom: 16px;
+            padding: 12px 16px;
+            border-radius: 20px;
+            max-width: 80%;
+            word-wrap: break-word;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .message.user {
+            background: #3b82f6;
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 8px;
+        }
+        
+        .message.bot {
+            background: white;
+            color: #374151;
+            border: 1px solid #e5e7eb;
+            border-bottom-left-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .chat-input-container {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            background: white;
+            padding: 12px;
+            margin: 0 0 16px 0;
+            border-radius: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border: 2px solid #e2e8f0;
+            flex-shrink: 0;
+        }
+        
+        .chat-input {
+            flex: 1;
+            padding: 16px 20px;
+            border: 2px solid #d1d5db;
+            border-radius: 30px;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s;
+        }
+        
+        .chat-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+        
+        .chat-send-btn {
+            padding: 16px 24px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-width: 80px;
+        }
+        
+        .chat-send-btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+        
+        /* 결제 버튼 영역 */
+        .payment-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+        
+        .payment-btn {
+            padding: 16px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-width: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .payment-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .btn-qr {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-qr:hover {
+            background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+        }
+        
+        .btn-bank {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+        
+        .btn-bank:hover {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+        }
+        
+        /* QR코드 결제 관리 영역 */
+        .payment-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .payment-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            border: 2px solid #e2e8f0;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* 장바구니 형태의 결제 목록 */
+        .payment-cart {
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 2px solid #e2e8f0;
+            min-height: 200px;
+            padding: 20px;
+        }
+        
+        .cart-header {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 16px;
+            padding: 12px 16px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
+            font-weight: 600;
+            font-size: 14px;
+            color: #374151;
+        }
+        
+        .cart-items {
+            min-height: 120px;
+        }
+        
+        .cart-item {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 10px;
+            align-items: center;
+            padding: 12px 16px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            font-size: 14px;
+        }
+        
+        .cart-item-name {
+            font-weight: 500;
+            color: #1f2937;
+        }
+        
+        .cart-item-amount {
+            font-weight: 600;
+            color: #059669;
+            text-align: center;
+        }
+        
+        .cart-item-status {
+            text-align: center;
+        }
+        
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .status-completed {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .status-failed {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        
+        .empty-cart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100px;
+            text-align: center;
+            color: #6b7280;
+            padding: 20px 10px;
+        }
+        
+        .empty-icon {
+            font-size: 36px;
+            margin-bottom: 10px;
+            opacity: 0.5;
+        }
+        
+        .empty-text {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+        
+        .empty-hint {
+            font-size: 12px;
+            color: #9ca3af;
+        }
+        
+        .cart-total {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 2px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
+        }
+        
+        .total-label {
+            font-size: 16px;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .total-amount {
+            font-size: 20px;
+            font-weight: 700;
+            color: #059669;
+        }
+        
+        /* 결제 통계 */
+        .payment-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #64748b;
+            font-weight: 500;
+        }
+        
+        .quick-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+            min-width: 120px;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #f1f5f9;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .btn-secondary:hover {
+            background: #e2e8f0;
+        }
+        
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+        
+        /* 스크롤바 스타일링 */
+        .chat-messages::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .chat-messages::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+        
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        
+        .chat-messages::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        
+        /* 반응형 디자인 */
+        @media (max-width: 1200px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .ai-chat-section {
+                flex: none;
+                height: 60vh;
+            }
+            
+            .payment-section {
+                flex: none;
+                height: 40vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- AI 어시스턴트 채팅창 - 가장 크게 -->
+        <div class="ai-chat-section">
+            <div class="ai-header">
+                <div class="ai-title">🤖 AI결제대행 어시스턴스</div>
+                <div class="ai-subtitle">QR코드결제도우미</div>
+            </div>
+            
+            <div class="chat-container">
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message bot">
+                        안녕하세요! SHIPGU AI결제대행 어시스턴스입니다. 🚀<br><br>
+                        QR코드 결제, 환율 계산, 결제 현황 조회 등 무엇이든 도와드릴 수 있습니다.<br>
+                        어떤 도움이 필요하신가요?
+                    </div>
+                </div>
+                
+                <div class="chat-input-container">
+                    <input type="text" class="chat-input" id="chatInput" placeholder="AI 어시스턴트에게 질문하세요..." onkeypress="handleChatKeyPress(event)">
+                    <button class="chat-send-btn" onclick="sendMessage()">전송</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- QR코드 결제 관리 영역 -->
+        <div class="payment-section">
+            <!-- 결제 진행 현황판 (장바구니) -->
+            <div class="payment-card">
+                <h3 class="card-title">🛒 결제 진행 현황</h3>
+                <div class="payment-cart" id="paymentCart">
+                    <div class="cart-header">
+                        <span>결제 항목</span>
+                        <span>금액</span>
+                        <span>상태</span>
+                    </div>
+                    <div class="cart-items" id="cartItems">
+                        <div class="empty-cart">
+                            <div class="empty-icon">🛍️</div>
+                            <div class="empty-text">결제 정보가 없습니다</div>
+                            <div class="empty-hint">채팅에서 결제 요청 시 자동으로 추가됩니다</div>
+                        </div>
+                    </div>
+                    <div class="cart-total">
+                        <div class="total-label">총 결제 금액:</div>
+                        <div class="total-amount" id="cartTotalAmount">₩0</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 결제 현황 -->
+            <div class="payment-card">
+                <h3 class="card-title">📊 결제 현황</h3>
+                <div class="payment-stats">
+                    <div class="stat-item">
+                        <div class="stat-number" id="totalPayments">0</div>
+                        <div class="stat-label">총 결제</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="pendingPayments">0</div>
+                        <div class="stat-label">대기중</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="completedPayments">0</div>
+                        <div class="stat-label">완료</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="totalAmount">₩0</div>
+                        <div class="stat-label">총 금액</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 빠른 액션 -->
+            <div class="payment-card">
+                <h3 class="card-title">⚡ 빠른 액션</h3>
+                <div class="quick-actions">
+                    <button class="action-btn btn-primary" onclick="addPayment()">결제 추가</button>
+                    <button class="action-btn btn-secondary" onclick="showPaymentHistory()">결제 내역</button>
+                    <button class="action-btn btn-success" onclick="generateReport()">리포트 생성</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 전역 변수
+        let paymentData = {
+            total: 0,
+            pending: 0,
+            completed: 0,
+            totalAmount: 0
+        };
+        
+        let cartItems = [];
+        let cartTotal = 0;
+        
+        // 샘플 데이터 초기화
+        function initializeData() {
+            paymentData = {
+                total: 12,
+                pending: 3,
+                completed: 9,
+                totalAmount: 1250000
+            };
+            updatePaymentStats();
+        }
+        
+        // 결제 통계 업데이트
+        function updatePaymentStats() {
+            document.getElementById('totalPayments').textContent = paymentData.total;
+            document.getElementById('pendingPayments').textContent = paymentData.pending;
+            document.getElementById('completedPayments').textContent = paymentData.completed;
+            document.getElementById('totalAmount').textContent = `₩${paymentData.totalAmount.toLocaleString()}`;
+        }
+        
+        // 장바구니에 항목 추가
+        function addToCart(itemName, amount, paymentMethod = 'QR코드') {
+            const newItem = {
+                id: Date.now(),
+                name: itemName,
+                amount: amount,
+                status: 'pending',
+                method: paymentMethod,
+                timestamp: new Date()
+            };
+            
+            cartItems.push(newItem);
+            updateCartDisplay();
+            updateCartTotal();
+            
+            // 결제 통계도 업데이트
+            paymentData.total++;
+            paymentData.pending++;
+            paymentData.totalAmount += amount;
+            updatePaymentStats();
+            
+            console.log('장바구니에 추가:', newItem);
+        }
+        
+        // 장바구니 표시 업데이트
+        function updateCartDisplay() {
+            const cartItemsContainer = document.getElementById('cartItems');
+            
+            if (cartItems.length === 0) {
+                cartItemsContainer.innerHTML = `
+                    <div class="empty-cart">
+                        <div class="empty-icon">🛍️</div>
+                        <div class="empty-text">결제 정보가 없습니다</div>
+                        <div class="empty-hint">채팅에서 결제 요청 시 자동으로 추가됩니다</div>
+                    </div>
+                `;
+            } else {
+                cartItemsContainer.innerHTML = cartItems.map(item => `
+                    <div class="cart-item" data-id="${item.id}">
+                        <div class="cart-item-name">${item.name}</div>
+                        <div class="cart-item-amount">₩${item.amount.toLocaleString()}</div>
+                        <div class="cart-item-status">
+                            <span class="status-badge status-${item.status}">${getStatusText(item.status)}</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+        
+        // 상태 텍스트 변환
+        function getStatusText(status) {
+            switch (status) {
+                case 'pending': return '대기중';
+                case 'completed': return '완료';
+                case 'failed': return '실패';
+                default: return '알 수 없음';
+            }
+        }
+        
+        // 장바구니 총액 업데이트
+        function updateCartTotal() {
+            cartTotal = cartItems.reduce((sum, item) => sum + item.amount, 0);
+            document.getElementById('cartTotalAmount').textContent = `₩${cartTotal.toLocaleString()}`;
+        }
+        
+        // 결제 추가
+        function addPayment() {
+            const paymentMethod = prompt('결제 방법을 선택하세요:\n1. 알리페이\n2. 위챗페이\n3. 웨이디엔\n\n번호를 입력하세요 (1-3):');
+            
+            if (!paymentMethod) return;
+            
+            const methods = ['', '알리페이', '위챗페이', '웨이디엔'];
+            const selectedMethod = methods[parseInt(paymentMethod)];
+            
+            if (!selectedMethod) {
+                alert('잘못된 선택입니다.');
+                return;
+            }
+            
+            const amount = prompt(`${selectedMethod} 결제 금액을 입력하세요 (원 단위):`);
+            
+            if (!amount || isNaN(amount)) {
+                alert('올바른 금액을 입력하세요.');
+                return;
+            }
+            
+            const numAmount = parseInt(amount.replace(/[^0-9]/g, ''));
+            if (numAmount <= 0) {
+                alert('0원보다 큰 금액을 입력하세요.');
+                return;
+            }
+            
+            // 장바구니에 추가
+            addToCart(`${selectedMethod} 결제`, numAmount, selectedMethod);
+            
+            addBotMessage(`💳 ${selectedMethod} 결제가 장바구니에 추가되었습니다!<br>금액: ₩${numAmount.toLocaleString()}<br>상태: 대기중`);
+        }
+        
+        // 결제 내역 표시
+        function showPaymentHistory() {
+            addBotMessage("📋 최근 결제 내역:<br>• 2024-01-15: 알리페이 결제 완료 (₩150,000)<br>• 2024-01-14: 위챗페이 결제 완료 (₩320,000)<br>• 2024-01-13: 웨이디엔 결제 대기중 (₩450,000)");
+        }
+        
+        // 리포트 생성
+        function generateReport() {
+            addBotMessage(`📊 결제 리포트가 생성되었습니다!<br>총 결제 건수: ${paymentData.total}건<br>총 결제 금액: ₩${paymentData.totalAmount.toLocaleString()}<br>완료율: ${Math.round((paymentData.completed / paymentData.total) * 100)}%`);
+        }
+        
+        // 챗봇 메시지 전송
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            addUserMessage(message);
+            input.value = '';
+            
+            // AI 응답 시뮬레이션
+            setTimeout(() => {
+                const responses = [
+                    "네, 도움이 필요하시군요! QR코드 결제와 관련된 질문이신가요? 💳",
+                    "좋은 질문입니다! 결제 현황이나 환율 정보를 확인해드릴까요? 📊",
+                    "QR코드 업로드나 결제 처리를 도와드릴 수 있습니다. 구체적으로 어떤 작업을 원하시나요? 🚀",
+                    "현재 대기중인 결제가 있습니다. 확인해보시겠어요? ⏳",
+                    "환율 계산이나 결제 리포트 생성에 도움이 필요하시면 말씀해주세요! 📈"
+                ];
+                
+                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                addBotMessage(randomResponse);
+            }, 1000);
+        }
+        
+        // 엔터키로 메시지 전송
+        function handleChatKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+        
+        // 사용자 메시지 추가
+        function addUserMessage(message) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message user';
+            messageDiv.textContent = message;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // 봇 메시지 추가
+        function addBotMessage(message) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message bot';
+            messageDiv.innerHTML = message;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeData();
+            
+            // AI 어시스턴트 초기 메시지
+            setTimeout(() => {
+                addBotMessage(`오늘의 결제 현황을 확인해보세요! 📊<br>총 ${paymentData.total}건의 결제가 있습니다.`);
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

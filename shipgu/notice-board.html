@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>공지사항 | SHIPGU - 글로벌 소싱 플랫폼</title>
+    <meta name="description" content="SHIPGU 공지사항 - 서비스 안내 및 업데이트 소식"/>
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet"/>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Pretendard', sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #64748b;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        
+        .back-btn:hover {
+            background: #f1f5f9;
+            color: #2563eb;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1e293b;
+            margin: 0;
+        }
+        
+        .page-subtitle {
+            font-size: 16px;
+            color: #64748b;
+            margin-top: 8px;
+        }
+        
+        .notice-stats {
+            display: flex;
+            gap: 24px;
+            padding: 16px 0;
+            border-top: 1px solid #f1f5f9;
+        }
+        
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+        
+        .stat-label {
+            color: #64748b;
+        }
+        
+        .stat-value {
+            font-weight: 600;
+            color: #1e293b;
+        }
+        
+        .notice-board {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .board-header {
+            background: #f8fafc;
+            padding: 16px 24px;
+            border-bottom: 1px solid #e2e8f0;
+            display: grid;
+            grid-template-columns: 80px 1fr 120px 100px;
+            gap: 16px;
+            align-items: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: #475569;
+        }
+        
+        .notice-list {
+            list-style: none;
+        }
+        
+        .notice-post {
+            display: grid;
+            grid-template-columns: 80px 1fr 120px 100px;
+            gap: 16px;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        
+        .notice-post:hover {
+            background: #f8fafc;
+        }
+        
+        .notice-post.important {
+            background: #fefce8;
+            border-left: 4px solid #f59e0b;
+        }
+        
+        .notice-post.important:hover {
+            background: #fffbeb;
+        }
+        
+        .post-category {
+            display: flex;
+            justify-content: center;
+        }
+        
+        .category-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        .category-badge.important {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .category-badge.update {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .category-badge.info {
+            background: #10b981;
+            color: white;
+        }
+        
+        .post-content {
+            min-width: 0;
+        }
+        
+        .post-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 4px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .post-preview {
+            font-size: 13px;
+            color: #64748b;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .post-date {
+            font-size: 13px;
+            color: #94a3b8;
+            text-align: center;
+        }
+        
+        .post-views {
+            font-size: 13px;
+            color: #94a3b8;
+            text-align: center;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            padding: 24px;
+            background: white;
+            margin-top: 16px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .page-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border: 1px solid #e2e8f0;
+            background: white;
+            color: #64748b;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .page-btn:hover {
+            border-color: #2563eb;
+            color: #2563eb;
+        }
+        
+        .page-btn.active {
+            background: #2563eb;
+            color: white;
+            border-color: #2563eb;
+        }
+        
+        .page-btn.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        
+        @media (max-width: 768px) {
+            .board-header,
+            .notice-post {
+                grid-template-columns: 60px 1fr 80px;
+            }
+            
+            .post-views {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-top">
+                <a href="#" onclick="parent.showQRPaymentSystem()" class="back-btn">
+                    ← 메인으로 돌아가기
+                </a>
+            </div>
+            <h1 class="page-title">📢 공지사항</h1>
+            <p class="page-subtitle">SHIPGU 서비스 관련 공지사항과 업데이트 소식을 확인하세요</p>
+            
+            <div class="notice-stats">
+                <div class="stat-item">
+                    <span class="stat-label">전체</span>
+                    <span class="stat-value">12개</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">중요</span>
+                    <span class="stat-value">3개</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">이번 달</span>
+                    <span class="stat-value">5개</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="notice-board">
+            <div class="board-header">
+                <div>분류</div>
+                <div>제목</div>
+                <div>작성일</div>
+                <div>조회수</div>
+            </div>
+            
+            <ul class="notice-list">
+                <li class="notice-post important" onclick="viewNotice(1)">
+                    <div class="post-category">
+                        <span class="category-badge important">중요</span>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-title">서비스 이용 안내사항</div>
+                        <div class="post-preview">제품구매목적으로만 서비스이용이 가능합니다. 자세한 내용을 확인해주세요.</div>
+                    </div>
+                    <div class="post-date">2024.01.15</div>
+                    <div class="post-views">1,247</div>
+                </li>
+                
+                <li class="notice-post" onclick="viewNotice(2)">
+                    <div class="post-category">
+                        <span class="category-badge update">업데이트</span>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-title">1688 솔루션 업데이트 안내</div>
+                        <div class="post-preview">수수료 0% 혜택이 확대되었습니다. 한도 제한도 완전히 해제되었습니다.</div>
+                    </div>
+                    <div class="post-date">2024.01.10</div>
+                    <div class="post-views">856</div>
+                </li>
+                
+                <li class="notice-post" onclick="viewNotice(3)">
+                    <div class="post-category">
+                        <span class="category-badge info">신규</span>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-title">QR코드 결제시스템 오픈</div>
+                        <div class="post-preview">알리페이, 위챗페이, 웨이디엔 결제를 지원합니다. 간편하고 안전한 결제를 이용하세요.</div>
+                    </div>
+                    <div class="post-date">2024.01.05</div>
+                    <div class="post-views">634</div>
+                </li>
+                
+                <li class="notice-post important" onclick="viewNotice(4)">
+                    <div class="post-category">
+                        <span class="category-badge important">중요</span>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-title">개인정보처리방침 개정 안내</div>
+                        <div class="post-preview">개인정보처리방침이 개정되어 안내드립니다. 변경된 내용을 꼭 확인해주세요.</div>
+                    </div>
+                    <div class="post-date">2023.12.28</div>
+                    <div class="post-views">1,892</div>
+                </li>
+                
+                <li class="notice-post" onclick="viewNotice(5)">
+                    <div class="post-category">
+                        <span class="category-badge info">안내</span>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-title">연말연시 고객센터 운영 안내</div>
+                        <div class="post-preview">12월 30일부터 1월 2일까지 고객센터 운영시간이 단축됩니다.</div>
+                    </div>
+                    <div class="post-date">2023.12.20</div>
+                    <div class="post-views">423</div>
+                </li>
+                
+                <li class="notice-post" onclick="viewNotice(6)">
+                    <div class="post-category">
+                        <span class="category-badge update">업데이트</span>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-title">배송 추적 시스템 개선</div>
+                        <div class="post-preview">실시간 배송 추적이 더욱 정확해졌습니다. 새로운 기능을 확인해보세요.</div>
+                    </div>
+                    <div class="post-date">2023.12.15</div>
+                    <div class="post-views">567</div>
+                </li>
+                
+                <li class="notice-post" onclick="viewNotice(7)">
+                    <div class="post-category">
+                        <span class="category-badge info">안내</span>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-title">환율 정책 변경 안내</div>
+                        <div class="post-preview">실시간 환율 적용 정책이 변경됩니다. 자세한 내용을 확인해주세요.</div>
+                    </div>
+                    <div class="post-date">2023.12.10</div>
+                    <div class="post-views">789</div>
+                </li>
+                
+                <li class="notice-post important" onclick="viewNotice(8)">
+                    <div class="post-category">
+                        <span class="category-badge important">중요</span>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-title">보안 업데이트 완료 안내</div>
+                        <div class="post-preview">시스템 보안이 한층 강화되었습니다. 안전한 서비스 이용을 위한 업데이트입니다.</div>
+                    </div>
+                    <div class="post-date">2023.12.05</div>
+                    <div class="post-views">1,156</div>
+                </li>
+                
+                <li class="notice-post" onclick="viewNotice(9)">
+                    <div class="post-category">
+                        <span class="category-badge info">안내</span>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-title">신규 결제 수단 추가</div>
+                        <div class="post-preview">카카오페이, 토스페이가 새롭게 추가되었습니다.</div>
+                    </div>
+                    <div class="post-date">2023.11.28</div>
+                    <div class="post-views">445</div>
+                </li>
+                
+                <li class="notice-post" onclick="viewNotice(10)">
+                    <div class="post-category">
+                        <span class="category-badge update">업데이트</span>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-title">대시보드 UI 개선</div>
+                        <div class="post-preview">사용자 경험 개선을 위해 대시보드 디자인이 새롭게 변경되었습니다.</div>
+                    </div>
+                    <div class="post-date">2023.11.20</div>
+                    <div class="post-views">678</div>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="pagination">
+            <a href="#" class="page-btn disabled">‹</a>
+            <a href="#" class="page-btn active">1</a>
+            <a href="#" class="page-btn">2</a>
+            <a href="#" class="page-btn">3</a>
+            <a href="#" class="page-btn">›</a>
+        </div>
+    </div>
+    
+    <script>
+        function viewNotice(id) {
+            // iframe 환경에서 부모 창의 함수 호출
+            if (parent && parent.showNoticeDetail) {
+                parent.showNoticeDetail(id);
+            } else {
+                // 직접 접근 시 상세 페이지로 이동
+                window.location.href = `notice-detail.html?id=${id}`;
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,107 +1,87 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>광고주센터 로그인 - Troy</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="troy-login.css">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>광고주센터 로그인 - Troy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="troy-login.css" />
 </head>
-<body>
-  <div class="page">
-    <section class="hero">
-      <div class="hero-inner">
-        <h2 class="hero-subtitle">리뷰와 유입, 매출 상승의 공식</h2>
-        <h3 class="hero-title">
-          <img src="assets/horse.png" alt="Troy emblem" class="emblem">
-          <span>Troy</span>
-        </h3>
-        <p class="hero-desc">Influencer Platform &amp; Brands</p>
-        <div class="legal">
-          <p class="links">대행사 모집 <span class="sep">|</span> <a href="#" class="link">광고주센터</a> <span class="sep">|</span> 로그인</p>
-          <p class="corp">트로이 인터내셔널 대표자: 이원섭 사업자등록번호: 117-81-79518 ...</p>
-        </div>
-      </div>
-    </section>
-    <section class="login">
-      <div class="login-card">
-        <div class="login-header">
-          <img class="wreath left" src="assets/left.png" alt="left wreath">
-          <div class="logo-text"><span class="brand">Troy</span> <span class="center">광고주센터</span></div>
-          <img class="wreath right" src="assets/right.png" alt="right wreath">
-        </div>
-        <form class="form">
-          <label class="label" for="bizId">사업자번호</label>
-          <input class="input" id="bizId" placeholder="사업자번호" autocomplete="off">
-
-          <label class="label" for="password">비밀번호</label>
-          <input class="input" id="password" type="password" placeholder="6자이상의 비밀번호">
-
-          <button class="btn" type="submit">로그인하기</button>
-
-          <div class="meta-links">
-            <a href="#" class="primary">광고주센터가입</a>
-            <span class="divider">|</span>
-            <a href="#">비밀번호찾기</a>
-            <span class="divider">|</span>
-            <a href="#">문의하기</a>
+  <body>
+    <div class="page">
+      <section class="hero">
+        <div class="hero-inner">
+          <h2 class="hero-subtitle">리뷰와 유입, 매출 상승의 공식</h2>
+          <h3 class="hero-title">
+            <img src="horse.png" alt="Troy emblem" class="emblem" />
+            <span>Troy</span>
+          </h3>
+          <p class="hero-desc">Influencer Platform &amp; Brands</p>
+          <div class="legal">
+            <p class="links">
+              대행사 모집 <span class="sep">|</span>
+              <a href="#" class="link">광고주센터</a>
+              <span class="sep">|</span> 로그인
+            </p>
+            <p class="corp">
+              트로이 인터내셔널 대표자: 이원섭 사업자등록번호: 117-81-79518 ...
+            </p>
           </div>
-        </form>
-      </div>
-    </section>
-  </div>
-  <script>
-    (function(){
-      const form = document.querySelector('.form');
-      const idInput = document.getElementById('bizId');
-      const pwInput = document.getElementById('password');
+        </div>
+      </section>
+      <section class="login">
+        <div class="login-card">
+          <div class="login-header">
+            <img
+              class="wreath left"
+              src="left.png"
+              alt="left wreath"
+            />
+            <div class="logo-text">
+              <span class="brand">Troy</span>
+              <span class="center">광고주센터</span>
+            </div>
+            <img
+              class="wreath right"
+              src="right.png"
+              alt="right wreath"
+            />
+          </div>
+          <form class="form">
+            <label class="label" for="bizId">사업자번호</label>
+            <input
+              class="input"
+              id="bizId"
+              placeholder="사업자번호"
+              autocomplete="off"
+            />
 
-      function routeByRole(userId, password){
-        if(userId === 'admin' && password === '1234'){
-          alert('관리자 로그인 성공!');
-          setTimeout(() => window.location.replace('admin-dashboard.html'), 500);
-        } else if(userId === 'agency' && password === '1234'){
-          alert('대행사 로그인 성공!');
-          setTimeout(() => window.location.replace('agency-dashboard.html'), 500);
-        } else if(userId === 'customer' && password === '1234'){
-          alert('고객 로그인 성공!');
-          setTimeout(() => window.location.replace('customer-dashboard.html'), 500);
-        } else if(userId === 'partner' && password === '1234'){
-          alert('파트너 로그인 성공!');
-          setTimeout(() => window.location.replace('partner-dashboard.html'), 500);
-        } else {
-          alert('아이디 또는 비밀번호가 올바르지 않습니다.');
-        }
-      }
+            <label class="label" for="password">비밀번호</label>
+            <input
+              class="input"
+              id="password"
+              type="password"
+              placeholder="6자이상의 비밀번호"
+            />
 
-      function handleSubmit(e){
-        if(e) e.preventDefault();
-        routeByRole((idInput.value||'').trim(), (pwInput.value||'').trim());
-      }
+            <button class="btn" type="submit">로그인하기</button>
 
-      // 폼 제출 이벤트 (엔터키 지원)
-      form.addEventListener('submit', handleSubmit);
-      
-      // 로그인 버튼 클릭 이벤트
-      document.querySelector('.btn').addEventListener('click', handleSubmit);
-      
-      // 엔터키 이벤트 추가
-      idInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-          pwInput.focus();
-        }
-      });
-      
-      pwInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-          handleSubmit();
-        }
-      });
-    })();
-  </script>
-</body>
+            <div class="meta-links">
+              <a href="#" class="primary">광고주센터가입</a>
+              <span class="divider">|</span>
+              <a href="#">비밀번호찾기</a>
+              <span class="divider">|</span>
+              <a href="#">문의하기</a>
+            </div>
+          </form>
+        </div>
+      </section>
+    </div>
+    <script src="troy-login.js"></script>
+  </body>
 </html>
-
-
