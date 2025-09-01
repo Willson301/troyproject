@@ -19,14 +19,14 @@
             height: 100vh;
             overflow: hidden;
             margin: 0;
-            padding: 4px;
-            font-size: 12px;
+            padding: 6px;
+            font-size: 14px;
         }
         
         .container {
             display: flex;
-            height: calc(100vh - 8px);
-            gap: 8px;
+            height: calc(100vh - 12px);
+            gap: 12px;
             padding: 0;
         }
         
@@ -151,13 +151,13 @@
         }
         
         .ai-title {
-            font-size: 13px;
+            font-size: 15px;
             font-weight: 600;
-            margin-bottom: 2px;
+            margin-bottom: 4px;
         }
         
         .ai-subtitle {
-            font-size: 10px;
+            font-size: 12px;
             opacity: 0.9;
         }
         
@@ -414,7 +414,24 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 0;
+            position: relative;
+        }
+
+        /* 고정 헤더 */
+        .fixed-payment-header {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 8px;
+            padding: 8px 12px;
+            background: #f8fafc;
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+            font-weight: 600;
+            font-size: 9px;
+            color: #374151;
         }
         
         .payment-card {
@@ -445,18 +462,7 @@
         }
         
         .cart-header {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr;
-            gap: 10px;
-            align-items: center;
-            margin-bottom: 16px;
-            padding: 12px 16px;
-            background: white;
-            border-radius: 8px;
-            border: 1px solid #d1d5db;
-            font-weight: 600;
-            font-size: 9px;
-            color: #374151;
+            display: none;
         }
         
         .cart-items {
@@ -710,12 +716,13 @@
             <!-- 결제 진행 현황판 (장바구니) -->
             <div class="payment-card">
                 <h3 class="card-title">🛒 결제 진행 현황</h3>
+                <!-- 고정 결제 헤더 -->
+                <div class="fixed-payment-header">
+                    <span>결제 항목</span>
+                    <span>금액</span>
+                    <span>상태</span>
+                </div>
                 <div class="payment-cart" id="paymentCart">
-                    <div class="cart-header">
-                        <span>결제 항목</span>
-                        <span>금액</span>
-                        <span>상태</span>
-                    </div>
                     <div class="cart-items" id="cartItems">
                         <div class="empty-cart">
                             <div class="empty-icon">🛍️</div>

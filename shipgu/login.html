@@ -60,6 +60,8 @@
                         <h4>🧪 테스트 계정</h4>
                         <div class="test-account individual">👤 개인회원: user@shipgu.com / 12345678</div>
                         <div class="test-account business">🏢 사업자회원: business@shipgu.com / 12345678</div>
+                        <div class="test-account corporation">🏛️ 법인회원: corporation@shipgu.com / 12345678</div>
+                        <div class="test-account admin">👨‍💼 관리자: admin@shipgu.com / 12345678</div>
                     </div>
                     
                     <div class="divider">
@@ -121,6 +123,19 @@
                 name: '김사업', 
                 memberType: 'business',
                 isVerified: false 
+            },
+            'corporation@shipgu.com': { 
+                password: '12345678', 
+                name: '법인대표', 
+                memberType: 'corporation',
+                isVerified: true 
+            },
+            'admin@shipgu.com': { 
+                password: '12345678', 
+                name: '관리자', 
+                memberType: 'admin',
+                role: 'admin',
+                isVerified: true 
             }
         };
 
@@ -135,6 +150,12 @@
                     passwordInput.value = '12345678';
                 } else if (this.classList.contains('business')) {
                     emailInput.value = 'business@shipgu.com';
+                    passwordInput.value = '12345678';
+                } else if (this.classList.contains('corporation')) {
+                    emailInput.value = 'corporation@shipgu.com';
+                    passwordInput.value = '12345678';
+                } else if (this.classList.contains('admin')) {
+                    emailInput.value = 'admin@shipgu.com';
                     passwordInput.value = '12345678';
                 }
                 

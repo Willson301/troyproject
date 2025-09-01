@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>무역송금 T/T 시스템 | SHIPGU</title>
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet"/>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Pretendard', sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            height: 100vh;
+            overflow: hidden;
+            margin: 0;
+            padding: 6px;
+            font-size: 14px;
+        }
+        
+        .container {
+            display: flex;
+            height: calc(100vh - 12px);
+            gap: 12px;
+            padding: 0;
+        }
+        
+        /* 무역송금 서류 작성 영역 */
+        .ai-chat-section {
+            flex: 1;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #e2e8f0;
+            min-height: 0;
+        }
+
+        .document-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 8px;
+            gap: 12px;
+            overflow-y: auto;
+            min-height: 0;
+        }
+
+        .form-template {
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+            padding: 12px;
+            flex: 1;
+        }
+
+        .template-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .template-header h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .template-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .preview-btn,
+        .issue-btn,
+        .save-btn {
+            padding: 4px 8px;
+            border: none;
+            border-radius: 4px;
+            font-size: 9px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .preview-btn {
+            background: #6b7280;
+            color: white;
+        }
+
+        .preview-btn:hover {
+            background: #4b5563;
+        }
+
+        .issue-btn {
+            background: #10b981;
+            color: white;
+        }
+
+        .issue-btn:hover {
+            background: #059669;
+        }
+
+        .save-btn {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .save-btn:hover {
+            background: #2563eb;
+        }
+
+        .document-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 16px;
+            font-size: 10px;
+        }
+
+        .document-table td {
+            border: 1px solid #d1d5db;
+            padding: 8px;
+            vertical-align: middle;
+        }
+
+        .label-cell {
+            background: #f8fafc;
+            font-weight: 600;
+            color: #374151;
+            width: 120px;
+            text-align: center;
+        }
+
+        .input-cell {
+            background: white;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 4px 6px;
+            border: none;
+            outline: none;
+            background: transparent;
+            font-size: 10px;
+            color: #374151;
+        }
+
+        .form-input:focus {
+            background: #f0f9ff;
+            border-radius: 2px;
+        }
+
+        .full-width {
+            width: 100%;
+        }
+
+        .form-textarea {
+            width: 100%;
+            min-height: 60px;
+            padding: 4px 6px;
+            border: none;
+            outline: none;
+            background: transparent;
+            font-size: 10px;
+            color: #374151;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .form-textarea:focus {
+            background: #f0f9ff;
+            border-radius: 2px;
+        }
+
+        .signature-section {
+            margin-top: 20px;
+            text-align: right;
+        }
+
+        .signature-box {
+            display: inline-block;
+            text-align: center;
+        }
+
+        .signature-box p {
+            font-size: 11px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .signature-line {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 10px;
+        }
+
+        .signature-input {
+            width: 100px;
+            padding: 4px;
+            border: none;
+            border-bottom: 1px solid #374151;
+            outline: none;
+            text-align: center;
+            font-size: 10px;
+        }
+
+        .stamp-area {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            border: 2px dashed #d1d5db;
+            border-radius: 50%;
+            margin-left: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8px;
+            color: #6b7280;
+            background: #f9fafb;
+        }
+        
+        /* 무역송금 관리 섹션 */
+        .remittance-section {
+            flex: 0.8;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            min-height: 0;
+        }
+        
+        .ai-header {
+            padding: 8px 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 8px 8px 0 0;
+            text-align: center;
+        }
+        
+        .ai-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .ai-subtitle {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+        
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 8px;
+            padding-bottom: 0;
+            overflow: hidden;
+            min-height: 0;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px;
+            background: #f8fafc;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 8px;
+            scroll-behavior: smooth;
+            min-height: 0;
+        }
+        
+        .message {
+            margin-bottom: 8px;
+            padding: 6px 8px;
+            border-radius: 8px;
+            max-width: 85%;
+            word-wrap: break-word;
+            font-size: 11px;
+            line-height: 1.3;
+        }
+        
+        .message.user {
+            background: #3b82f6;
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 8px;
+        }
+        
+        .message.bot {
+            background: white;
+            color: #374151;
+            border: 1px solid #e5e7eb;
+            border-bottom-left-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .chat-input-container {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            background: white;
+            padding: 6px;
+            margin: 0 0 8px 0;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+            flex-shrink: 0;
+        }
+        
+        .chat-input {
+            flex: 1;
+            padding: 6px 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 12px;
+            font-size: 11px;
+            outline: none;
+            transition: all 0.2s;
+        }
+        
+        .chat-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+        
+        .chat-send-btn {
+            padding: 6px 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-width: 50px;
+        }
+        
+        .chat-send-btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+
+        /* 무역송금 관리 영역 */
+        .remittance-management {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            position: relative;
+        }
+
+        .remittance-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            border: 2px solid #e2e8f0;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            font-size: 10px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* 고정 헤더 */
+        .fixed-remittance-header {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 8px;
+            padding: 8px 12px;
+            background: #f8fafc;
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+            font-weight: 600;
+            font-size: 9px;
+            color: #374151;
+        }
+
+        /* 무역송금 진행 목록 */
+        .remittance-progress {
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 2px solid #e2e8f0;
+            min-height: 200px;
+            padding: 20px;
+        }
+
+        .progress-items {
+            min-height: 120px;
+        }
+
+        .progress-item {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 10px;
+            align-items: center;
+            padding: 12px 16px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            font-size: 9px;
+        }
+
+        .progress-item-name {
+            font-weight: 500;
+            color: #1f2937;
+        }
+
+        .progress-item-amount {
+            font-weight: 600;
+            color: #059669;
+            text-align: center;
+        }
+
+        .progress-item-status {
+            text-align: center;
+        }
+
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-completed {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-processing {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .empty-progress {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100px;
+            text-align: center;
+            color: #6b7280;
+            padding: 20px 10px;
+        }
+
+        .empty-icon {
+            font-size: 16px;
+            margin-bottom: 4px;
+            opacity: 0.5;
+        }
+
+        .empty-text {
+            font-size: 9px;
+            font-weight: 500;
+            margin-bottom: 3px;
+        }
+
+        .empty-hint {
+            font-size: 8px;
+            color: #9ca3af;
+        }
+
+        /* 스크롤바 스타일링 */
+        .chat-messages::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* 반응형 디자인 */
+        @media (max-width: 1200px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .ai-chat-section {
+                flex: none;
+                height: 60vh;
+            }
+            
+            .remittance-section {
+                flex: none;
+                height: 40vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 무역송금 서류 작성 영역 -->
+        <div class="ai-chat-section">
+            <div class="ai-header">
+                <div class="ai-title">📋 무역송금 서류 작성</div>
+                <div class="ai-subtitle">법인회원 송금 서류 발행</div>
+            </div>
+            
+            <div class="document-container">
+                <!-- 무역송금 양식 편집 -->
+                <div class="form-template">
+                    <div class="template-header">
+                        <h4>📋 무역송금 신청서 (T/T)</h4>
+                        <div class="template-actions">
+                            <button class="preview-btn" onclick="previewDocument()">미리보기</button>
+                            <button class="issue-btn" onclick="issueDocument()">발행하기</button>
+                            <button class="save-btn" onclick="saveDocument()">파일저장</button>
+                        </div>
+                    </div>
+                    
+                    <div class="template-form" id="templateForm">
+                        <table class="document-table">
+                            <tr>
+                                <td class="label-cell">신청인 (회사명)</td>
+                                <td class="input-cell">
+                                    <input type="text" id="companyName" placeholder="회사명을 입력하세요" class="form-input">
+                                </td>
+                                <td class="label-cell">신청일자</td>
+                                <td class="input-cell">
+                                    <input type="date" id="applicationDate" class="form-input">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label-cell">사업자등록번호</td>
+                                <td class="input-cell">
+                                    <input type="text" id="businessNumber" placeholder="000-00-00000" class="form-input">
+                                </td>
+                                <td class="label-cell">대표자명</td>
+                                <td class="input-cell">
+                                    <input type="text" id="representative" placeholder="대표자명" class="form-input">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label-cell">송금 금액</td>
+                                <td class="input-cell">
+                                    <input type="text" id="amount" placeholder="USD 0,000.00" class="form-input">
+                                </td>
+                                <td class="label-cell">환율</td>
+                                <td class="input-cell">
+                                    <input type="text" id="exchangeRate" placeholder="1,350.00" class="form-input">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label-cell">수취인</td>
+                                <td class="input-cell" colspan="3">
+                                    <input type="text" id="recipient" placeholder="수취인명 (영문)" class="form-input full-width">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label-cell">수취인 계좌</td>
+                                <td class="input-cell" colspan="3">
+                                    <input type="text" id="recipientAccount" placeholder="계좌번호" class="form-input full-width">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label-cell">수취은행</td>
+                                <td class="input-cell" colspan="3">
+                                    <input type="text" id="recipientBank" placeholder="은행명 및 주소" class="form-input full-width">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label-cell">품명</td>
+                                <td class="input-cell" colspan="3">
+                                    <input type="text" id="productName" placeholder="거래 품목명" class="form-input full-width">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label-cell">송금 목적</td>
+                                <td class="input-cell" colspan="3">
+                                    <select id="purpose" class="form-input full-width">
+                                        <option value="">선택하세요</option>
+                                        <option value="상품대금">상품대금</option>
+                                        <option value="서비스대금">서비스대금</option>
+                                        <option value="선급금">선급금</option>
+                                        <option value="기술도입">기술도입</option>
+                                        <option value="기타">기타</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label-cell">특기사항</td>
+                                <td class="input-cell" colspan="3">
+                                    <textarea id="remarks" placeholder="기타 특기사항" class="form-textarea"></textarea>
+                                </td>
+                            </tr>
+                        </table>
+                        
+                        <div class="signature-section">
+                            <div class="signature-box">
+                                <p>위와 같이 무역송금을 신청합니다.</p>
+                                <div class="signature-line">
+                                    <span>신청인: </span>
+                                    <input type="text" id="applicantName" placeholder="서명" class="signature-input">
+                                    <span>(인)</span>
+                                    <div class="stamp-area">도장</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 무역송금 관리 영역 -->
+        <div class="remittance-section">
+            <div class="remittance-management">
+                <!-- 무역송금 진행 현황 -->
+                <div class="remittance-card">
+                    <h3 class="card-title">🌐 무역송금 진행 가이드</h3>
+                    <!-- 고정 헤더 -->
+                    <div class="fixed-remittance-header">
+                        <span>송금 항목</span>
+                        <span>금액</span>
+                        <span>상태</span>
+                    </div>
+                    <div class="remittance-progress" id="remittanceProgress">
+                        <div class="progress-items" id="progressItems">
+                            <div class="empty-progress">
+                                <div class="empty-icon">💼</div>
+                                <div class="empty-text">진행중인 송금이 없습니다</div>
+                                <div class="empty-hint">채팅에서 송금 요청 시 자동으로 추가됩니다</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 전역 변수
+        let remittanceData = {
+            total: 0,
+            pending: 0,
+            completed: 0,
+            totalAmount: 0
+        };
+        
+        let progressItems = [];
+        
+        // 샘플 데이터 초기화
+        function initializeData() {
+            remittanceData = {
+                total: 5,
+                pending: 2,
+                completed: 3,
+                totalAmount: 2500000
+            };
+            
+            // 샘플 송금 항목 추가
+            addSampleRemittance();
+        }
+        
+        // 샘플 송금 추가
+        function addSampleRemittance() {
+            addToProgress('중국 공급업체 A', 500000, 'completed');
+            addToProgress('베트남 제조사 B', 750000, 'processing');
+            addToProgress('태국 수출업체 C', 300000, 'pending');
+        }
+        
+        // 진행목록에 항목 추가
+        function addToProgress(itemName, amount, status = 'pending') {
+            const newItem = {
+                id: Date.now(),
+                name: itemName,
+                amount: amount,
+                status: status,
+                timestamp: new Date()
+            };
+            
+            progressItems.push(newItem);
+            updateProgressDisplay();
+            
+            console.log('송금 진행목록에 추가:', newItem);
+        }
+        
+        // 진행목록 표시 업데이트
+        function updateProgressDisplay() {
+            const progressItemsContainer = document.getElementById('progressItems');
+            
+            if (progressItems.length === 0) {
+                progressItemsContainer.innerHTML = `
+                    <div class="empty-progress">
+                        <div class="empty-icon">💼</div>
+                        <div class="empty-text">진행중인 송금이 없습니다</div>
+                        <div class="empty-hint">채팅에서 송금 요청 시 자동으로 추가됩니다</div>
+                    </div>
+                `;
+            } else {
+                progressItemsContainer.innerHTML = progressItems.map(item => `
+                    <div class="progress-item" data-id="${item.id}">
+                        <div class="progress-item-name">${item.name}</div>
+                        <div class="progress-item-amount">$${item.amount.toLocaleString()}</div>
+                        <div class="progress-item-status">
+                            <span class="status-badge status-${item.status}">${getStatusText(item.status)}</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+        
+        // 상태 텍스트 변환
+        function getStatusText(status) {
+            switch (status) {
+                case 'pending': return '대기중';
+                case 'processing': return '진행중';
+                case 'completed': return '완료';
+                default: return '알 수 없음';
+            }
+        }
+        
+        // 파일 저장 함수
+        function saveDocument() {
+            const formData = getFormData();
+            if (!validateFormData(formData)) {
+                alert('모든 필수 정보를 입력해주세요.');
+                return;
+            }
+            
+            // HTML을 PDF로 저장하기 위한 내용 생성
+            const documentContent = generateDocumentHTML(formData);
+            
+            // 파일 다운로드
+            const blob = new Blob([documentContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `무역송금신청서_${formData.companyName}_${new Date().toISOString().slice(0, 10)}.html`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            alert('무역송금 서류가 저장되었습니다!');
+        }
+
+        // 문서 HTML 생성
+        function generateDocumentHTML(data) {
+            return `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="utf-8">
+                    <title>무역송금 신청서</title>
+                    <style>
+                        body { font-family: 'Pretendard', sans-serif; padding: 40px; }
+                        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+                        td { border: 1px solid #333; padding: 10px; vertical-align: middle; }
+                        .label-cell { background: #f5f5f5; font-weight: bold; text-align: center; width: 150px; }
+                        .signature-section { margin-top: 40px; text-align: right; }
+                        .signature-line { display: inline-block; margin-top: 20px; }
+                        .stamp-area { display: inline-block; width: 80px; height: 80px; border: 2px solid #333; border-radius: 50%; margin-left: 30px; text-align: center; line-height: 76px; }
+                        h2 { text-align: center; margin-bottom: 30px; }
+                    </style>
+                </head>
+                <body>
+                    <h2>무역송금 신청서 (T/T)</h2>
+                    <table>
+                        <tr><td class="label-cell">신청인 (회사명)</td><td>${data.companyName}</td><td class="label-cell">신청일자</td><td>${data.applicationDate}</td></tr>
+                        <tr><td class="label-cell">사업자등록번호</td><td>${data.businessNumber}</td><td class="label-cell">대표자명</td><td>${data.representative}</td></tr>
+                        <tr><td class="label-cell">송금 금액</td><td>${data.amount}</td><td class="label-cell">환율</td><td>${data.exchangeRate}</td></tr>
+                        <tr><td class="label-cell">수취인</td><td colspan="3">${data.recipient}</td></tr>
+                        <tr><td class="label-cell">수취인 계좌</td><td colspan="3">${data.recipientAccount}</td></tr>
+                        <tr><td class="label-cell">수취은행</td><td colspan="3">${data.recipientBank}</td></tr>
+                        <tr><td class="label-cell">품명</td><td colspan="3">${data.productName}</td></tr>
+                        <tr><td class="label-cell">송금 목적</td><td colspan="3">${data.purpose}</td></tr>
+                        <tr><td class="label-cell">특기사항</td><td colspan="3">${data.remarks}</td></tr>
+                    </table>
+                    <div class="signature-section">
+                        <p>위와 같이 무역송금을 신청합니다.</p>
+                        <div class="signature-line">
+                            신청인: ${data.applicantName} (인) <div class="stamp-area">도장</div>
+                        </div>
+                    </div>
+                </body>
+                </html>
+            `;
+        }
+
+        // 미리보기 함수
+        function previewDocument() {
+            const formData = getFormData();
+            if (!validateFormData(formData)) {
+                alert('모든 필수 정보를 입력해주세요.');
+                return;
+            }
+            
+            // 미리보기 창 열기
+            const previewWindow = window.open('', '_blank', 'width=800,height=600');
+            previewWindow.document.write(generatePreviewHTML(formData));
+        }
+
+        // 발행 함수
+        function issueDocument() {
+            const formData = getFormData();
+            if (!validateFormData(formData)) {
+                alert('모든 필수 정보를 입력해주세요.');
+                return;
+            }
+            
+            // 진행목록에 추가
+            addToProgress(formData.companyName, formData.amount, 'pending');
+            
+            // 폼 초기화
+            clearForm();
+            
+            alert('무역송금 서류가 발행되었습니다!');
+        }
+
+        // 폼 데이터 수집
+        function getFormData() {
+            return {
+                companyName: document.getElementById('companyName').value,
+                applicationDate: document.getElementById('applicationDate').value,
+                businessNumber: document.getElementById('businessNumber').value,
+                representative: document.getElementById('representative').value,
+                amount: document.getElementById('amount').value,
+                exchangeRate: document.getElementById('exchangeRate').value,
+                recipient: document.getElementById('recipient').value,
+                recipientAccount: document.getElementById('recipientAccount').value,
+                recipientBank: document.getElementById('recipientBank').value,
+                productName: document.getElementById('productName').value,
+                purpose: document.getElementById('purpose').value,
+                remarks: document.getElementById('remarks').value,
+                applicantName: document.getElementById('applicantName').value
+            };
+        }
+
+        // 폼 데이터 검증
+        function validateFormData(data) {
+            return data.companyName && data.applicationDate && data.businessNumber && 
+                   data.representative && data.amount && data.recipient && 
+                   data.productName && data.purpose && data.applicantName;
+        }
+
+        // 미리보기 HTML 생성
+        function generatePreviewHTML(data) {
+            return `
+                <html>
+                <head><title>무역송금 서류 미리보기</title></head>
+                <body style="font-family: Arial; padding: 20px;">
+                    <h2>무역송금 신청서</h2>
+                    <table border="1" style="width: 100%; border-collapse: collapse;">
+                        <tr><td><strong>회사명</strong></td><td>${data.companyName}</td></tr>
+                        <tr><td><strong>송금 금액</strong></td><td>${data.amount}</td></tr>
+                        <tr><td><strong>품명</strong></td><td>${data.productName}</td></tr>
+                        <tr><td><strong>수취인</strong></td><td>${data.recipientName}</td></tr>
+                        <tr><td><strong>송금 목적</strong></td><td>${data.purpose}</td></tr>
+                        <tr><td><strong>송금일</strong></td><td>${data.date}</td></tr>
+                    </table>
+                </body>
+                </html>
+            `;
+        }
+
+        // 폼 초기화
+        function clearForm() {
+            document.getElementById('companyName').value = '';
+            document.getElementById('applicationDate').value = '';
+            document.getElementById('businessNumber').value = '';
+            document.getElementById('representative').value = '';
+            document.getElementById('amount').value = '';
+            document.getElementById('exchangeRate').value = '';
+            document.getElementById('recipient').value = '';
+            document.getElementById('recipientAccount').value = '';
+            document.getElementById('recipientBank').value = '';
+            document.getElementById('productName').value = '';
+            document.getElementById('purpose').value = '';
+            document.getElementById('remarks').value = '';
+            document.getElementById('applicantName').value = '';
+        }
+        
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeData();
+            updateProgressDisplay();
+            
+            // AI 어시스턴트 초기 메시지
+            setTimeout(() => {
+                addBotMessage(`오늘의 송금 현황을 확인해보세요! 🏦<br>총 ${remittanceData.total}건의 송금이 진행중입니다.`);
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

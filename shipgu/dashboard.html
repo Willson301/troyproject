@@ -117,6 +117,47 @@
             color: #92400e;
         }
         
+        /* 회원 타입 스위처 */
+        .member-switcher {
+            margin: 16px 0;
+            padding: 12px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .switcher-label {
+            font-size: 12px;
+            font-weight: 500;
+            color: #6b7280;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .switcher-select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            background: white;
+            font-size: 13px;
+            color: #374151;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .switcher-select:hover {
+            border-color: #3b82f6;
+        }
+        
+        .switcher-select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+        }
+        
         /* 환율 정보 */
         .exchange-rate {
             display: flex !important;
@@ -268,6 +309,18 @@
             background: #eff6ff;
         }
         
+        /* 상단 독립 메뉴 강조 스타일 */
+        .nav-link.top-menu {
+            font-weight: 700;
+            font-size: 15px;
+            color: #111827;
+        }
+        
+        .nav-link.top-menu:hover {
+            background: #e5e7eb;
+            color: #000000;
+        }
+        
         /* 로그아웃 섹션 */
         .logout-section {
             padding: 24px;
@@ -279,7 +332,7 @@
             padding: 8px 12px;
             background: none;
             border: none;
-            color: #6b7280;
+            color: #dc2626;
             font-size: 14px;
             text-align: left;
             border-radius: 6px;
@@ -288,35 +341,18 @@
         }
         
         .logout-btn:hover {
-            background: #f3f4f6;
-            color: #111827;
+            background: #fef2f2;
+            color: #991b1b;
         }
         
         /* 메인 콘텐츠 */
         .main-content {
             flex: 1;
-            padding: 24px;
+            padding: 12px;
         }
         
-        .welcome-section {
-            background: white;
-            border-radius: 8px;
-            padding: 32px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-        
-        .welcome-title {
-            font-size: 24px;
-            font-weight: 700;
-            color: #111827;
+        .service-section {
             margin-bottom: 8px;
-        }
-        
-        .welcome-subtitle {
-            font-size: 16px;
-            color: #6b7280;
-            margin-bottom: 32px;
         }
         
         .service-grid {
@@ -327,8 +363,8 @@
         
         .service-card {
             background: #f9fafb;
-            padding: 24px;
-            border-radius: 8px;
+            padding: 12px;
+            border-radius: 6px;
             border: 1px solid #e5e7eb;
             text-align: center;
             transition: all 0.2s;
@@ -345,19 +381,19 @@
         }
         
         .service-icon {
-            font-size: 32px;
-            margin-bottom: 12px;
-        }
-        
-        .service-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: #111827;
+            font-size: 24px;
             margin-bottom: 8px;
         }
         
-        .service-desc {
+        .service-title {
             font-size: 14px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 6px;
+        }
+        
+        .service-desc {
+            font-size: 12px;
             color: #6b7280;
             line-height: 1.4;
         }
@@ -591,6 +627,17 @@
                     <span class="user-badge unverified" id="userBadge">미인증</span>
                 </div>
                 
+                <!-- 회원 타입 테스트 스위처 -->
+                <div class="member-switcher">
+                    <div class="switcher-label">🔄 테스트 모드</div>
+                    <select id="memberTypeSwitcher" class="switcher-select">
+                        <option value="individual">👤 개인회원</option>
+                        <option value="business">🏢 사업자회원</option>
+                        <option value="corporation">🏛️ 법인회원</option>
+                        <option value="admin">👨‍💼 관리자</option>
+                    </select>
+                </div>
+                
                 <!-- 환율 정보 -->
                 <div class="exchange-rate">
                     <span class="exchange-label">환율</span>
@@ -623,7 +670,13 @@
                     <div class="nav-group">
                         <ul class="nav-list">
                             <li class="nav-item">
-                                <a href="/notices" class="nav-link">📢 공지사항</a>
+                                <a href="/notices" class="nav-link top-menu">공지사항</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/guide" class="nav-link top-menu">서비스 이용 가이드</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/faq" class="nav-link top-menu">자주묻는질문</a>
                             </li>
                         </ul>
                     </div>
@@ -643,29 +696,12 @@
                         </ul>
                     </div>
 
-                    <div class="nav-group">
-                        <h3 class="nav-title">배송 관리</h3>
-                        <ul class="nav-list">
-                            <li class="nav-item">
-                                <a href="/shipping" class="nav-link">배송조회</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="/warehouse" class="nav-link">창고현황</a>
-                            </li>
-                        </ul>
-                    </div>
 
                     <div class="nav-group">
                         <h3 class="nav-title">고객 지원</h3>
                         <ul class="nav-list">
                             <li class="nav-item">
-                                <a href="/notices" class="nav-link">공지사항</a>
-                            </li>
-                            <li class="nav-item">
                                 <a href="/support" class="nav-link">1:1 문의</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="/faq" class="nav-link">자주묻는질문</a>
                             </li>
                         </ul>
                     </div>
@@ -703,14 +739,7 @@
                 </div>
             </div>
             
-            <div class="welcome-section">
-                <h1 class="welcome-title">
-                    <span id="welcomeUserName">홍길동</span>님, 환영합니다!
-                </h1>
-                <p class="welcome-subtitle">
-                    SHIPGU와 함께 글로벌 소싱을 시작해보세요
-                </p>
-                
+            <div class="service-section">
                 <div class="service-grid">
                     <div class="service-card" onclick="showQRPaymentSystem()" style="cursor: pointer;">
                         <div class="service-icon">💳</div>
@@ -724,24 +753,24 @@
                         <div class="service-desc">수수료 없는 1688 직접 구매</div>
                     </div>
                     
-                    <a href="/superagency" class="service-card">
+                    <div class="service-card" onclick="showTradeRemittanceSystem()">
                         <div class="service-icon">🏢</div>
-                        <div class="service-title">슈퍼에이전시</div>
-                        <div class="service-desc">전문 구매대행 서비스</div>
-                    </a>
+                        <div class="service-title">무역송금(T/T)</div>
+                        <div class="service-desc">법인회원 송금시스템</div>
+                    </div>
                 </div>
 
                 <!-- 1688 간단한 임베드 영역 -->
-                <div class="embedded-1688" id="embedded1688" style="display: block;">
-                    <div style="background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-top: 20px; padding: 20px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <div class="embedded-1688" id="embedded1688" style="display: block; height: 75vh;">
+                    <div style="background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-top: 4px; padding: 12px; height: 100%; display: flex; flex-direction: column;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                             <h3 style="margin: 0; color: #333;">💳 QR코드 결제시스템</h3>
                             <button onclick="close1688()" style="background: none; border: none; font-size: 18px; cursor: pointer;">✕</button>
                         </div>
                         <iframe 
                             id="embed1688Iframe" 
                             src="qr-payment-system.html"
-                            style="width: 100%; height: 600px; border: 1px solid #ddd; border-radius: 8px;"
+                            style="width: 100%; height: 100%; flex: 1; border: 1px solid #ddd; border-radius: 8px;"
                             title="1688">
                         </iframe>
                     </div>
@@ -749,6 +778,242 @@
             </div>
         </div>
     </div>
+
+    <!-- 무역송금 접근 제한 모달 -->
+    <div class="modal-overlay" id="tradeRemittanceModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="modal-close" onclick="closeTradeRemittanceModal()">×</button>
+                <span class="modal-icon">🏦</span>
+                <div class="modal-title">무역송금 T/T</div>
+                <div class="modal-subtitle">Trade Transfer System</div>
+            </div>
+            <div class="modal-body">
+                <div class="access-restriction">
+                    <div class="restriction-title">서비스 이용 제한 안내</div>
+                    <div class="restriction-content">
+                        무역송금 T/T는 해외물품대금<br>
+                        지급증빙자료로써, 아래 조건을<br>
+                        충족하는 회원만 이용 가능합니다.
+                    </div>
+                    <div class="restriction-requirements">
+                        <div class="requirement-item">사업자회원 중 업태에 '해외 구매대행업' 등록</div>
+                        <div class="requirement-item">법인회원 인증 완료</div>
+                        <div class="requirement-item">사업자등록증 및 법인 서류 제출</div>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button class="modal-btn modal-btn-secondary" onclick="closeTradeRemittanceModal()">닫기</button>
+                    <button class="modal-btn modal-btn-primary" onclick="enterTradeRemittanceSystem()">접속하기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* 모달 팝업 스타일 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 0;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            transform: scale(0.8) translateY(20px);
+            transition: transform 0.3s ease;
+            overflow: hidden;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 24px 32px;
+            text-align: center;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s;
+            opacity: 0.8;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+            opacity: 1;
+        }
+
+        .modal-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .modal-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            line-height: 1.2;
+        }
+
+        .modal-subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        .modal-body {
+            padding: 32px;
+            text-align: center;
+        }
+
+        .access-restriction {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 2px solid #f59e0b;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        .access-restriction::before {
+            content: "⚠️";
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            font-size: 24px;
+            padding: 0 12px;
+        }
+
+        .restriction-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #92400e;
+            margin-bottom: 12px;
+        }
+
+        .restriction-content {
+            color: #78350f;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .restriction-requirements {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid #f59e0b;
+        }
+
+        .requirement-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: #92400e;
+        }
+
+        .requirement-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .requirement-item::before {
+            content: "✓";
+            background: #10b981;
+            color: white;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-width: 120px;
+        }
+
+        .modal-btn-primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .modal-btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+        }
+
+        .modal-btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+
+        .modal-btn-secondary:hover {
+            background: #e5e7eb;
+            transform: translateY(-1px);
+        }
+    </style>
 
 
     <script>
@@ -923,7 +1188,15 @@
             
             // 사용자 이름 표시
             document.getElementById('userName').textContent = currentUser.name;
-            document.getElementById('welcomeUserName').textContent = currentUser.name;
+            if(document.getElementById('welcomeUserName')) {
+                document.getElementById('welcomeUserName').textContent = currentUser.name;
+            }
+            
+            // 회원 타입 스위처 초기화
+            initializeMemberSwitcher();
+            
+            // 현재 회원 타입에 맞게 사이드바 메뉴 초기화
+            updateSidebarMenu(currentUser.memberType);
             
             // 회원 유형별 라벨 설정
             const userLabel = document.querySelector('.user-label');
@@ -944,17 +1217,17 @@
             const isVerified = currentUser.isVerified;
             
             if (isVerified) {
-                userBadge.textContent = '인증완료';
+                userBadge.textContent = 'KYC 인증';
                 userBadge.className = 'user-badge verified';
             } else {
-                userBadge.textContent = '미인증';
+                userBadge.textContent = 'KYC 미인증';
                 userBadge.className = 'user-badge unverified';
                 userBadge.style.cursor = 'pointer';
-                userBadge.title = '클릭하여 인증하기';
+                userBadge.title = '클릭하여 KYC 인증하기';
                 
                 // 미인증 뱃지 클릭 시 인증 페이지로 이동
                 userBadge.addEventListener('click', function() {
-                    if (confirm('인증을 진행하시겠습니까?')) {
+                    if (confirm('KYC 인증을 진행하시겠습니까?')) {
                         window.location.href = 'verify.html';
                     }
                 });
@@ -994,6 +1267,14 @@
 
         // 1688 솔루션을 iframe에 표시
         function show1688Solution() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            
+            // 개인회원 접근 제한
+            if (currentUser && currentUser.memberType === 'individual') {
+                alert('🚫 접근 제한\n\n1688솔루션은 사업자회원 이상만 이용 가능합니다.\n\n사업자 인증 후 이용해주세요.');
+                return;
+            }
+            
             const embedded1688 = document.getElementById('embedded1688');
             const iframe = document.getElementById('embed1688Iframe');
             
@@ -1011,32 +1292,273 @@
             console.log('1688 솔루션이 iframe에 표시됩니다');
         }
 
-        function showServiceSelection() {
-            const services = [
-                { name: '1688솔루션', desc: '수수료 없는 1688 직접 구매 (자동 표시됨)' },
-                { name: 'QR코드 결제시스템', desc: '알리페이/위챗페이/웨이디엔', action: 'showQRPaymentSystem' },
-                { name: '슈퍼에이전시', desc: '전문 구매대행 서비스', url: '/superagency' }
-            ];
+        function showTradeRemittanceSystem() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
             
-            let message = '📋 서비스를 선택해주세요:\n\n';
-            services.forEach((service, index) => {
-                message += `${index + 1}. ${service.name}\n   ${service.desc}\n\n`;
-            });
-            
-            const choice = prompt(message + '선택하실 번호를 입력해주세요 (1-3):');
-            
-            if (choice && choice >= 1 && choice <= 3) {
-                const selectedService = services[choice - 1];
-                alert(`${selectedService.name} 서비스를 선택하셨습니다.\n${selectedService.desc}`);
-                
-                if (selectedService.url) {
-                    window.location.href = selectedService.url;
-                } else if (selectedService.action === 'showQRPaymentSystem') {
-                    showQRPaymentSystem();
-                } else if (selectedService.name === '1688솔루션') {
-                    alert('1688 솔루션은 이미 대시보드에 표시되어 있습니다!');
-                }
+            // 개인회원 접근 제한
+            if (currentUser && currentUser.memberType === 'individual') {
+                alert('🚫 접근 제한\n\n무역송금(T/T)는 법인회원만 이용 가능합니다.\n\n법인 인증 후 이용해주세요.');
+                return;
             }
+            
+            // 조건 없이 팝업만 표시
+            showTradeRemittanceModal();
+        }
+
+        // 무역송금 시스템 접속
+        function enterTradeRemittanceSystem() {
+            closeTradeRemittanceModal();
+            
+            const embedded1688 = document.getElementById('embedded1688');
+            const iframe = document.getElementById('embed1688Iframe');
+            
+            // iframe을 무역송금 시스템으로 변경
+            iframe.src = 'trade-remittance-system.html';
+            
+            // 제목과 닫기 버튼 변경
+            const header = embedded1688.querySelector('h3');
+            header.innerHTML = '🏦 무역송금(T/T)';
+            
+            // 닫기 버튼 클릭 시 1688로 되돌리기
+            const closeBtn = embedded1688.querySelector('button');
+            closeBtn.onclick = function() {
+                iframe.src = 'https://www.1688.com';
+                header.innerHTML = '🛒 1688 솔루션';
+                closeBtn.onclick = close1688; // 원래 함수로 복원
+            };
+            
+            console.log('무역송금 시스템에 접속합니다');
+        }
+
+        // 무역송금 모달 표시
+        function showTradeRemittanceModal() {
+            const modal = document.getElementById('tradeRemittanceModal');
+            if (modal) {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        // 무역송금 모달 닫기
+        function closeTradeRemittanceModal() {
+            const modal = document.getElementById('tradeRemittanceModal');
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+
+
+        function showServiceSelection() {
+            // 결제요청 버튼 클릭 시 바로 QR코드 결제시스템 표시
+            showQRPaymentSystem();
+        }
+        
+        // 회원 타입 스위처 초기화
+        function initializeMemberSwitcher() {
+            const switcher = document.getElementById('memberTypeSwitcher');
+            if (!switcher) return;
+            
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) return;
+            
+            // 현재 회원 타입으로 선택 설정
+            switcher.value = currentUser.memberType || 'individual';
+            
+            // 변경 이벤트 리스너 추가
+            switcher.addEventListener('change', function() {
+                switchMemberType(this.value);
+            });
+        }
+        
+        // 회원 타입 전환
+        function switchMemberType(newMemberType) {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) return;
+            
+            // 회원 타입별 테스트 데이터
+            const memberData = {
+                individual: {
+                    name: '홍길동',
+                    memberType: 'individual',
+                    email: 'user@shipgu.com',
+                    isVerified: false
+                },
+                business: {
+                    name: '김사업',
+                    memberType: 'business', 
+                    email: 'business@shipgu.com',
+                    isVerified: false
+                },
+                corporation: {
+                    name: '법인대표',
+                    memberType: 'corporation',
+                    email: 'corporation@shipgu.com',
+                    isVerified: true
+                },
+                admin: {
+                    name: '관리자',
+                    memberType: 'admin',
+                    email: 'admin@shipgu.com',
+                    role: 'admin',
+                    isVerified: true
+                }
+            };
+            
+            // 새로운 사용자 정보 생성
+            const newUserData = {
+                ...currentUser,
+                ...memberData[newMemberType],
+                loginTime: new Date().toISOString()
+            };
+            
+            // localStorage 업데이트
+            localStorage.setItem('currentUser', JSON.stringify(newUserData));
+            
+            // UI 업데이트 - 사용자명 변경
+            document.getElementById('userName').textContent = newUserData.name;
+            
+            // 회원 유형별 라벨 설정
+            const userLabel = document.querySelector('.user-label');
+            if (newMemberType === 'individual') {
+                userLabel.textContent = '개인회원';
+            } else if (newMemberType === 'business') {
+                userLabel.textContent = '사업자회원';
+            } else if (newMemberType === 'corporation') {
+                userLabel.textContent = '법인회원';
+            } else if (newMemberType === 'admin') {
+                userLabel.textContent = '관리자';
+            }
+            
+            // 인증 뱃지 업데이트
+            const userBadge = document.getElementById('userBadge');
+            if (newUserData.isVerified) {
+                userBadge.textContent = 'KYC 인증';
+                userBadge.className = 'user-badge verified';
+            } else {
+                userBadge.textContent = 'KYC 미인증';
+                userBadge.className = 'user-badge unverified';
+            }
+            
+            // 회원 타입에 따른 서비스 카드 표시/숨김
+            updateServiceCards(newMemberType);
+            
+            // 회원 타입에 따른 사이드바 메뉴 업데이트
+            updateSidebarMenu(newMemberType);
+            
+            console.log(`회원 타입이 ${newMemberType}로 변경되었습니다.`);
+        }
+        
+        // 회원 타입에 따른 서비스 카드 접근 권한 설정 (카드는 보이지만 접근 제한)
+        function updateServiceCards(memberType) {
+            // 카드는 모두 표시되지만 접근 권한만 제어
+            // 별도 처리 없음 - 각 서비스 함수에서 권한 체크
+        }
+        
+        // 회원 타입에 따른 사이드바 메뉴 업데이트
+        function updateSidebarMenu(memberType) {
+            const navSection = document.querySelector('.nav-section nav');
+            
+            let menuHTML = '';
+            
+            if (memberType === 'individual') {
+                // 개인회원 메뉴
+                menuHTML = `
+                    <div class="nav-group">
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a href="/notices" class="nav-link top-menu">공지사항</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/guide" class="nav-link top-menu">서비스 이용 가이드</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/faq" class="nav-link top-menu">자주묻는질문</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="nav-group">
+                        <h3 class="nav-title">나의 정보</h3>
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a href="/payment" class="nav-link">결제내역</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/cart" class="nav-link">장바구니</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/favorites" class="nav-link">찜한 상품</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="nav-group">
+                        <h3 class="nav-title">고객 지원</h3>
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a href="/support" class="nav-link">1:1 문의</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                `;
+            } else {
+                // 사업자/법인/관리자 기본 메뉴 (기존 구조 유지)
+                menuHTML = `
+                    <div class="nav-group">
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a href="/notices" class="nav-link top-menu">공지사항</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/guide" class="nav-link top-menu">서비스 이용 가이드</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/faq" class="nav-link top-menu">자주묻는질문</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="nav-group">
+                        <h3 class="nav-title">주문 관리</h3>
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a href="/orders" class="nav-link">주문내역</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/cart" class="nav-link">장바구니</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/favorites" class="nav-link">찜한 상품</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="nav-group">
+                        <h3 class="nav-title">고객 지원</h3>
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a href="/support" class="nav-link">1:1 문의</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="nav-group">
+                        <h3 class="nav-title">계정 관리</h3>
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a href="/payment" class="nav-link">결제내역</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/profile" class="nav-link">나의 정보</a>
+                            </li>
+                        </ul>
+                    </div>
+                `;
+            }
+            
+            navSection.innerHTML = menuHTML;
         }
     </script>
 </body>
