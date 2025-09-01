@@ -712,16 +712,16 @@
                 </p>
                 
                 <div class="service-grid">
-                    <div class="service-card" id="service1688">
-                        <div class="service-icon">🛒</div>
-                        <div class="service-title">1688솔루션</div>
-                        <div class="service-desc">수수료 없는 1688 직접 구매</div>
-                    </div>
-                    
                     <div class="service-card" onclick="showQRPaymentSystem()" style="cursor: pointer;">
                         <div class="service-icon">💳</div>
                         <div class="service-title">QR코드 결제시스템</div>
                         <div class="service-desc">알리페이/위챗페이/웨이디엔</div>
+                    </div>
+                    
+                    <div class="service-card" onclick="show1688Solution()" style="cursor: pointer;">
+                        <div class="service-icon">🛒</div>
+                        <div class="service-title">1688솔루션</div>
+                        <div class="service-desc">수수료 없는 1688 직접 구매</div>
                     </div>
                     
                     <a href="/superagency" class="service-card">
@@ -735,12 +735,12 @@
                 <div class="embedded-1688" id="embedded1688" style="display: block;">
                     <div style="background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-top: 20px; padding: 20px;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                            <h3 style="margin: 0; color: #333;">🛒 1688 솔루션</h3>
+                            <h3 style="margin: 0; color: #333;">💳 QR코드 결제시스템</h3>
                             <button onclick="close1688()" style="background: none; border: none; font-size: 18px; cursor: pointer;">✕</button>
                         </div>
                         <iframe 
                             id="embed1688Iframe" 
-                            src="https://www.1688.com"
+                            src="qr-payment-system.html"
                             style="width: 100%; height: 600px; border: 1px solid #ddd; border-radius: 8px;"
                             title="1688">
                         </iframe>
@@ -900,8 +900,9 @@
         document.addEventListener('DOMContentLoaded', function() {
             console.log('페이지 로드 완료');
             
-            // 1688이 자동으로 표시되므로 별도 버튼 이벤트 불필요
-            console.log('1688 솔루션이 자동으로 표시됩니다');
+            // QR코드 결제시스템이 기본으로 표시됩니다
+            showQRPaymentSystem();
+            console.log('QR코드 결제시스템이 기본으로 표시됩니다');
             
             const currentUser = JSON.parse(localStorage.getItem('currentUser'));
             
@@ -989,6 +990,25 @@
             };
             
             console.log('QR코드 결제시스템이 iframe에 표시됩니다');
+        }
+
+        // 1688 솔루션을 iframe에 표시
+        function show1688Solution() {
+            const embedded1688 = document.getElementById('embedded1688');
+            const iframe = document.getElementById('embed1688Iframe');
+            
+            // iframe을 1688로 변경
+            iframe.src = 'https://www.1688.com';
+            
+            // 제목과 닫기 버튼 변경
+            const header = embedded1688.querySelector('h3');
+            header.innerHTML = '🛒 1688 솔루션';
+            
+            // 닫기 버튼 클릭 시 숨기기
+            const closeBtn = embedded1688.querySelector('button');
+            closeBtn.onclick = close1688; // 원래 함수로 복원
+            
+            console.log('1688 솔루션이 iframe에 표시됩니다');
         }
 
         function showServiceSelection() {
