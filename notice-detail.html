@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>공지사항 상세 | SHIPGU</title>
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet"/>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Pretendard', sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #64748b;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        
+        .nav-btn:hover {
+            background: #f1f5f9;
+            color: #2563eb;
+        }
+        
+        .post-meta {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        
+        .category-badge {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .category-badge.important {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .category-badge.update {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .category-badge.info {
+            background: #10b981;
+            color: white;
+        }
+        
+        .meta-item {
+            font-size: 14px;
+            color: #64748b;
+        }
+        
+        .post-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+        
+        .post-info {
+            font-size: 14px;
+            color: #64748b;
+        }
+        
+        .content-section {
+            background: white;
+            padding: 32px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 24px;
+        }
+        
+        .content {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #374151;
+        }
+        
+        .content h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1e293b;
+            margin: 24px 0 16px 0;
+        }
+        
+        .content p {
+            margin-bottom: 16px;
+        }
+        
+        .content ul {
+            margin: 16px 0;
+            padding-left: 20px;
+        }
+        
+        .content li {
+            margin-bottom: 8px;
+        }
+        
+        .highlight-box {
+            background: #fef3c7;
+            border: 1px solid #fbbf24;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 20px 0;
+        }
+        
+        .highlight-box h4 {
+            color: #92400e;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .highlight-box p {
+            color: #92400e;
+            margin: 0;
+        }
+        
+        .action-buttons {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            display: flex;
+            gap: 12px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #1d4ed8;
+        }
+        
+        .btn-secondary {
+            background: #f1f5f9;
+            color: #64748b;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .btn-secondary:hover {
+            background: #e2e8f0;
+            color: #475569;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="nav-buttons">
+                <a href="#" onclick="parent.showNoticeBoard()" class="nav-btn">
+                    ← 공지사항 목록
+                </a>
+                <a href="#" onclick="parent.showQRPaymentSystem()" class="nav-btn">
+                    🏠 메인으로
+                </a>
+            </div>
+            
+            <div class="post-meta">
+                <span class="category-badge important" id="categoryBadge">중요</span>
+                <span class="meta-item">작성일: <span id="postDate">2024.01.15</span></span>
+                <span class="meta-item">조회수: <span id="postViews">1,247</span></span>
+            </div>
+            
+            <h1 class="post-title" id="postTitle">서비스 이용 안내사항</h1>
+            <div class="post-info">SHIPGU 운영팀</div>
+        </div>
+        
+        <div class="content-section">
+            <div class="content" id="postContent">
+                <p>안녕하세요. SHIPGU를 이용해 주셔서 감사합니다.</p>
+                
+                <p>본 공지사항을 통해 SHIPGU 서비스 이용 시 주의사항에 대해 안내드립니다.</p>
+                
+                <div class="highlight-box">
+                    <h4>⚠️ 중요 안내사항</h4>
+                    <p>SHIPGU 서비스는 제품구매 목적으로만 이용이 가능합니다. 다른 용도로의 사용은 제한됩니다.</p>
+                </div>
+                
+                <h3>서비스 이용 안내</h3>
+                <ul>
+                    <li><strong>1688 솔루션:</strong> 수수료 없는 직접 구매 서비스를 제공합니다.</li>
+                    <li><strong>QR 결제시스템:</strong> 알리페이, 위챗페이, 웨이디엔을 지원합니다.</li>
+                    <li><strong>배송 서비스:</strong> 안전하고 빠른 글로벌 배송을 제공합니다.</li>
+                </ul>
+                
+                <h3>이용 시 주의사항</h3>
+                <p>서비스를 안전하고 원활하게 이용하기 위해 다음 사항을 준수해 주시기 바랍니다:</p>
+                <ul>
+                    <li>개인정보 보호를 위해 계정 정보를 안전하게 관리해 주세요.</li>
+                    <li>의심스러운 활동 발견 시 즉시 고객센터로 문의해 주세요.</li>
+                    <li>서비스 약관을 준수하여 이용해 주시기 바랍니다.</li>
+                </ul>
+                
+                <p>궁금한 사항이 있으시면 언제든지 고객센터로 문의해 주시기 바랍니다.</p>
+                
+                <p>감사합니다.</p>
+            </div>
+        </div>
+        
+        <div class="action-buttons">
+            <a href="#" onclick="parent.showNoticeBoard()" class="btn btn-primary">
+                📋 목록으로 돌아가기
+            </a>
+            <a href="#" onclick="parent.showQRPaymentSystem()" class="btn btn-secondary">
+                🏠 메인으로
+            </a>
+        </div>
+    </div>
+    
+    <script>
+        // URL 파라미터에서 공지사항 ID 가져오기
+        function getUrlParameter(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+        
+        // 공지사항 데이터
+        const notices = {
+            1: {
+                title: "서비스 이용 안내사항",
+                category: "important",
+                categoryText: "중요",
+                date: "2024.01.15",
+                views: "1,247",
+                content: `
+                    <p>안녕하세요. SHIPGU를 이용해 주셔서 감사합니다.</p>
+                    <p>본 공지사항을 통해 SHIPGU 서비스 이용 시 주의사항에 대해 안내드립니다.</p>
+                    <div class="highlight-box">
+                        <h4>⚠️ 중요 안내사항</h4>
+                        <p>SHIPGU 서비스는 제품구매 목적으로만 이용이 가능합니다. 다른 용도로의 사용은 제한됩니다.</p>
+                    </div>
+                    <h3>서비스 이용 안내</h3>
+                    <ul>
+                        <li><strong>1688 솔루션:</strong> 수수료 없는 직접 구매 서비스를 제공합니다.</li>
+                        <li><strong>QR 결제시스템:</strong> 알리페이, 위챗페이, 웨이디엔을 지원합니다.</li>
+                        <li><strong>배송 서비스:</strong> 안전하고 빠른 글로벌 배송을 제공합니다.</li>
+                    </ul>
+                    <h3>이용 시 주의사항</h3>
+                    <p>서비스를 안전하고 원활하게 이용하기 위해 다음 사항을 준수해 주시기 바랍니다:</p>
+                    <ul>
+                        <li>개인정보 보호를 위해 계정 정보를 안전하게 관리해 주세요.</li>
+                        <li>의심스러운 활동 발견 시 즉시 고객센터로 문의해 주세요.</li>
+                        <li>서비스 약관을 준수하여 이용해 주시기 바랍니다.</li>
+                    </ul>
+                    <p>궁금한 사항이 있으시면 언제든지 고객센터로 문의해 주시기 바랍니다.</p>
+                    <p>감사합니다.</p>
+                `
+            },
+            2: {
+                title: "1688 솔루션 업데이트 안내",
+                category: "update",
+                categoryText: "업데이트",
+                date: "2024.01.10",
+                views: "856",
+                content: `
+                    <p>안녕하세요. SHIPGU 운영팀입니다.</p>
+                    <p>1688 솔루션의 새로운 업데이트가 완료되었음을 알려드립니다.</p>
+                    <h3>주요 업데이트 내용</h3>
+                    <ul>
+                        <li><strong>수수료 0% 혜택 확대:</strong> 모든 카테고리에서 수수료 없이 이용 가능</li>
+                        <li><strong>한도 제한 완전 해제:</strong> 구매 한도 제한이 완전히 사라졌습니다</li>
+                        <li><strong>실시간 환율 적용:</strong> 더욱 정확한 가격 정보 제공</li>
+                        <li><strong>배송 추적 개선:</strong> 실시간 배송 현황 확인 가능</li>
+                    </ul>
+                    <p>새로운 기능들을 통해 더욱 편리한 서비스를 경험해보세요!</p>
+                `
+            },
+            3: {
+                title: "QR코드 결제시스템 오픈",
+                category: "info",
+                categoryText: "신규",
+                date: "2024.01.05",
+                views: "634",
+                content: `
+                    <p>새로운 QR코드 결제시스템이 오픈되었습니다!</p>
+                    <h3>지원 결제 수단</h3>
+                    <ul>
+                        <li><strong>알리페이 (Alipay):</strong> 중국 최대 모바일 결제 플랫폼</li>
+                        <li><strong>위챗페이 (WeChat Pay):</strong> 위챗 기반 간편 결제</li>
+                        <li><strong>웨이디엔 (UnionPay):</strong> 중국 은련 카드 결제</li>
+                    </ul>
+                    <p>QR코드 스캔만으로 간편하고 안전한 결제가 가능합니다.</p>
+                    <div class="highlight-box">
+                        <h4>📱 이용 방법</h4>
+                        <p>대시보드에서 'QR코드 결제시스템'을 클릭하여 이용해보세요!</p>
+                    </div>
+                `
+            }
+        };
+        
+        // 페이지 로드 시 공지사항 내용 설정
+        document.addEventListener('DOMContentLoaded', function() {
+            const noticeId = getUrlParameter('id') || '1';
+            const notice = notices[noticeId];
+            
+            if (notice) {
+                document.getElementById('postTitle').textContent = notice.title;
+                document.getElementById('postDate').textContent = notice.date;
+                document.getElementById('postViews').textContent = notice.views;
+                document.getElementById('postContent').innerHTML = notice.content;
+                
+                const badge = document.getElementById('categoryBadge');
+                badge.textContent = notice.categoryText;
+                badge.className = `category-badge ${notice.category}`;
+            }
+        });
+    </script>
+</body>
+</html>

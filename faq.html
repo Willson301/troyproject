@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>자주묻는질문 | SHIPGU</title>
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet"/>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Pretendard', sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+        
+        .page-subtitle {
+            font-size: 16px;
+            color: #64748b;
+        }
+        
+        .faq-categories {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+        
+        .category-btn {
+            padding: 8px 16px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 20px;
+            font-size: 14px;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        
+        .category-btn.active, .category-btn:hover {
+            background: #2563eb;
+            color: white;
+            border-color: #2563eb;
+        }
+        
+        .faq-board {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .faq-list {
+            list-style: none;
+        }
+        
+        .faq-item {
+            border-bottom: 1px solid #f1f5f9;
+        }
+        
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+        
+        .faq-question {
+            padding: 20px 24px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .faq-question:hover {
+            background: #f8fafc;
+        }
+        
+        .faq-icon {
+            background: #eff6ff;
+            color: #2563eb;
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        
+        .question-text {
+            flex: 1;
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+        
+        .expand-icon {
+            font-size: 18px;
+            color: #64748b;
+            transition: transform 0.2s;
+        }
+        
+        .faq-item.active .expand-icon {
+            transform: rotate(180deg);
+        }
+        
+        .faq-answer {
+            display: none;
+            padding: 0 24px 24px 60px;
+            font-size: 14px;
+            color: #64748b;
+            line-height: 1.7;
+        }
+        
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+        
+        .answer-highlight {
+            background: #f0f9ff;
+            border-left: 3px solid #2563eb;
+            padding: 12px 16px;
+            margin: 12px 0;
+            border-radius: 0 6px 6px 0;
+        }
+        
+        .search-box {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="page-title">❓ 자주묻는질문</h1>
+            <p class="page-subtitle">SHIPGU 서비스 이용 중 자주 묻는 질문들을 모아놓았습니다</p>
+        </div>
+        
+        <div class="search-box">
+            <input type="text" class="search-input" placeholder="궁금한 내용을 검색해 보세요..." oninput="searchFAQ(this.value)">
+        </div>
+        
+        <div class="faq-categories">
+            <button class="category-btn active" onclick="filterFAQ('all')">전체</button>
+            <button class="category-btn" onclick="filterFAQ('payment')">QR코드 결제</button>
+            <button class="category-btn" onclick="filterFAQ('account')">계정 관리</button>
+            <button class="category-btn" onclick="filterFAQ('upgrade')">회원 전환</button>
+            <button class="category-btn" onclick="filterFAQ('technical')">기술적 문제</button>
+        </div>
+        
+        <div class="faq-board">
+            <ul class="faq-list" id="faqList">
+                <li class="faq-item" data-category="payment" onclick="toggleFAQ(this)">
+                    <div class="faq-question">
+                        <div class="faq-icon">Q</div>
+                        <div class="question-text">QR코드 결제시 오류가 발생했어요. 어떻게 해야 하나요?</div>
+                        <div class="expand-icon">▼</div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>QR코드 결제 오류가 발생하는 경우 다음과 같은 원인들이 있을 수 있습니다:</p>
+                        <div class="answer-highlight">
+                            <strong>주요 해결 방법:</strong><br>
+                            1. QR코드 유효시간(5분) 확인 후 새로 생성<br>
+                            2. 결제 앱의 최신 버전 확인<br>
+                            3. 네트워크 연결 상태 점검<br>
+                            4. 잔액 부족 여부 확인
+                        </div>
+                        <p>위 방법으로도 해결되지 않으면 1:1 문의를 통해 고객센터로 연락해 주시기 바랍니다.</p>
+                    </div>
+                </li>
+                
+                <li class="faq-item" data-category="payment" onclick="toggleFAQ(this)">
+                    <div class="faq-question">
+                        <div class="faq-icon">Q</div>
+                        <div class="question-text">지원하는 결제 수단이 무엇인가요?</div>
+                        <div class="expand-icon">▼</div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>SHIPGU에서는 다음 결제 수단을 지원합니다:</p>
+                        <div class="answer-highlight">
+                            • <strong>알리페이 (Alipay)</strong> - 중국 최대 모바일 결제 플랫폼<br>
+                            • <strong>위챗페이 (WeChat Pay)</strong> - 위챗 기반 간편 결제<br>
+                            • <strong>웨이디엔 (UnionPay)</strong> - 중국 은련 카드 결제
+                        </div>
+                        <p>모든 결제 수단은 실시간 환율이 적용되며, 개인회원도 이용 가능합니다.</p>
+                    </div>
+                </li>
+                
+                <li class="faq-item" data-category="account" onclick="toggleFAQ(this)">
+                    <div class="faq-question">
+                        <div class="faq-icon">Q</div>
+                        <div class="question-text">개인회원과 사업자회원의 차이점이 무엇인가요?</div>
+                        <div class="expand-icon">▼</div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>회원 유형에 따라 이용할 수 있는 서비스가 다릅니다:</p>
+                        <div class="answer-highlight">
+                            <strong>개인회원:</strong><br>
+                            • QR코드 결제시스템만 이용 가능<br>
+                            • 사업자번호 등록 불필요<br><br>
+                            <strong>사업자/법인회원:</strong><br>
+                            • QR코드 결제시스템<br>
+                            • 1688솔루션 (수수료 없는 직접 구매)<br>
+                            • 무역송금(T/T) 서비스<br>
+                            • 사업자번호 등록 필요
+                        </div>
+                    </div>
+                </li>
+                
+                <li class="faq-item" data-category="upgrade" onclick="toggleFAQ(this)">
+                    <div class="faq-question">
+                        <div class="faq-icon">Q</div>
+                        <div class="question-text">사업자회원으로 전환하려면 어떤 서류가 필요한가요?</div>
+                        <div class="expand-icon">▼</div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>사업자회원 전환을 위해서는 다음 서류가 필요합니다:</p>
+                        <div class="answer-highlight">
+                            <strong>필수 서류:</strong><br>
+                            • 사업자등록증 사본<br>
+                            • 대표자 신분증 사본<br>
+                            • 통장 사본 (사업자명 확인용)<br><br>
+                            <strong>추가 서류 (법인의 경우):</strong><br>
+                            • 법인등기부등본<br>
+                            • 인감증명서
+                        </div>
+                        <p>서류 제출 후 1-2 영업일 내에 승인 결과를 알려드립니다.</p>
+                    </div>
+                </li>
+                
+                <li class="faq-item" data-category="payment" onclick="toggleFAQ(this)">
+                    <div class="faq-question">
+                        <div class="faq-icon">Q</div>
+                        <div class="question-text">환율은 어떻게 적용되나요?</div>
+                        <div class="expand-icon">▼</div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>SHIPGU는 실시간 환율 시스템을 사용합니다:</p>
+                        <div class="answer-highlight">
+                            • 실시간 시장 환율 + 7원의 적용환율 사용<br>
+                            • 30초마다 자동 업데이트<br>
+                            • 결제 시점의 환율이 최종 적용<br>
+                            • 좌측 사이드바에서 현재 적용환율 확인 가능
+                        </div>
+                    </div>
+                </li>
+                
+                <li class="faq-item" data-category="technical" onclick="toggleFAQ(this)">
+                    <div class="faq-question">
+                        <div class="faq-icon">Q</div>
+                        <div class="question-text">로그인이 안 되거나 화면이 제대로 표시되지 않아요.</div>
+                        <div class="expand-icon">▼</div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>기술적 문제 해결을 위한 단계별 방법:</p>
+                        <div class="answer-highlight">
+                            <strong>1단계:</strong> 브라우저 새로고침 (Ctrl+F5)<br>
+                            <strong>2단계:</strong> 브라우저 캐시 및 쿠키 삭제<br>
+                            <strong>3단계:</strong> 다른 브라우저에서 접속 시도<br>
+                            <strong>4단계:</strong> 인터넷 연결 상태 확인
+                        </div>
+                        <p>위 방법으로 해결되지 않으면 사용 중인 브라우저와 기기 정보를 포함하여 1:1 문의해 주세요.</p>
+                    </div>
+                </li>
+                
+                <li class="faq-item" data-category="account" onclick="toggleFAQ(this)">
+                    <div class="faq-question">
+                        <div class="faq-icon">Q</div>
+                        <div class="question-text">결제 내역은 어디서 확인할 수 있나요?</div>
+                        <div class="expand-icon">▼</div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>결제 내역 확인 방법:</p>
+                        <div class="answer-highlight">
+                            • 좌측 사이드바 > 계정 관리 > 결제내역 메뉴<br>
+                            • 모든 QR코드 결제 기록 확인 가능<br>
+                            • 날짜별, 금액별 검색 기능 제공<br>
+                            • 영수증 다운로드 및 재발행 가능
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    
+    <script>
+        function toggleFAQ(element) {
+            element.classList.toggle('active');
+        }
+        
+        function filterFAQ(category) {
+            const items = document.querySelectorAll('.faq-item');
+            const buttons = document.querySelectorAll('.category-btn');
+            
+            // 버튼 스타일 업데이트
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // FAQ 항목 필터링
+            items.forEach(item => {
+                if (category === 'all' || item.dataset.category === category) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                    item.classList.remove('active');
+                }
+            });
+        }
+        
+        function searchFAQ(query) {
+            const items = document.querySelectorAll('.faq-item');
+            const lowerQuery = query.toLowerCase();
+            
+            items.forEach(item => {
+                const questionText = item.querySelector('.question-text').textContent.toLowerCase();
+                const answerText = item.querySelector('.faq-answer').textContent.toLowerCase();
+                
+                if (questionText.includes(lowerQuery) || answerText.includes(lowerQuery) || query === '') {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                    item.classList.remove('active');
+                }
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>본인인증 | SHIPGU - 글로벌 소싱 플랫폼</title>
+    <meta name="description" content="SHIPGU 본인인증 - 안전한 거래를 위한 신원확인"/>
+    <link rel="stylesheet" href="style.css"/>
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet"/>
+</head>
+<body style="background: white;">
+    <style>
+        .verify-main *, 
+        .verify-container *, 
+        .step-content *, 
+        .input-group label,
+        .required {
+            color: #333 !important;
+        }
+        .step-content {
+            color: #333 !important;
+            display: none;
+        }
+        .step-content.active {
+            display: block !important;
+        }
+    </style>
+    <header class="black my-lto8ev">
+        <div class="my-yghcnd">
+            <div class="my-p71deq">
+                <a href="index.html"><img src="수바.PNG" alt="SHIPGU" class="logo-image"></a>
+            </div>
+            <div class="my-155dtqa">
+                <a href="/1688"><div class="fs_16 fw_600 my-1nm2b7m">1688솔루션</div></a>
+                <a href="/superagency"><div class="fs_16 fw_600 my-1nm2b7m">슈퍼에이전시</div></a>
+            </div>
+            <div class="white my-32upwi">
+                <a href="dashboard.html" class="back-btn">← 대시보드</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="verify-main" style="background: white; color: #333; min-height: calc(100vh - 70px); display: flex; align-items: center; justify-content: center;">
+        <div class="verify-container" style="max-width: 380px; width: 100%; padding: 16px;">
+            <div class="verify-header" style="text-align: center; margin-bottom: 16px;">
+                <h1 class="verify-title" id="verifyTitle" style="color: #333; font-size: 18px; margin-bottom: 4px;">본인인증</h1>
+                <p class="verify-subtitle" id="verifySubtitle" style="color: #666; font-size: 12px;">안전한 거래를 위한 신원확인</p>
+                
+                <div class="kyc-notice" style="background: #f0f7ff; padding: 8px; border-radius: 4px; margin: 12px 0; border-left: 2px solid #007bff;">
+                    <div style="font-size: 11px; color: #333; font-weight: 500; margin-bottom: 2px;">🏛️ 고객확인제도 시행중</div>
+                    <p style="font-size: 10px; color: #666; line-height: 1.2; margin: 2px 0;">
+                        금융위원회 KYC 가이드라인 적용
+                        <a href="https://www.fsc.go.kr" target="_blank" style="color: #007bff; text-decoration: none; margin-left: 4px;">가이드라인 ↗</a>
+                    </p>
+                </div>
+                
+                <div class="member-type-indicator" id="memberTypeIndicator" style="text-align: center; margin-bottom: 12px;">
+                    <div class="type-badge individual" id="typeBadge" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: #e3f2fd; color: #333; border-radius: 16px; font-size: 11px; border: 1px solid #90caf9;">
+                        <span class="type-icon" id="typeIcon">👤</span>
+                        <span class="type-text" id="typeText" style="color: #333;">개인회원</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="verify-steps" style="display: flex; justify-content: center; gap: 8px; margin: 16px 0;">
+                <div class="step active" data-step="1" style="display: flex; align-items: center; gap: 4px; padding: 4px 8px; background: #007bff; color: white; border-radius: 12px; font-size: 11px;">
+                    <div class="step-number">1</div>
+                    <div class="step-text">개인정보</div>
+                </div>
+                <div class="step" data-step="2" style="display: flex; align-items: center; gap: 4px; padding: 4px 8px; background: #f8f9fa; color: #333; border-radius: 12px; font-size: 11px; border: 1px solid #ddd;">
+                    <div class="step-number">2</div>
+                    <div class="step-text">계좌인증</div>
+                </div>
+                <div class="step" data-step="3" style="display: flex; align-items: center; gap: 4px; padding: 4px 8px; background: #f8f9fa; color: #333; border-radius: 12px; font-size: 11px; border: 1px solid #ddd;">
+                    <div class="step-number">3</div>
+                    <div class="step-text">신분증</div>
+                </div>
+            </div>
+
+            <div class="verify-content" style="color: #333;">
+                <!-- Step 1: 개인정보 입력 -->
+                <div class="step-content active" id="step1" style="background: white; padding: 16px; border-radius: 6px; color: #333; border: 1px solid #ddd;">
+                    <div class="step-title" style="text-align: center; margin-bottom: 16px;">
+                        <h2 style="color: #333; font-size: 16px; margin-bottom: 4px;">개인정보 입력</h2>
+                        <p style="color: #666; font-size: 11px;">정확한 정보를 입력해주세요</p>
+                    </div>
+                    
+                    <form class="verify-form" id="personalInfoForm" style="max-width: 320px; margin: 0 auto;">
+                        <div class="form-row" style="display: flex; gap: 10px; margin-bottom: 14px;">
+                            <div class="input-group" style="flex: 1;">
+                                <label for="realName" style="display: block; color: #333; font-weight: 500; margin-bottom: 3px; font-size: 11px;">실명 <span style="color: red;">*</span></label>
+                                <input type="text" id="realName" name="realName" placeholder="홍길동" required style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 12px; box-sizing: border-box;">
+                            </div>
+                            <div class="input-group" style="flex: 1;">
+                                <label for="birthDate" style="display: block; color: #333; font-weight: 500; margin-bottom: 3px; font-size: 11px;">생년월일 <span style="color: red;">*</span></label>
+                                <input type="text" id="birthDate" name="birthDate" placeholder="19900101" maxlength="8" required style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 12px; box-sizing: border-box;">
+                            </div>
+                        </div>
+                        
+                        <div class="input-group" style="margin-bottom: 14px;">
+                            <label for="phoneNumber" style="display: block; color: #333; font-weight: 500; margin-bottom: 3px; font-size: 11px;">휴대폰 번호 <span style="color: red;">*</span></label>
+                            <div class="phone-input-group" style="display: flex; gap: 8px;">
+                                <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="010-1234-5678" required style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 12px;">
+                                <button type="button" class="verify-btn" id="phoneVerifyBtn" style="padding: 8px 12px; background: #007bff; color: white; border: none; border-radius: 4px; font-size: 11px; white-space: nowrap;">인증요청</button>
+                            </div>
+                        </div>
+
+                        <div class="input-group" id="phoneVerifyGroup" style="display: none; margin-bottom: 14px;">
+                            <label for="phoneVerifyCode" style="display: block; color: #333; font-weight: 500; margin-bottom: 3px; font-size: 11px;">인증번호 <span style="color: red;">*</span></label>
+                            <div class="verify-code-group" style="display: flex; gap: 8px; align-items: center;">
+                                <input type="text" id="phoneVerifyCode" name="phoneVerifyCode" placeholder="123456" maxlength="6" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 12px;">
+                                <span class="timer" id="timer" style="color: #dc3545; font-size: 11px; font-weight: 500; min-width: 40px;">03:00</span>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; gap: 8px;">
+                            <button type="submit" class="step-next-btn" style="flex: 1; padding: 12px; background: #007bff; color: white; border: none; border-radius: 4px; font-size: 13px; font-weight: 500; cursor: pointer;">다음 단계</button>
+                            <button type="button" onclick="showStep(2)" style="padding: 12px 16px; background: #6c757d; color: white; border: none; border-radius: 4px; font-size: 11px; cursor: pointer;">테스트:2단계</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Step 2: 1원 인증 -->
+                <div class="step-content" id="step2" style="background: white; padding: 16px; border-radius: 6px; color: #333; border: 1px solid #ddd;">
+                    <div class="step-title" style="text-align: center; margin-bottom: 16px;">
+                        <h2 style="color: #333; font-size: 16px; margin-bottom: 4px;">1원 계좌 인증</h2>
+                        <p style="color: #666; font-size: 11px;">환불받을 계좌를 등록해주세요</p>
+                    </div>
+                    
+                    <div class="info-box" style="background: #fff3cd; padding: 10px; border-radius: 4px; margin-bottom: 16px; border-left: 3px solid #ffc107;">
+                        <div style="color: #856404; font-size: 10px; line-height: 1.4;">
+                            💡 <strong>1원 인증 절차</strong><br>
+                            1. 계좌번호 입력 → 2. 1원 입금 → 3. 입금자명 확인 → 4. 자동 환불
+                        </div>
+                    </div>
+                    
+                    <form class="verify-form" id="accountForm" style="max-width: 320px; margin: 0 auto;">
+                        <div class="input-group" style="margin-bottom: 14px;">
+                            <label for="bankName" style="display: block; color: #333; font-weight: 500; margin-bottom: 3px; font-size: 11px;">은행 <span style="color: red;">*</span></label>
+                            <select id="bankName" name="bankName" required style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 12px; box-sizing: border-box;">
+                                <option value="">은행 선택</option>
+                                <option value="kb">KB국민</option>
+                                <option value="shinhan">신한</option>
+                                <option value="hana">하나</option>
+                                <option value="woori">우리</option>
+                                <option value="nh">NH농협</option>
+                                <option value="kakao">카카오뱅크</option>
+                                <option value="toss">토스뱅크</option>
+                                <option value="kbank">케이뱅크</option>
+                            </select>
+                        </div>
+                        
+                        <div class="input-group" style="margin-bottom: 14px;">
+                            <label for="accountNumber" style="display: block; color: #333; font-weight: 500; margin-bottom: 3px; font-size: 11px;">계좌번호 <span style="color: red;">*</span></label>
+                            <input type="text" id="accountNumber" name="accountNumber" placeholder="1234567890" required style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 12px; box-sizing: border-box;">
+                        </div>
+                        
+                        <div class="input-group" style="margin-bottom: 14px;">
+                            <label for="accountHolder" style="display: block; color: #333; font-weight: 500; margin-bottom: 3px; font-size: 11px;">예금주명 <span style="color: red;">*</span></label>
+                            <input type="text" id="accountHolder" name="accountHolder" placeholder="홍길동" required style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 12px; box-sizing: border-box;">
+                        </div>
+                        
+                        <button type="button" class="verify-account-btn" id="startOneWonVerify" style="width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 4px; font-size: 13px; font-weight: 500; cursor: pointer; margin-bottom: 14px;">💳 1원 인증 시작</button>
+                        
+                        <div class="verification-status" id="verificationStatus" style="display: none; background: #e8f5e8; padding: 12px; border-radius: 4px; margin-bottom: 14px; border-left: 3px solid #28a745;">
+                            <div style="color: #155724; font-size: 12px; text-align: center;">
+                                ⏳ <strong>1원 입금 완료</strong><br>
+                                <span style="font-size: 11px;">입금자명을 확인하고 아래에 입력하세요</span>
+                            </div>
+                        </div>
+                        
+                        <div class="input-group" id="senderNameGroup" style="display: none; margin-bottom: 14px;">
+                            <label for="senderName" style="display: block; color: #333; font-weight: 500; margin-bottom: 3px; font-size: 11px;">입금자명 <span style="color: red;">*</span></label>
+                            <div style="display: flex; gap: 8px;">
+                                <input type="text" id="senderName" name="senderName" placeholder="김철수" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 12px;">
+                                <button type="button" class="verify-btn" id="verifySenderName" style="padding: 8px 12px; background: #007bff; color: white; border: none; border-radius: 4px; font-size: 11px; white-space: nowrap;">확인</button>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; gap: 8px;">
+                            <button type="button" onclick="showStep(1)" style="padding: 12px 16px; background: #6c757d; color: white; border: none; border-radius: 4px; font-size: 11px; cursor: pointer;">← 이전</button>
+                            <button type="button" class="step-next-btn" id="step2Next" onclick="showStep(3)" style="flex: 1; padding: 12px; background: #007bff; color: white; border: none; border-radius: 4px; font-size: 13px; font-weight: 500; cursor: pointer;">다음 단계</button>
+                            <button type="button" onclick="showStep(3)" style="padding: 12px 16px; background: #6c757d; color: white; border: none; border-radius: 4px; font-size: 11px; cursor: pointer;">테스트:3단계</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Step 3: 신분증 업로드 -->
+                <div class="step-content" id="step3" style="background: white; padding: 16px; border-radius: 6px; color: #333; border: 1px solid #ddd;">
+                    <div class="step-title" style="text-align: center; margin-bottom: 16px;">
+                        <h2 style="color: #333; font-size: 16px; margin-bottom: 4px;">신분증 업로드</h2>
+                        <p style="color: #666; font-size: 11px;">신원확인을 위해 신분증을 업로드해주세요</p>
+                    </div>
+                    
+                    <div class="guidelines" style="background: #f8f9ff; padding: 12px; border-radius: 4px; margin-bottom: 16px; border-left: 3px solid #6f42c1;">
+                        <div style="color: #493069; font-size: 11px; font-weight: 500; margin-bottom: 6px;">업로드 가이드라인</div>
+                        <div class="guideline-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 10px; color: #6c757d;">
+                            <div style="text-align: center;">
+                                <div style="color: #28a745; font-size: 16px; margin-bottom: 4px;">✓</div>
+                                <div style="color: #155724; font-weight: 500; font-size: 10px; margin-bottom: 2px;">올바른 예시</div>
+                                <div style="line-height: 1.3;">
+                                    • 신분증 가득 채우기<br>
+                                    • 선명한 화질<br>
+                                    • 반사 없이 촬영<br>
+                                    • 뒷자리 가리기
+                                </div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="color: #dc3545; font-size: 16px; margin-bottom: 4px;">✗</div>
+                                <div style="color: #721c24; font-weight: 500; font-size: 10px; margin-bottom: 2px;">잘못된 예시</div>
+                                <div style="line-height: 1.3;">
+                                    • 흐릿한 사진<br>
+                                    • 빛 반사<br>
+                                    • 주민번호 노출<br>
+                                    • 다른 물건 포함
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="privacy-notice" style="background: #fff3cd; padding: 10px; border-radius: 4px; margin-bottom: 16px; border-left: 3px solid #ffc107; text-align: center;">
+                        <div style="color: #856404; font-size: 11px;">
+                            <strong>개인정보 보호 안내</strong><br>
+                            <span style="color: #dc3545; font-weight: 600; font-size: 12px;">주민등록번호 뒷자리는 반드시 가려주세요!</span><br>
+                            <span style="font-size: 10px;">스티커, 테이프 또는 편집으로 마스킹 처리</span>
+                        </div>
+                    </div>
+                    
+                    <div class="id-upload-section" style="margin-bottom: 16px;">
+                        <div class="upload-type-selector" style="display: flex; gap: 4px; margin-bottom: 16px; background: #f8f9fa; padding: 4px; border-radius: 6px;">
+                            <button type="button" class="upload-type-btn active" data-type="license" style="flex: 1; padding: 6px; background: #007bff; color: white; border: none; border-radius: 4px; font-size: 10px; cursor: pointer;">주민등록증</button>
+                            <button type="button" class="upload-type-btn" data-type="passport" style="flex: 1; padding: 6px; background: white; color: #666; border: 1px solid #ddd; border-radius: 4px; font-size: 10px; cursor: pointer;">여권</button>
+                            <button type="button" class="upload-type-btn" data-type="driver" style="flex: 1; padding: 6px; background: white; color: #666; border: 1px solid #ddd; border-radius: 4px; font-size: 10px; cursor: pointer;">운전면허증</button>
+                        </div>
+                        
+                        <div class="id-upload-area" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+                            <div class="upload-side">
+                                <div style="color: #333; font-size: 11px; font-weight: 500; margin-bottom: 6px; text-align: center;">앞면</div>
+                                <div class="file-drop-zone" id="frontDropZone" style="border: 2px dashed #ddd; border-radius: 4px; padding: 20px; text-align: center; background: #fafafa; cursor: pointer; transition: all 0.2s;">
+                                    <input type="file" id="frontIdFile" accept="image/*" style="display: none;">
+                                    <div style="color: #666; font-size: 24px; margin-bottom: 6px;">+</div>
+                                    <div style="color: #666; font-size: 10px; margin-bottom: 2px;">앞면 업로드</div>
+                                    <div style="color: #999; font-size: 9px;">JPG, PNG (10MB)</div>
+                                </div>
+                                <div id="frontPreview" class="id-preview"></div>
+                            </div>
+                            
+                            <div class="upload-side">
+                                <div style="color: #333; font-size: 11px; font-weight: 500; margin-bottom: 6px; text-align: center;">뒷면</div>
+                                <div class="file-drop-zone" id="backDropZone" style="border: 2px dashed #ddd; border-radius: 4px; padding: 20px; text-align: center; background: #fafafa; cursor: pointer; transition: all 0.2s;">
+                                    <input type="file" id="backIdFile" accept="image/*" style="display: none;">
+                                    <div style="color: #666; font-size: 24px; margin-bottom: 6px;">+</div>
+                                    <div style="color: #666; font-size: 10px; margin-bottom: 2px;">뒷면 업로드</div>
+                                    <div style="color: #dc3545; font-size: 9px;">뒷자리 마스킹 필수!</div>
+                                </div>
+                                <div id="backPreview" class="id-preview"></div>
+                            </div>
+                        </div>
+                        
+                        <div style="background: #f8d7da; padding: 8px; border-radius: 4px; margin-bottom: 16px; border-left: 3px solid #dc3545; text-align: center;">
+                            <div style="color: #721c24; font-size: 10px;">
+                                <strong>주의:</strong> 업로드 전 주민번호 뒷자리가 가려져 있는지 확인하세요!
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; gap: 8px;">
+                            <button type="button" onclick="showStep(2)" style="padding: 12px 16px; background: #6c757d; color: white; border: none; border-radius: 4px; font-size: 11px; cursor: pointer;">← 이전</button>
+                            <button type="button" onclick="completeVerification()" style="flex: 1; padding: 12px; background: #28a745; color: white; border: none; border-radius: 4px; font-size: 13px; font-weight: 500; cursor: pointer;">인증 완료</button>
+                        </div>
+                    </div>
+                    
+                    <div class="verify-agreement">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="agreementCheck" required>
+                            <span class="checkmark"></span>
+                            본인인증을 위한 개인정보 수집·이용에 동의합니다 <span class="required">(필수)</span>
+                        </label>
+                    </div>
+                    
+                    <button type="button" class="complete-verify-btn" id="completeVerify">인증 완료</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let currentStep = 1;
+        let phoneVerified = false;
+        let accountVerified = false;
+        let frontIdUploaded = false;
+        let backIdUploaded = false;
+
+        // 페이지 로드 시 회원 타입 확인 및 표시
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (currentUser && currentUser.memberType) {
+                const typeBadge = document.getElementById('typeBadge');
+                const typeIcon = document.getElementById('typeIcon');
+                const typeText = document.getElementById('typeText');
+                const verifyTitle = document.getElementById('verifyTitle');
+                const verifySubtitle = document.getElementById('verifySubtitle');
+                
+                typeBadge.classList.remove('individual', 'business', 'corporation');
+                
+                switch(currentUser.memberType) {
+                    case 'individual':
+                        typeBadge.classList.add('individual');
+                        typeIcon.textContent = '👤';
+                        typeText.textContent = '개인회원';
+                        verifyTitle.textContent = '개인회원 인증';
+                        verifySubtitle.textContent = '개인 신원확인을 위해 본인인증을 진행해주세요';
+                        break;
+                    case 'business':
+                        typeBadge.classList.add('business');
+                        typeIcon.textContent = '🏢';
+                        typeText.textContent = '사업자회원';
+                        verifyTitle.textContent = '사업자회원 인증';
+                        verifySubtitle.textContent = '사업자 신원확인을 위해 본인인증과 사업자등록증 확인을 진행해주세요';
+                        break;
+                    case 'corporation':
+                        typeBadge.classList.add('corporation');
+                        typeIcon.textContent = '🏛️';
+                        typeText.textContent = '법인회원';
+                        verifyTitle.textContent = '법인회원 인증';
+                        verifySubtitle.textContent = '법인 신원확인을 위해 법인등록증과 대표자 본인인증을 진행해주세요';
+                        break;
+                }
+            }
+        });
+
+        // Step 관리
+        function showStep(stepNumber) {
+            document.querySelectorAll('.step').forEach(step => {
+                step.classList.remove('active', 'completed');
+                const stepNum = parseInt(step.dataset.step);
+                if (stepNum === stepNumber) {
+                    step.classList.add('active');
+                } else if (stepNum < stepNumber) {
+                    step.classList.add('completed');
+                }
+            });
+
+            document.querySelectorAll('.step-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(`step${stepNumber}`).classList.add('active');
+            
+            currentStep = stepNumber;
+        }
+
+        // Step 1: 개인정보 입력
+        document.getElementById('phoneVerifyBtn').addEventListener('click', function() {
+            const phoneNumber = document.getElementById('phoneNumber').value;
+            if (!phoneNumber) {
+                alert('휴대폰 번호를 입력하세요.');
+                return;
+            }
+            
+            // 인증번호 발송 시뮬레이션
+            alert('인증번호가 발송되었습니다.');
+            document.getElementById('phoneVerifyGroup').style.display = 'block';
+            this.textContent = '재발송';
+            this.disabled = true;
+            
+            // 타이머 시작
+            let timeLeft = 180; // 3분
+            const timer = document.getElementById('timer');
+            const countdown = setInterval(() => {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timer.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    this.disabled = false;
+                    this.textContent = '재발송';
+                    alert('인증시간이 만료되었습니다.');
+                }
+                timeLeft--;
+            }, 1000);
+
+            // 인증번호 검증 (시뮬레이션)
+            document.getElementById('phoneVerifyCode').addEventListener('input', function() {
+                if (this.value.length === 6) {
+                    if (this.value === '123456') {
+                        clearInterval(countdown);
+                        phoneVerified = true;
+                        alert('휴대폰 인증이 완료되었습니다.');
+                        this.style.borderColor = '#22C55E';
+                        this.readOnly = true;
+                    } else {
+                        alert('인증번호가 일치하지 않습니다.');
+                        this.style.borderColor = '#EF4444';
+                    }
+                }
+            });
+        });
+
+        document.getElementById('personalInfoForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!phoneVerified) {
+                alert('휴대폰 인증을 완료해주세요.');
+                return;
+            }
+            
+            showStep(2);
+        });
+
+        // Step 2: 1원 인증
+        document.getElementById('startOneWonVerify').addEventListener('click', function() {
+            const bankName = document.getElementById('bankName').value;
+            const accountNumber = document.getElementById('accountNumber').value;
+            const accountHolder = document.getElementById('accountHolder').value;
+            
+            if (!bankName || !accountNumber || !accountHolder) {
+                alert('모든 계좌 정보를 입력해주세요.');
+                return;
+            }
+            
+            // 1원 입금 시뮬레이션
+            alert('1원 입금이 완료되었습니다.');
+            document.getElementById('verificationStatus').style.display = 'block';
+            document.getElementById('senderNameGroup').style.display = 'block';
+            this.disabled = true;
+            this.textContent = '입금 완료';
+        });
+
+        document.getElementById('verifySenderName').addEventListener('click', function() {
+            const senderName = document.getElementById('senderName').value;
+            if (senderName === 'SHIPGU') {
+                accountVerified = true;
+                alert('계좌 인증이 완료되었습니다.');
+                document.getElementById('step2Next').style.display = 'block';
+                this.disabled = true;
+                this.textContent = '인증완료';
+            } else {
+                alert('입금자명이 일치하지 않습니다.');
+            }
+        });
+
+        document.getElementById('step2Next').addEventListener('click', function() {
+            if (!accountVerified) {
+                alert('계좌 인증을 완료해주세요.');
+                return;
+            }
+            showStep(3);
+        });
+
+        // Step 3: 신분증 업로드
+        document.querySelectorAll('.upload-type-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.upload-type-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // 파일 업로드 처리
+        function setupFileUpload(dropZoneId, fileInputId, previewId, type) {
+            const dropZone = document.getElementById(dropZoneId);
+            const fileInput = document.getElementById(fileInputId);
+            const preview = document.getElementById(previewId);
+
+            dropZone.addEventListener('click', () => fileInput.click());
+
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('dragover');
+            });
+
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.classList.remove('dragover');
+            });
+
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('dragover');
+                handleFiles(e.dataTransfer.files, preview, type);
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                handleFiles(e.target.files, preview, type);
+            });
+        }
+
+        function handleFiles(files, preview, type) {
+            if (files.length > 0) {
+                const file = files[0];
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        preview.innerHTML = `
+                            <div class="preview-image">
+                                <img src="${e.target.result}" alt="신분증 미리보기">
+                                <button type="button" class="remove-preview" onclick="removePreview('${preview.id}', '${type}')">✕</button>
+                            </div>
+                        `;
+                        
+                        if (type === 'front') {
+                            frontIdUploaded = true;
+                        } else {
+                            backIdUploaded = true;
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    alert('이미지 파일만 업로드 가능합니다.');
+                }
+            }
+        }
+
+        function removePreview(previewId, type) {
+            document.getElementById(previewId).innerHTML = '';
+            if (type === 'front') {
+                frontIdUploaded = false;
+                document.getElementById('frontIdFile').value = '';
+            } else {
+                backIdUploaded = false;
+                document.getElementById('backIdFile').value = '';
+            }
+        }
+
+        // 파일 업로드 설정
+        setupFileUpload('frontDropZone', 'frontIdFile', 'frontPreview', 'front');
+        setupFileUpload('backDropZone', 'backIdFile', 'backPreview', 'back');
+
+        // 인증 완료 함수
+        function completeVerification() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) {
+                alert('사용자 정보를 찾을 수 없습니다.');
+                return;
+            }
+
+            // 인증 상태 업데이트
+            currentUser.isVerified = true;
+            currentUser.verifiedAt = new Date().toISOString();
+            
+            // 로컬스토리지에 저장
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            
+            // 성공 메시지
+            alert('본인인증이 완료되었습니다!\n이제 모든 서비스를 이용하실 수 있습니다.');
+            
+            // 대시보드로 이동
+            window.location.href = 'dashboard.html';
+        }
+
+        // 최종 인증 완료 (기존 코드 유지)
+        document.getElementById('completeVerify')?.addEventListener('click', function() {
+            if (!frontIdUploaded || !backIdUploaded) {
+                alert('신분증 앞면과 뒷면을 모두 업로드해주세요.');
+                return;
+            }
+            
+            completeVerification();
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            currentUser.isVerified = true;
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            
+            alert('본인인증이 완료되었습니다!');
+            window.location.href = 'dashboard.html';
+        });
+    </script>
+</body>
+</html>

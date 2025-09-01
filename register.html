@@ -1,108 +1,401 @@
 <!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>광고주센터 신규가입 - Troy</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="troy-login.css" />
-  </head>
-  <body>
-    <div class="page register-page">
-      <section class="login register-section">
-        <div class="login-card register-card">
-          <div class="login-header">
-            <div class="wreaths-container">
-              <div class="center-content">
-                <div class="troy-with-wreaths">
-                  <img
-                    class="wreath left"
-                    src="left.png"
-                    alt="left wreath"
-                  />
-                  <span class="brand">Troy</span>
-                  <img
-                    class="wreath right"
-                    src="right.png"
-                    alt="right wreath"
-                  />
-                </div>
-                <div class="center">광고주센터 가입</div>
-              </div>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>회원가입 | SHIPGU - 글로벌 소싱 플랫폼</title>
+    <meta name="description" content="SHIPGU 회원가입 - 세상에 없던 1688 직접 구매 솔루션"/>
+    <link rel="stylesheet" href="style.css"/>
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet"/>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Pretendard', sans-serif;
+            background: white;
+            color: #333;
+        }
+        
+        .main-content {
+            min-height: calc(100vh - 70px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+        
+        .signup-form {
+            width: 100%;
+            max-width: 360px;
+            background: #f8f9fa;
+            padding: 40px;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .form-header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #212529;
+            margin-bottom: 8px;
+        }
+        
+        .form-header p {
+            font-size: 14px;
+            color: #6c757d;
+        }
+        
+        .member-type-tabs {
+            display: flex;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #dee2e6;
+            margin-bottom: 24px;
+        }
+        
+        .tab-btn {
+            flex: 1;
+            padding: 10px 12px;
+            background: none;
+            border: none;
+            font-size: 13px;
+            color: #6c757d;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.2s;
+        }
+        
+        .tab-btn.active {
+            background: #007bff;
+            color: white;
+        }
+        
+        .social-buttons {
+            margin-bottom: 24px;
+        }
+        
+        .social-btn {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            background: white;
+            font-size: 14px;
+            cursor: pointer;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: border-color 0.2s;
+        }
+        
+        .social-btn:hover {
+            border-color: #007bff;
+        }
+        
+        .social-btn.kakao {
+            background: #FEE500;
+            border-color: #FEE500;
+            color: #000;
+        }
+        
+        .divider {
+            position: relative;
+            text-align: center;
+            margin: 24px 0;
+            color: #6c757d;
+            font-size: 12px;
+        }
+        
+        .divider:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #dee2e6;
+        }
+        
+        .divider span {
+            background: #f8f9fa;
+            padding: 0 12px;
+        }
+        
+        .input-field {
+            margin-bottom: 16px;
+        }
+        
+        .input-field label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: #495057;
+            margin-bottom: 6px;
+        }
+        
+        .input-field input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        
+        .input-field input:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
+        }
+        
+        /* 서비스 공지사항 */
+        .service-notice {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .notice-header {
+            font-size: 13px;
+            font-weight: 600;
+            color: #856404;
+            margin-bottom: 6px;
+        }
+        
+        .notice-content {
+            font-size: 11px;
+            color: #664d03;
+            line-height: 1.4;
+        }
+        
+        .checkbox-group {
+            margin-bottom: 20px;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 12px;
+            color: #495057;
+        }
+        
+        .checkbox-item input {
+            margin-right: 8px;
+            width: 16px;
+            height: 16px;
+        }
+        
+        .submit-button {
+            width: 100%;
+            padding: 14px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-bottom: 16px;
+            transition: background-color 0.2s;
+        }
+        
+        .submit-button:hover {
+            background: #0056b3;
+        }
+        
+        .footer-link {
+            text-align: center;
+            font-size: 13px;
+            color: #6c757d;
+        }
+        
+        .footer-link a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        
+        .footer-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header class="black my-lto8ev">
+        <div class="my-yghcnd">
+            <div class="my-p71deq">
+                <a href="index.html"><span style="color: white; font-size: 20px; font-weight: 700;">🚢 SHIPGU</span></a>
             </div>
-          </div>
-          <form class="form" id="register-form">
-            <label class="label" for="bizId">아이디</label>
-            <input
-              class="input"
-              id="bizId"
-              placeholder="110-10-11011"
-              required
-            />
-
-            <label class="label" for="company">상호명</label>
-            <input
-              class="input"
-              id="company"
-              placeholder="ex) 트로이인터내셔널"
-              required
-            />
-
-            <label class="label" for="pw">비밀번호</label>
-            <input
-              class="input"
-              id="pw"
-              type="password"
-              placeholder="4자리이상 비밀번호"
-              required
-            />
-
-            <label class="label" for="pw2">비밀번호 확인</label>
-            <input
-              class="input"
-              id="pw2"
-              type="password"
-              placeholder="비밀번호 재입력"
-              required
-            />
-
-            <label class="label" for="name">담당자 성함</label>
-            <input class="input" id="name" placeholder="홍길동" required />
-
-            <label class="label" for="phone">전화번호</label>
-            <input
-              class="input"
-              id="phone"
-              placeholder="010-1111-2222"
-              required
-            />
-
-            <label class="label" for="email">이메일</label>
-            <input
-              class="input"
-              id="email"
-              type="email"
-              placeholder="abc@troy.co.kr"
-              required
-            />
-
-            <label class="label" for="url">제품판매URL</label>
-            <input
-              class="input"
-              id="url"
-              placeholder="https://www.coupang.com/vp/products/123456789 (쿠팡, 네이버, 오늘의집 등등)"
-            />
-
-            <button class="btn" type="submit">광고주 회원가입</button>
-          </form>
+            <div class="my-155dtqa">
+                <a href="/1688"><div class="fs_16 fw_600 my-1nm2b7m">1688솔루션</div></a>
+                <a href="/superagency"><div class="fs_16 fw_600 my-1nm2b7m">슈퍼에이전시</div></a>
+            </div>
+            <div class="white my-32upwi">
+                <a href="login.html"><div class="fs_16 fw_600 my-1nm2b7m">로그인</div></a>
+                <div id="menu">≡</div>
+            </div>
         </div>
-      </section>
+    </header>
+
+    <div class="main-content">
+        <div class="signup-form">
+            <div class="form-header">
+                <h1>회원가입</h1>
+                <p>SHIPGU와 함께 시작하세요</p>
+            </div>
+            
+            <div class="member-type-tabs">
+                <button class="tab-btn active" data-type="individual">개인</button>
+                <button class="tab-btn" data-type="business">사업자</button>
+                <button class="tab-btn" data-type="corporation">법인</button>
+            </div>
+            
+            <div class="social-buttons">
+                <button class="social-btn kakao" onclick="signupWithKakao()">
+                    💬 카카오로 시작
+                </button>
+                <button class="social-btn" onclick="signupWithGoogle()">
+                    🌐 Google로 시작
+                </button>
+            </div>
+
+            <div class="divider">
+                <span>또는</span>
+            </div>
+
+            <form id="signupForm">
+                <div class="input-field">
+                    <label for="name">이름</label>
+                    <input type="text" id="name" name="name" placeholder="홍길동" required>
+                </div>
+                
+                <div class="input-field">
+                    <label for="email">이메일</label>
+                    <input type="email" id="email" name="email" placeholder="example@email.com" required>
+                </div>
+                
+                <div class="input-field">
+                    <label for="password">비밀번호</label>
+                    <input type="password" id="password" name="password" placeholder="8자 이상" required>
+                </div>
+                
+                <!-- 서비스 이용 필수 공지 -->
+                <div class="service-notice">
+                    <div class="notice-header">⚠️ 서비스 이용 안내</div>
+                    <div class="notice-content">
+                        제품구매목적으로만 서비스이용이 가능합니다.
+                    </div>
+                </div>
+                
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="terms" required>
+                        <span>서비스 이용약관 동의 (필수)</span>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="privacy" required>
+                        <span>개인정보 처리방침 동의 (필수)</span>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="marketing">
+                        <span>마케팅 정보 수신 동의 (선택)</span>
+                    </div>
+                </div>
+                
+                <button type="submit" class="submit-button">가입하기</button>
+            </form>
+            
+            <div class="footer-link">
+                이미 계정이 있으신가요? <a href="login.html">로그인</a>
+            </div>
+        </div>
     </div>
-    <script src="register.js"></script>
-  </body>
+
+    <script>
+        let selectedMemberType = 'individual';
+
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                selectedMemberType = this.dataset.type;
+            });
+        });
+
+        function signupWithKakao() {
+            const userData = {
+                email: 'kakao@shipgu.com',
+                name: '카카오사용자',
+                memberType: selectedMemberType,
+                isVerified: false,
+                loginMethod: 'kakao',
+                loginTime: new Date().toISOString()
+            };
+            
+            localStorage.setItem('currentUser', JSON.stringify(userData));
+            alert('카카오 가입 완료!');
+            window.location.href = 'verify.html';
+        }
+
+        function signupWithGoogle() {
+            const userData = {
+                email: 'google@shipgu.com',
+                name: '구글사용자',
+                memberType: selectedMemberType,
+                isVerified: false,
+                loginMethod: 'google',
+                loginTime: new Date().toISOString()
+            };
+            
+            localStorage.setItem('currentUser', JSON.stringify(userData));
+            alert('구글 가입 완료!');
+            window.location.href = 'verify.html';
+        }
+
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            if (password.length < 8) {
+                alert('비밀번호는 8자 이상이어야 합니다.');
+                return;
+            }
+            
+            if (!document.querySelector('input[name="terms"]').checked || 
+                !document.querySelector('input[name="privacy"]').checked) {
+                alert('필수 약관에 동의해주세요.');
+                return;
+            }
+            
+            const userData = {
+                email: email,
+                name: name,
+                memberType: selectedMemberType,
+                isVerified: false,
+                loginTime: new Date().toISOString()
+            };
+            
+            localStorage.setItem('currentUser', JSON.stringify(userData));
+            alert('가입 완료!');
+            window.location.href = 'verify.html';
+        });
+    </script>
+</body>
 </html>

@@ -1,0 +1,1631 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>AI결제대행 어시스턴스 | SHIPGU</title>
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet"/>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Pretendard', sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            height: 100vh;
+            overflow: hidden;
+            margin: 0;
+            padding: 6px;
+            font-size: 14px;
+        }
+        
+        .container {
+            display: flex;
+            height: calc(100vh - 12px);
+            gap: 12px;
+            padding: 0;
+        }
+        
+        /* AI 어시스턴트 채팅창 */
+        .ai-chat-section {
+            flex: 1;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #e2e8f0;
+            min-height: 0;
+        }
+        
+        /* QR코드 저장 및 장바구니 섹션 */
+        .qr-cart-section {
+            flex: 0.8;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            min-height: 0;
+        }
+        
+        /* QR 이미지 저장 영역 */
+        .qr-storage {
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            padding: 8px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+            flex: 0 0 auto;
+        }
+        
+        .qr-storage-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+        
+        .storage-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+        
+        .qr-upload-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-size: 9px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .qr-upload-btn:hover {
+            background: #2563eb;
+        }
+        
+        .qr-images-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+            gap: 4px;
+            max-height: 80px;
+            overflow-y: auto;
+        }
+        
+        .qr-image-item {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+            background: #f8fafc;
+            cursor: pointer;
+        }
+        
+        .qr-image-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .qr-image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        
+        .qr-image-item:hover .qr-image-overlay {
+            opacity: 1;
+        }
+        
+        .qr-action-btn {
+            background: white;
+            border: none;
+            border-radius: 3px;
+            padding: 2px 4px;
+            font-size: 7px;
+            margin: 1px;
+            cursor: pointer;
+        }
+        
+        .ai-header {
+            padding: 8px 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 8px 8px 0 0;
+            text-align: center;
+        }
+        
+        .ai-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .ai-subtitle {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+        
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 8px;
+            padding-bottom: 0;
+            overflow: hidden;
+            min-height: 0;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px;
+            background: #f8fafc;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 8px;
+            scroll-behavior: smooth;
+            min-height: 0;
+        }
+        
+        .message {
+            margin-bottom: 8px;
+            padding: 6px 8px;
+            border-radius: 8px;
+            max-width: 85%;
+            word-wrap: break-word;
+            font-size: 11px;
+            line-height: 1.3;
+        }
+        
+        .message.user {
+            background: #3b82f6;
+            color: white;
+            margin-right: auto;
+            border-bottom-left-radius: 8px;
+        }
+        
+        .message.bot {
+            background: white;
+            color: #374151;
+            border: 1px solid #e5e7eb;
+            border-bottom-right-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-left: auto;
+        }
+        
+        .chat-input-container {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            background: white;
+            padding: 6px;
+            margin: 0 0 8px 0;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+            flex-shrink: 0;
+        }
+        
+        .chat-input {
+            flex: 1;
+            padding: 6px 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 12px;
+            font-size: 11px;
+            outline: none;
+            transition: all 0.2s;
+        }
+        
+        .chat-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+        
+        .chat-send-btn {
+            padding: 6px 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-width: 50px;
+        }
+        
+        .chat-send-btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+        
+        /* 결제 방식 선택 버튼 */
+        .payment-method-buttons {
+            display: flex;
+            gap: 8px;
+            padding: 8px 12px;
+            margin-bottom: 8px;
+        }
+        
+        .payment-method-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            background: white;
+            color: #6b7280;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .payment-method-btn:hover {
+            border-color: #3b82f6;
+            color: #3b82f6;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+        }
+        
+        .payment-method-btn.active {
+            border-color: #3b82f6;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+        }
+        
+        .payment-method-btn.active:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(59, 130, 246, 0.35);
+        }
+        
+        .method-icon {
+            font-size: 16px;
+        }
+        
+        .method-text {
+            font-weight: 600;
+        }
+        
+        /* 환율 하이라이트 */
+        .exchange-highlight {
+            color: #000000;
+            font-weight: 700;
+            background: #fef3c7;
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 1px solid #f59e0b;
+        }
+        
+        /* QR 결제 카드들 */
+        .qr-payment-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            padding: 8px 12px;
+            margin-bottom: 8px;
+        }
+        
+        .payment-card-item {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .payment-card-item:hover {
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+        }
+        
+        .payment-card-item.selected {
+            border-color: #10b981;
+            background: #f0fdf4;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+        }
+        
+        .cn-icon {
+            background: #dc2626;
+            color: white;
+            font-weight: bold;
+            font-size: 9px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 4px auto;
+        }
+        
+        .alipay-logo {
+            background: #1677FF;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 4px auto;
+            font-family: -apple-system, BlinkMacSystemFont, 'Microsoft YaHei', sans-serif;
+        }
+        
+        .wechat-logo {
+            background: #07C160;
+            font-size: 18px;
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 4px auto;
+        }
+        
+        .card-icon {
+            font-size: 24px;
+            margin-bottom: 6px;
+        }
+        
+        .card-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 2px;
+        }
+        
+        .card-desc {
+            font-size: 10px;
+            color: #6b7280;
+        }
+        
+        /* 드래그앤드롭 영역 */
+        .drag-drop-area {
+            margin: 8px 12px;
+            border: 2px dashed #cbd5e1;
+            border-radius: 8px;
+            background: #f8fafc;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .drag-drop-area:hover {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+        
+        .drag-drop-area.dragover {
+            border-color: #10b981;
+            background: #f0fdf4;
+        }
+        
+        .drag-drop-content {
+            padding: 12px;
+            text-align: center;
+        }
+        
+        .drag-icon {
+            font-size: 24px;
+            margin-bottom: 6px;
+            opacity: 0.6;
+        }
+        
+        .drag-text {
+            font-size: 12px;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 3px;
+        }
+        
+        .drag-hint {
+            font-size: 10px;
+            color: #6b7280;
+        }
+        
+        /* 장바구니 영역 */
+        .payment-cart {
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            padding: 8px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+            flex: 1;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+            flex-shrink: 0;
+        }
+        
+        .cart-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+        
+        .cart-count {
+            background: #3b82f6;
+            color: white;
+            border-radius: 8px;
+            padding: 1px 4px;
+            font-size: 9px;
+            font-weight: 600;
+        }
+        
+        .cart-items {
+            max-height: 120px;
+            overflow-y: auto;
+            flex: 1;
+            min-height: 0;
+        }
+        
+        .cart-item {
+            display: flex;
+            align-items: center;
+            padding: 4px;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            margin-bottom: 3px;
+            background: #f8fafc;
+        }
+        
+        .cart-item-preview {
+            width: 24px;
+            height: 24px;
+            border-radius: 3px;
+            object-fit: cover;
+            margin-right: 4px;
+        }
+        
+        .cart-item-info {
+            flex: 1;
+        }
+        
+        .cart-item-name {
+            font-size: 9px;
+            font-weight: 500;
+            margin-bottom: 1px;
+        }
+        
+        .cart-item-amount {
+            font-size: 8px;
+            color: #10b981;
+            font-weight: 600;
+        }
+        
+        .cart-item-remove {
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 2px;
+            padding: 1px 3px;
+            font-size: 7px;
+            cursor: pointer;
+        }
+        
+        .cart-total {
+            border-top: 1px solid #e2e8f0;
+            padding-top: 6px;
+            margin-top: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        
+        .total-label {
+            font-size: 10px;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .total-amount {
+            font-size: 11px;
+            font-weight: 700;
+            color: #10b981;
+        }
+        
+        /* 결제 버튼 영역 */
+        .payment-buttons {
+            display: flex;
+            gap: 4px;
+            margin-top: 6px;
+            flex-shrink: 0;
+        }
+        
+        .payment-btn {
+            padding: 4px 6px;
+            border: none;
+            border-radius: 4px;
+            font-size: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+        }
+        
+        .payment-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #6b7280;
+            color: white;
+        }
+        
+        .btn-primary:hover { background: #2563eb; }
+        .btn-success:hover { background: #059669; }
+        .btn-secondary:hover { background: #4b5563; }
+        
+        /* QR코드 결제 관리 영역 */
+        .payment-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            position: relative;
+        }
+
+        /* 고정 헤더 */
+        .fixed-payment-header {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 8px;
+            padding: 8px 12px;
+            background: #f8fafc;
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+            font-weight: 600;
+            font-size: 9px;
+            color: #374151;
+        }
+        
+        .payment-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            border: 2px solid #e2e8f0;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-title {
+            font-size: 10px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        /* 장바구니 형태의 결제 목록 */
+        .payment-cart {
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 2px solid #e2e8f0;
+            min-height: 200px;
+            padding: 20px;
+        }
+        
+        .cart-header {
+            display: none;
+        }
+        
+        .cart-items {
+            min-height: 120px;
+        }
+        
+        .cart-item {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 10px;
+            align-items: center;
+            padding: 12px 16px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            font-size: 9px;
+        }
+        
+        .cart-item-name {
+            font-weight: 500;
+            color: #1f2937;
+        }
+        
+        .cart-item-amount {
+            font-weight: 600;
+            color: #059669;
+            text-align: center;
+        }
+        
+        .cart-item-status {
+            text-align: center;
+        }
+        
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .status-completed {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .status-failed {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        
+        .empty-cart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100px;
+            text-align: center;
+            color: #6b7280;
+            padding: 20px 10px;
+        }
+        
+        .empty-icon {
+            font-size: 16px;
+            margin-bottom: 4px;
+            opacity: 0.5;
+        }
+        
+        .empty-text {
+            font-size: 9px;
+            font-weight: 500;
+            margin-bottom: 3px;
+        }
+        
+        .empty-hint {
+            font-size: 8px;
+            color: #9ca3af;
+        }
+        
+        .cart-total {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 2px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
+        }
+        
+        .total-label {
+            font-size: 16px;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .total-amount {
+            font-size: 20px;
+            font-weight: 700;
+            color: #059669;
+        }
+        
+        /* 결제 통계 */
+        .payment-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .stat-number {
+            font-size: 12px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 4px;
+        }
+        
+        .stat-label {
+            font-size: 8px;
+            color: #64748b;
+            font-weight: 500;
+        }
+        
+        .quick-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            padding: 4px 8px;
+            border: none;
+            border-radius: 4px;
+            font-size: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+            min-width: 120px;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #f1f5f9;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .btn-secondary:hover {
+            background: #e2e8f0;
+        }
+        
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+        
+        /* 스크롤바 스타일링 */
+        .chat-messages::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .chat-messages::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+        
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        
+        .chat-messages::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        
+        /* 반응형 디자인 */
+        @media (max-width: 1200px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .ai-chat-section {
+                flex: none;
+                height: 60vh;
+            }
+            
+            .payment-section {
+                flex: none;
+                height: 40vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- AI 어시스턴트 채팅창 - 가장 크게 -->
+        <div class="ai-chat-section">
+            <div class="ai-header">
+                <div class="ai-title">🤖 AI결제대행 어시스턴스</div>
+                <div class="ai-subtitle">QR코드결제도우미</div>
+            </div>
+            
+            <div class="chat-container">
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message bot" id="initialBotMessage">
+                        안녕하세요! SHIPGU AI결제대행 어시스턴스입니다. 🚀<br><br>
+                        금일 적용환율은 <span id="chatExchangeRate" class="exchange-highlight">로딩 중...</span> 입니다.<br><br>
+                        <span style="font-size: 14px; font-weight: 600;">결제 종류를 선택하시고, 구매처로 부터 받은 QR코드를 업로드해주세요!</span>
+                    </div>
+                </div>
+                
+                <!-- 결제 방식 선택 버튼 -->
+                
+                <!-- QR 결제 세부 옵션 카드들 -->
+                <div class="qr-payment-cards" id="qrPaymentCards">
+                    <div class="payment-card-item" onclick="selectQRMethod('alipay')">
+                        <div class="card-icon alipay-logo">支</div>
+                        <div class="card-name">알리페이</div>
+                        <div class="card-desc">Alipay 결제</div>
+                    </div>
+                    <div class="payment-card-item" onclick="selectQRMethod('wechat')">
+                        <div class="card-icon wechat-logo">💬</div>
+                        <div class="card-name">위챗페이</div>
+                        <div class="card-desc">WeChat Pay 결제</div>
+                    </div>
+                    
+                    <div class="payment-card-item" onclick="selectQRMethod('banktransfer')">
+                        <div class="card-icon cn-icon">CN</div>
+                        <div class="card-name">계좌이체</div>
+                        <div class="card-desc">Bank Transfer</div>
+                    </div>
+                </div>
+                
+                <!-- 드래그앤드롭 영역 -->
+                <div class="drag-drop-area" id="dragDropArea" style="display: none;">
+                    <div class="drag-drop-content">
+                        <div class="drag-icon">📤</div>
+                        <div class="drag-text">
+                            <strong id="selectedMethodName">QR코드</strong>를 여기에 드래그하세요
+                        </div>
+                        <div class="drag-hint">또는 클릭하여 파일 선택</div>
+                        <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="handleFileSelect(event)">
+                    </div>
+                </div>
+                
+                <div class="chat-input-container">
+                    <input type="text" class="chat-input" id="chatInput" placeholder="AI 어시스턴트에게 질문하세요..." onkeypress="handleChatKeyPress(event)">
+                    <button class="chat-send-btn" onclick="sendMessage()">전송</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- QR코드 결제 관리 영역 -->
+        <div class="payment-section">
+            <!-- 결제 진행 현황판 (장바구니) -->
+            <div class="payment-card">
+                <h3 class="card-title">🛒 결제 진행 현황</h3>
+                <!-- 고정 결제 헤더 -->
+                <div class="fixed-payment-header">
+                    <span>결제 항목</span>
+                    <span>금액</span>
+                    <span>상태</span>
+                </div>
+                <div class="payment-cart" id="paymentCart">
+                    <div class="cart-items" id="cartItems">
+                        <div class="empty-cart">
+                            <div class="empty-icon">🛍️</div>
+                            <div class="empty-text">결제 정보가 없습니다</div>
+                            <div class="empty-hint">채팅에서 결제 요청 시 자동으로 추가됩니다</div>
+                        </div>
+                    </div>
+                    <div class="cart-total">
+                        <div class="total-label">총 결제 금액:</div>
+                        <div class="total-amount" id="cartTotalAmount">₩0</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 결제 현황 -->
+            <div class="payment-card">
+                <h3 class="card-title">📊 결제 현황</h3>
+                <div class="payment-stats">
+                    <div class="stat-item">
+                        <div class="stat-number" id="totalPayments">0</div>
+                        <div class="stat-label">총 결제</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="pendingPayments">0</div>
+                        <div class="stat-label">대기중</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="completedPayments">0</div>
+                        <div class="stat-label">완료</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="totalAmount">₩0</div>
+                        <div class="stat-label">총 금액</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 빠른 액션 -->
+            <div class="payment-card">
+                <h3 class="card-title">⚡ 빠른 액션</h3>
+                <div class="quick-actions">
+                    <button class="action-btn btn-primary" onclick="addPayment()">결제 추가</button>
+                    <button class="action-btn btn-secondary" onclick="showPaymentHistory()">결제 내역</button>
+                    <button class="action-btn btn-success" onclick="generateReport()">리포트 생성</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 전역 변수
+        let paymentData = {
+            total: 0,
+            pending: 0,
+            completed: 0,
+            totalAmount: 0
+        };
+        
+        let cartItems = [];
+        let cartTotal = 0;
+        
+        // 현재 선택된 결제 방식 저장
+        let selectedPaymentMethod = 'qr';
+        
+        // 현재 선택된 QR 방식 저장
+        let selectedQRMethod = '';
+        
+        // 결제 방식 선택 함수
+        function selectPaymentMethod(method) {
+            selectedPaymentMethod = method;
+            
+            // 모든 버튼에서 active 클래스 제거
+            document.querySelectorAll('.payment-method-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // 선택된 버튼에 active 클래스 추가
+            const selectedBtn = document.querySelector(`.${method}-method`);
+            if (selectedBtn) {
+                selectedBtn.classList.add('active');
+            }
+            
+            // QR 카드 영역 표시/숨김
+            const qrCards = document.getElementById('qrPaymentCards');
+            const dragDropArea = document.getElementById('dragDropArea');
+            
+            if (method === 'qr') {
+                qrCards.style.display = 'grid';
+                dragDropArea.style.display = 'none';
+                addBotMessage(`QR코드결제 방식이 선택되었습니다. 💳<br>결제할 QR 종류를 선택해주세요.`);
+            } else {
+                qrCards.style.display = 'none';
+                dragDropArea.style.display = 'none';
+                addBotMessage(`계좌이체 방식이 선택되었습니다. 🏦<br>입금할 계좌 정보를 안내해드리겠습니다.`);
+            }
+            
+            console.log(`결제 방식 변경: ${method}`);
+        }
+        
+        // QR 세부 방식 선택 함수
+        function selectQRMethod(qrType) {
+            selectedQRMethod = qrType;
+            
+            // 모든 카드에서 selected 클래스 제거
+            document.querySelectorAll('.payment-card-item').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // 선택된 카드에 selected 클래스 추가
+            const selectedCard = document.querySelector(`.payment-card-item[onclick="selectQRMethod('${qrType}')"]`);
+            if (selectedCard) {
+                selectedCard.classList.add('selected');
+            }
+            
+            // QR 방식별 이름 설정
+            const qrNames = {
+                alipay: '알리페이',
+                wechat: '위챗페이',
+                banktransfer: '계좌이체'
+            };
+            
+            // 계좌이체 선택 시 특별 처리
+            if (qrType === 'banktransfer') {
+                // 계좌이체 안내 메시지
+                const bankMessage = `请提供以下付款信息
+1.银行账号:
+2.收款人姓名:
+3.开户银行名称:
+4.开户银行支行:    （例如：000支行）
+5.付款金额:
+感谢您的配合`;
+
+                addBotMessage(`💳 계좌이체가 선택되었습니다!<br><br>구매처에게 보낼 계좌정보 요청 메시지입니다:<br><br><div style="background: #f3f4f6; padding: 12px; border-radius: 8px; margin: 8px 0; border-left: 4px solid #dc2626; white-space: pre-line; font-family: monospace; user-select: all; position: relative;">${bankMessage}<button onclick="copyBankMessage()" style="position: absolute; top: 8px; right: 8px; background: #dc2626; color: white; border: none; border-radius: 4px; padding: 4px 8px; font-size: 11px; cursor: pointer;">📋 복사</button></div><br>👆 복사 버튼을 눌러서 메시지를 복사하고 구매처에게 전송하세요!`);
+                
+                // 드래그앤드롭 영역을 계좌정보 입력 폼으로 변경
+                const dragDropArea = document.getElementById('dragDropArea');
+                dragDropArea.style.display = 'block';
+                dragDropArea.innerHTML = `
+                    <div class="drag-drop-content">
+                        <div style="text-align: center; margin-bottom: 8px; color: #dc2626; font-weight: 600; font-size: 11px;">
+                            💳 계좌정보 입력
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr; gap: 4px; margin-bottom: 8px; text-align: left;">
+                            <div>
+                                <label style="font-size: 9px; color: #374151; margin-bottom: 2px; display: block;">1. 银行账号 (은행계좌번호):</label>
+                                <input type="text" id="bankAccount" placeholder="1234567890123456" style="width: 100%; padding: 4px 6px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 9px; outline: none;">
+                            </div>
+                            <div>
+                                <label style="font-size: 9px; color: #374151; margin-bottom: 2px; display: block;">2. 收款人姓名 (수취인 성명):</label>
+                                <input type="text" id="recipientName" placeholder="张三" style="width: 100%; padding: 4px 6px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 9px; outline: none;">
+                            </div>
+                            <div>
+                                <label style="font-size: 9px; color: #374151; margin-bottom: 2px; display: block;">3. 开户银行名称 (개설은행명):</label>
+                                <input type="text" id="bankName" placeholder="中国银行" style="width: 100%; padding: 4px 6px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 9px; outline: none;">
+                            </div>
+                            <div>
+                                <label style="font-size: 9px; color: #374151; margin-bottom: 2px; display: block;">4. 开户银行支行 (개설은행지점):</label>
+                                <input type="text" id="bankBranch" placeholder="北京支行" style="width: 100%; padding: 4px 6px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 9px; outline: none;">
+                            </div>
+                            <div>
+                                <label style="font-size: 9px; color: #374151; margin-bottom: 2px; display: block;">5. 付款金额 (결제금액):</label>
+                                <input type="text" id="paymentAmount" placeholder="100 CNY" style="width: 100%; padding: 4px 6px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 9px; outline: none;">
+                                <div style="font-size: 8px; color: #dc2626; margin-top: 3px; line-height: 1.2;">
+                                    * 계좌이체 특성상 오기입으로 인해 결제처리가 되지않는경우 해당금액은 예치금으로 반영됩니다. 예치금으로 먼저 반영되고 이후 환불처리 가능합니다
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 6px; justify-content: center;">
+                            <button onclick="processBankTransfer()" style="padding: 4px 10px; background: #dc2626; color: white; border: none; border-radius: 4px; font-size: 11px; cursor: pointer;">처리</button>
+                            <button onclick="resetUpload()" style="padding: 4px 10px; background: #6b7280; color: white; border: none; border-radius: 4px; font-size: 11px; cursor: pointer;">초기화</button>
+                        </div>
+                    </div>
+                `;
+            } else {
+                // QR코드 결제 방식 (알리페이, 위챗페이)
+                const dragDropArea = document.getElementById('dragDropArea');
+                const selectedMethodName = document.getElementById('selectedMethodName');
+                
+                dragDropArea.style.display = 'block';
+                
+                // QR 업로드 영역으로 다시 초기화
+                dragDropArea.innerHTML = `
+                    <div class="drag-drop-content">
+                        <div class="drag-icon">📤</div>
+                        <div class="drag-text">
+                            <strong id="selectedMethodName">${qrNames[qrType]}</strong>를 여기에 드래그하세요
+                        </div>
+                        <div class="drag-hint">또는 클릭하여 파일 선택</div>
+                        <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="handleFileSelect(event)">
+                    </div>
+                `;
+                
+                // 드래그앤드롭 초기화
+                initializeDragAndDrop();
+            }
+            
+            console.log(`결제 방식 선택: ${qrType}`);
+        }
+        
+        // 샘플 데이터 초기화
+        function initializeData() {
+            paymentData = {
+                total: 12,
+                pending: 3,
+                completed: 9,
+                totalAmount: 1250000
+            };
+            updatePaymentStats();
+        }
+        
+        // 결제 통계 업데이트
+        function updatePaymentStats() {
+            document.getElementById('totalPayments').textContent = paymentData.total;
+            document.getElementById('pendingPayments').textContent = paymentData.pending;
+            document.getElementById('completedPayments').textContent = paymentData.completed;
+            document.getElementById('totalAmount').textContent = `₩${paymentData.totalAmount.toLocaleString()}`;
+        }
+        
+        // 장바구니에 항목 추가
+        function addToCart(itemName, amount, paymentMethod = 'QR코드') {
+            const newItem = {
+                id: Date.now(),
+                name: itemName,
+                amount: amount,
+                status: 'pending',
+                method: paymentMethod,
+                timestamp: new Date()
+            };
+            
+            cartItems.push(newItem);
+            updateCartDisplay();
+            updateCartTotal();
+            
+            // 결제 통계도 업데이트
+            paymentData.total++;
+            paymentData.pending++;
+            paymentData.totalAmount += amount;
+            updatePaymentStats();
+            
+            console.log('장바구니에 추가:', newItem);
+        }
+        
+        // 장바구니 표시 업데이트
+        function updateCartDisplay() {
+            const cartItemsContainer = document.getElementById('cartItems');
+            
+            if (cartItems.length === 0) {
+                cartItemsContainer.innerHTML = `
+                    <div class="empty-cart">
+                        <div class="empty-icon">🛍️</div>
+                        <div class="empty-text">결제 정보가 없습니다</div>
+                        <div class="empty-hint">채팅에서 결제 요청 시 자동으로 추가됩니다</div>
+                    </div>
+                `;
+            } else {
+                cartItemsContainer.innerHTML = cartItems.map(item => `
+                    <div class="cart-item" data-id="${item.id}">
+                        <div class="cart-item-name">${item.name}</div>
+                        <div class="cart-item-amount">₩${item.amount.toLocaleString()}</div>
+                        <div class="cart-item-status">
+                            <span class="status-badge status-${item.status}">${getStatusText(item.status)}</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+        
+        // 상태 텍스트 변환
+        function getStatusText(status) {
+            switch (status) {
+                case 'pending': return '대기중';
+                case 'completed': return '완료';
+                case 'failed': return '실패';
+                default: return '알 수 없음';
+            }
+        }
+        
+        // 장바구니 총액 업데이트
+        function updateCartTotal() {
+            cartTotal = cartItems.reduce((sum, item) => sum + item.amount, 0);
+            document.getElementById('cartTotalAmount').textContent = `₩${cartTotal.toLocaleString()}`;
+        }
+        
+        // 결제 추가
+        function addPayment() {
+            const paymentMethod = prompt('결제 방법을 선택하세요:\n1. 알리페이\n2. 위챗페이\n3. 웨이디엔\n\n번호를 입력하세요 (1-3):');
+            
+            if (!paymentMethod) return;
+            
+            const methods = ['', '알리페이', '위챗페이', '웨이디엔'];
+            const selectedMethod = methods[parseInt(paymentMethod)];
+            
+            if (!selectedMethod) {
+                alert('잘못된 선택입니다.');
+                return;
+            }
+            
+            const amount = prompt(`${selectedMethod} 결제 금액을 입력하세요 (원 단위):`);
+            
+            if (!amount || isNaN(amount)) {
+                alert('올바른 금액을 입력하세요.');
+                return;
+            }
+            
+            const numAmount = parseInt(amount.replace(/[^0-9]/g, ''));
+            if (numAmount <= 0) {
+                alert('0원보다 큰 금액을 입력하세요.');
+                return;
+            }
+            
+            // 장바구니에 추가
+            addToCart(`${selectedMethod} 결제`, numAmount, selectedMethod);
+            
+            addBotMessage(`💳 ${selectedMethod} 결제가 장바구니에 추가되었습니다!<br>금액: ₩${numAmount.toLocaleString()}<br>상태: 대기중`);
+        }
+        
+        // 결제 내역 표시
+        function showPaymentHistory() {
+            addBotMessage("📋 최근 결제 내역:<br>• 2024-01-15: 알리페이 결제 완료 (₩150,000)<br>• 2024-01-14: 위챗페이 결제 완료 (₩320,000)<br>• 2024-01-13: 웨이디엔 결제 대기중 (₩450,000)");
+        }
+        
+        // 리포트 생성
+        function generateReport() {
+            addBotMessage(`📊 결제 리포트가 생성되었습니다!<br>총 결제 건수: ${paymentData.total}건<br>총 결제 금액: ₩${paymentData.totalAmount.toLocaleString()}<br>완료율: ${Math.round((paymentData.completed / paymentData.total) * 100)}%`);
+        }
+        
+        // 챗봇 메시지 전송
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            addUserMessage(message);
+            input.value = '';
+            
+            // AI 응답 시뮬레이션
+            setTimeout(() => {
+                const responses = [
+                    "네, 도움이 필요하시군요! QR코드 결제와 관련된 질문이신가요? 💳",
+                    "좋은 질문입니다! 결제 현황이나 환율 정보를 확인해드릴까요? 📊",
+                    "QR코드 업로드나 결제 처리를 도와드릴 수 있습니다. 구체적으로 어떤 작업을 원하시나요? 🚀",
+                    "현재 대기중인 결제가 있습니다. 확인해보시겠어요? ⏳",
+                    "환율 계산이나 결제 리포트 생성에 도움이 필요하시면 말씀해주세요! 📈"
+                ];
+                
+                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                addBotMessage(randomResponse);
+            }, 1000);
+        }
+        
+        // 엔터키로 메시지 전송
+        function handleChatKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+        
+        // 사용자 메시지 추가
+        function addUserMessage(message) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message user';
+            messageDiv.textContent = message;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // 봇 메시지 추가
+        function addBotMessage(message) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message bot';
+            messageDiv.innerHTML = message;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // 페이지 로드 시 초기화
+        // 부모 창(대시보드)에서 환율 정보 가져오기
+        function getExchangeRateFromParent() {
+            try {
+                // 부모 창에서 환율 가져오기
+                if (window.parent && window.parent !== window) {
+                    const parentExchangeRate = window.parent.document.getElementById('exchangeRate');
+                    if (parentExchangeRate) {
+                        return parentExchangeRate.textContent; // 사이드바에서 실시간 환율 가져오기
+                    }
+                }
+            } catch (error) {
+                console.log('부모 창에서 환율을 가져올 수 없습니다:', error);
+            }
+            return '1CNY = 202KRW'; // 기본값
+        }
+        
+        // 채팅창에 환율 정보 업데이트
+        function updateChatExchangeRate() {
+            const exchangeRate = getExchangeRateFromParent();
+            const chatExchangeRateEl = document.getElementById('chatExchangeRate');
+            if (chatExchangeRateEl) {
+                chatExchangeRateEl.textContent = exchangeRate;
+            }
+        }
+        
+        // 드래그앤드롭 기능
+        function initializeDragAndDrop() {
+            const dragDropArea = document.getElementById('dragDropArea');
+            const fileInput = document.getElementById('fileInput');
+            
+            // 파일 입력이 없으면 (계좌이체 모드) 드래그앤드롭 비활성화
+            if (!fileInput) {
+                return;
+            }
+            
+            // 기존 이벤트 리스너 제거
+            dragDropArea.replaceWith(dragDropArea.cloneNode(true));
+            const newDragDropArea = document.getElementById('dragDropArea');
+            
+            // 드래그앤드롭 영역 클릭 시 파일 선택
+            newDragDropArea.addEventListener('click', () => {
+                const currentFileInput = document.getElementById('fileInput');
+                if (currentFileInput) {
+                    currentFileInput.click();
+                }
+            });
+            
+            // 드래그 이벤트 처리
+            newDragDropArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                newDragDropArea.classList.add('dragover');
+            });
+            
+            newDragDropArea.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                newDragDropArea.classList.remove('dragover');
+            });
+            
+            newDragDropArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                newDragDropArea.classList.remove('dragover');
+                
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    handleFileUpload(files[0]);
+                }
+            });
+        }
+        
+        // 파일 선택 처리
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                handleFileUpload(file);
+            }
+        }
+        
+        // 파일 업로드 처리
+        function handleFileUpload(file) {
+            // 이미지 파일 검증
+            if (!file.type.startsWith('image/')) {
+                alert('이미지 파일만 업로드 가능합니다.');
+                return;
+            }
+            
+            // 파일 크기 검증 (5MB 제한)
+            if (file.size > 5 * 1024 * 1024) {
+                alert('파일 크기는 5MB 이하만 가능합니다.');
+                return;
+            }
+            
+            // 이미지 미리보기
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                showImagePreview(e.target.result, file.name);
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        // 이미지 미리보기 표시
+        function showImagePreview(imageSrc, fileName) {
+            const dragDropArea = document.getElementById('dragDropArea');
+            
+            // 미리보기 HTML 생성
+            dragDropArea.innerHTML = `
+                <div class="drag-drop-content">
+                    <div style="text-align: center; margin-bottom: 15px;">
+                        <img src="${imageSrc}" alt="QR 미리보기" style="max-width: 200px; max-height: 200px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    </div>
+                    <div style="font-weight: 600; margin-bottom: 10px; color: #059669;">
+                        ✅ ${fileName} 업로드 완료
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; margin-bottom: 5px; font-weight: 500;">결제 금액 (CNY):</label>
+                        <input type="number" id="paymentAmount" placeholder="예: 100" style="width: 100px; padding: 8px; border: 1px solid #d1d5db; border-radius: 6px; text-align: center;" step="0.01" min="0">
+                    </div>
+                    <div style="display: flex; gap: 10px; justify-content: center;">
+                        <button onclick="addToCart()" style="padding: 8px 16px; background: #667eea; color: white; border: none; border-radius: 6px; font-weight: 500; cursor: pointer;">장바구니 담기</button>
+                        <button onclick="resetUpload()" style="padding: 8px 16px; background: #6b7280; color: white; border: none; border-radius: 6px; cursor: pointer;">다시 업로드</button>
+                    </div>
+                </div>
+            `;
+            
+            // 금액 입력창 포커스
+            setTimeout(() => {
+                document.getElementById('paymentAmount').focus();
+            }, 100);
+        }
+        
+        // 장바구니에 추가
+        function addToCart() {
+            const amountInput = document.getElementById('paymentAmount');
+            const amount = parseFloat(amountInput.value);
+            
+            if (!amount || amount <= 0) {
+                alert('올바른 금액을 입력해주세요.');
+                amountInput.focus();
+                return;
+            }
+            
+            // 현재 환율 가져오기
+            const exchangeRate = getExchangeRateFromParent();
+            const rate = parseInt(exchangeRate.split('=')[1].trim().replace('KRW', ''));
+            const krwAmount = Math.round(amount * rate);
+            
+            // 현재 선택된 결제 방법
+            const selectedCard = document.querySelector('.payment-card-item.selected');
+            const paymentMethod = selectedCard ? selectedCard.dataset.method : 'QR코드';
+            
+            // 장바구니 아이템 생성
+            const cartItem = {
+                id: Date.now(),
+                method: paymentMethod,
+                amount: amount,
+                krwAmount: krwAmount,
+                timestamp: new Date().toLocaleString('ko-KR')
+            };
+            
+            // 장바구니에 저장 (localStorage 활용)
+            let cart = JSON.parse(localStorage.getItem('qrPaymentCart') || '[]');
+            cart.push(cartItem);
+            localStorage.setItem('qrPaymentCart', JSON.stringify(cart));
+            
+            // 성공 메시지
+            addMessage('bot', `✅ 장바구니에 추가되었습니다!
+            
+📱 결제방법: ${paymentMethod}
+💰 금액: ${amount} CNY (₩${krwAmount.toLocaleString()})
+⏰ 시간: ${cartItem.timestamp}
+            
+장바구니 총 ${cart.length}개 항목이 있습니다.`);
+            
+            // 업로드 영역 초기화
+            resetUpload();
+            
+            // 입력창 포커스
+            document.getElementById('chatInput').focus();
+        }
+        
+        // 업로드 초기화
+        function resetUpload() {
+            const dragDropArea = document.getElementById('dragDropArea');
+            const selectedMethodName = document.getElementById('selectedMethodName').textContent;
+            
+            dragDropArea.innerHTML = `
+                <div class="drag-drop-content">
+                    <div class="drag-icon">📤</div>
+                    <div class="drag-text">
+                        <strong>${selectedMethodName}</strong>를 여기에 드래그하세요
+                    </div>
+                    <div class="drag-hint">또는 클릭하여 파일 선택</div>
+                    <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="handleFileSelect(event)">
+                </div>
+            `;
+            
+            // 드래그앤드롭 이벤트 재초기화
+            initializeDragAndDrop();
+        }
+
+        // 클립보드 복사 함수
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(function() {
+                addMessage('user', '📋 메시지가 클립보드에 복사되었습니다!');
+            }).catch(function() {
+                // 클립보드 API가 지원되지 않는 경우
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                addMessage('user', '📋 메시지가 클립보드에 복사되었습니다!');
+            });
+        }
+        
+        // 계좌정보 요청 메시지 복사 함수
+        function copyBankMessage() {
+            const bankMessage = `请提供以下付款信息
+1.银行账号:
+2.收款人姓名:
+3.开户银行名称:
+4.开户银行支行:    （例如：000支行）
+5.付款金额:
+感谢您的配合`;
+
+            copyToClipboard(bankMessage);
+        }
+        
+        // 계좌이체 처리 함수
+        function processBankTransfer() {
+            const bankAccount = document.getElementById('bankAccount').value.trim();
+            const recipientName = document.getElementById('recipientName').value.trim();
+            const bankName = document.getElementById('bankName').value.trim();
+            const bankBranch = document.getElementById('bankBranch').value.trim();
+            const paymentAmount = document.getElementById('paymentAmount').value.trim();
+            
+            if (!bankAccount || !recipientName || !bankName || !bankBranch || !paymentAmount) {
+                alert('모든 계좌정보를 입력해주세요.');
+                return;
+            }
+            
+            // 계좌정보 텍스트 생성
+            const bankInfo = `银行账号: ${bankAccount}
+收款人姓名: ${recipientName}
+开户银行名称: ${bankName}
+开户银行支行: ${bankBranch}
+付款金额: ${paymentAmount}`;
+            
+            // 현재 환율 가져오기
+            const exchangeRate = getExchangeRateFromParent();
+            
+            // 장바구니 아이템 생성 (금액은 나중에 파싱하거나 별도 입력받을 수 있음)
+            const cartItem = {
+                id: Date.now(),
+                method: '계좌이체',
+                bankInfo: bankInfo,
+                timestamp: new Date().toLocaleString('ko-KR'),
+                exchangeRate: exchangeRate
+            };
+            
+            // 장바구니에 저장
+            let cart = JSON.parse(localStorage.getItem('qrPaymentCart') || '[]');
+            cart.push(cartItem);
+            localStorage.setItem('qrPaymentCart', JSON.stringify(cart));
+            
+            // 성공 메시지
+            addMessage('bot', `✅ 계좌이체 정보가 장바구니에 추가되었습니다!
+            
+💳 결제방법: 계좌이체
+📋 계좌정보가 저장되었습니다
+⏰ 시간: ${cartItem.timestamp}
+💱 적용환율: ${exchangeRate}
+            
+장바구니 총 ${cart.length}개 항목이 있습니다.`);
+            
+            // 입력 영역 초기화
+            document.getElementById('bankAccount').value = '';
+            document.getElementById('recipientName').value = '';
+            document.getElementById('bankName').value = '';
+            document.getElementById('bankBranch').value = '';
+            document.getElementById('paymentAmount').value = '';
+            
+            // 채팅 입력창 포커스
+            document.getElementById('chatInput').focus();
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeData();
+            
+            // 환율 정보 업데이트
+            updateChatExchangeRate();
+            
+            // 드래그앤드롭 초기화
+            initializeDragAndDrop();
+        });
+    </script>
+</body>
+</html>
